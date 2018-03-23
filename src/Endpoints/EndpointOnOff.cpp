@@ -13,7 +13,7 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin)
 
 void EndpointOnOff::sendConfig()
 {
-  m_owner->sendMessage("conf", "e:on_off", m_id);
+  m_owner->sendMessage("conf", "e:on_off;r=60", m_id);
 }
 
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
