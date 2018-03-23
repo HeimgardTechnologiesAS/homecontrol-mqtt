@@ -4,7 +4,7 @@
 #include "PubSubClient.h"
 #include "helperFunctions.h"
 
-#include "EndpointZero.h"
+#include "Endpoints/EndpointZero.h"
 
 #define HCM_DEBUG
 
@@ -54,7 +54,7 @@ HomeControlMagic::HomeControlMagic(char* server_ip)
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
- 
+
   EndpointZero* epZ = new EndpointZero(hcm_ptr);
   epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
@@ -63,7 +63,7 @@ HomeControlMagic::HomeControlMagic(char* server_ip)
   m_client.setCallback(callback);
 
   sprintf(m_id, "%d", ESP.getChipId());
-  
+
 }
 
 void HomeControlMagic::doMagic(bool connection_ok)
@@ -87,7 +87,7 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   Serial.println(buffer);
   #endif
 
-  m_client.publish(buffer, message.c_str());  
+  m_client.publish(buffer, message.c_str());
 }
 
 void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint_id)
@@ -106,7 +106,7 @@ void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint
   char buffer1[4] = {0};
   sprintf(buffer1, "%d", message);
 
-  m_client.publish(buffer, buffer1);  
+  m_client.publish(buffer, buffer1);
 }
 
 /*
@@ -190,9 +190,9 @@ void HomeControlMagic::subscribeNow()
   strcat(buff, m_id);
   strcat(buff, "/#");
   #ifdef HCM_DEBUG
-  Serial.println(buff); 
-  #endif 
-  
+  Serial.println(buff);
+  #endif
+
   m_client.subscribe(buff);
   m_client.subscribe("broadcast");
 }
@@ -203,7 +203,7 @@ Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
   {
     return NULL;
   }
-  
+
   return m_endpoints_pointers[number];
 }
 
