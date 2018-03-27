@@ -21,12 +21,14 @@ class Endpoint
         i++;
       }
     }
-    
+
     virtual void sendConfig();
+    virtual void sendStatusMessage();
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
 
   protected:
     HomeControlMagic* m_owner;
     char m_id[4] = {0};
+    long m_resend_time;
 };
 

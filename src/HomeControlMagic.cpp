@@ -48,9 +48,9 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip)
+HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName)
   : m_number_of_endpoints(0)
-  , m_name("Reflektor tavan")
+  , m_name(deviceName)
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
@@ -71,6 +71,7 @@ void HomeControlMagic::doMagic(bool connection_ok)
   if(connection_ok)
   {
     mqttLoop(true);
+    sendStatus();
   }
 }
 
@@ -85,6 +86,10 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   strcat(buffer, topic.c_str());
   #ifdef HCM_DEBUG
   Serial.println(buffer);
+  #endif
+
+  #ifdef HCM_DEBUG
+  Serial.println(message);
   #endif
 
   m_client.publish(buffer, message.c_str());
@@ -105,6 +110,10 @@ void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint
 
   char buffer1[4] = {0};
   sprintf(buffer1, "%d", message);
+
+  #ifdef HCM_DEBUG
+  Serial.println(buffer1);
+  #endif
 
   m_client.publish(buffer, buffer1);
 }
@@ -234,6 +243,14 @@ void HomeControlMagic::sendConfigs()
   for(uint8_t i = 0; i<m_number_of_endpoints; i++)
   {
       m_endpoints_pointers[i]->sendConfig();
+  }
+}
+
+void HomeControlMagic::sendStatus()
+{
+  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
+  {
+      m_endpoints_pointers[i]->sendStatusMessage();
   }
 }
 

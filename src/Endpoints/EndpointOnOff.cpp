@@ -9,11 +9,25 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin)
   , m_pin(pin)
 {
   pinMode(m_pin, OUTPUT);
+  m_resend_time = millis();
+}
+
+void EndpointOnOff::setStatusTime(int status_time)
+{
+  if(status_time < 2)
+  {
+    m_resend_status_time = 2;
+  }
+  else
+  {
+    m_resend_status_time = status_time;
+  }
 }
 
 void EndpointOnOff::sendConfig()
 {
-  m_owner->sendMessage("conf", "e:on_off;r=60", m_id);
+  String buff = String("e:on_off;r=") + m_resend_status_time + String(";");
+  m_owner->sendMessage("conf", buff, m_id);
 }
 
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -39,4 +53,17 @@ void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int len
     m_owner->sendMessage("sp", digitalRead(m_pin), m_id);
   }
 }
+
+void EndpointOnOff::sendStatusMessage()
+{
+    if (millis() - m_resend_time > m_resend_status_time * 1000)
+    {
+      m_resend_time = millis();
+      #ifdef ENDPOINT_ON_OFF_DEBUG
+        Serial.println("sending status message");
+      #endif
+      m_owner->sendMessage("sp", digitalRead(m_pin), m_id);
+    }
+}
+
 
