@@ -30,5 +30,3 @@ void loop()
   wifi_loop.loop();
   hcm.doMagic(wifi_loop.isWifiConnected());
 }
-
-
