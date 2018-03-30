@@ -4,9 +4,12 @@
 
 #define ENDPOINT_LEVEL_DEBUG
 
-EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, int8_t pin)
+EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, int8_t pin, bool active_state)
   : Endpoint(hcm_ptr)
   , m_pin(pin)
+  , m_level(0)
+  , m_active_state(active_state)
+  , m_state(false)
 {
   pinMode(m_pin, OUTPUT);
   m_resend_time = millis();
@@ -44,18 +47,30 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
 
   if(lineContains(topic, "cl"))
   {
-    uint16_t level = extractInteger(payload, length);
+    m_level = extractInteger(payload, length);
 
-#ifndef ARDUINO_ESP8266_ESP01
-    level /= 40;
-    analogWrite(m_pin, level);
-#endif
+    controlPin();
 
-    m_owner->sendMessage("sl", (analogRead(m_pin) * 40), m_id);
+    m_owner->sendMessage("sl", m_level, m_id);
   }
+
   else if(lineContains(topic, "sl"))
   {
-    m_owner->sendMessage("sl", (analogRead(m_pin) * 40), m_id);
+    m_owner->sendMessage("sl", m_level, m_id);
+  }
+
+  else if(lineContains(topic, "cp"))
+  {
+    m_state = extractBool(payload, length);
+
+    controlPin();
+
+    m_owner->sendMessage("sp", m_state, m_id);
+  }
+
+  else if(lineContains(topic, "sp"))
+  {
+    m_owner->sendMessage("sp", m_state, m_id);
   }
 }
 
@@ -68,6 +83,26 @@ void EndpointLevel::sendStatusMessage()
         Serial.println("sending status message");
       #endif
 
-      m_owner->sendMessage("sl", (analogRead(m_pin) * 40), m_id);
+      m_owner->sendMessage("sp", m_state, m_id);
+      m_owner->sendMessage("sl", m_level, m_id);
     }
+}
+
+void EndpointLevel::controlPin()
+{
+  if(m_state)
+  {
+    if(m_active_state)
+    {
+      analogWrite(m_pin, m_level/10);
+    }
+    else
+    {
+      analogWrite(m_pin, (10000 - m_level) / 10);
+    }
+  }
+  else
+  {
+    digitalWrite(m_pin, !m_active_state);
+  }
 }

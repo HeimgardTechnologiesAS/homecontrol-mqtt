@@ -19,7 +19,8 @@ class HomeControlMagic
     void announce();
 
     void sendMessage(String topic, String message, char* endpoint_id);
-    void sendMessage(String topic, uint8_t message, char* endpoint_id);
+    //void sendMessage(String topic, uint8_t message, char* endpoint_id);
+    void sendMessage(String topic, uint16_t message, char* endpoint_id);
 
   private:
     bool reconnectMqtt();

@@ -95,7 +95,30 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   m_client.publish(buffer, message.c_str());
 }
 
-void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint_id)
+// void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint_id)
+// {
+//   char buffer[50] = {0};
+//   strcat(buffer, "d/");
+//   strcat(buffer, m_id);
+//   strcat(buffer, "/");
+//   strcat(buffer, endpoint_id);
+//   strcat(buffer, "/");
+//   strcat(buffer, topic.c_str());
+//   #ifdef HCM_DEBUG
+//   Serial.println(buffer);
+//   #endif
+
+//   char buffer1[4] = {0};
+//   sprintf(buffer1, "%d", message);
+
+//   #ifdef HCM_DEBUG
+//   Serial.println(buffer1);
+//   #endif
+
+//   m_client.publish(buffer, buffer1);
+// }
+
+void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, "d/");

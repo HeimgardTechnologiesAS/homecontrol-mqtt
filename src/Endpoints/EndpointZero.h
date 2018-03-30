@@ -9,6 +9,6 @@ class EndpointZero : public Endpoint
 
   void sendConfig();
   void sendStatusMessage();
-  void incomingMessage(char* topic, byte* payload, unsigned int length);    
+  void incomingMessage(char* topic, byte* payload, unsigned int length);
 };
 
