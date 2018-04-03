@@ -4,12 +4,12 @@
 
 #define DEBUG
 
-const String ssid = "hcwifi";
-const String pass = "f008ar8ar";
-const String deviceName = "Smart level";
+const String ssid = "SSID";
+const String pass = "PASS";
+const String deviceName = "NAME";
 
 WifiLoop wifi_loop(ssid, pass);
-HomeControlMagic hcm("192.168.1.182", deviceName);
+HomeControlMagic hcm("GW_IP", deviceName);
 
 EndpointLevel enpointLevel(&hcm, LED_BUILTIN, false);
 

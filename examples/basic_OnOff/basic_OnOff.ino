@@ -6,7 +6,7 @@
 
 const String ssid = "SSID";
 const String pass = "PASS";
-const String deviceName = "Smart on/off";
+const String deviceName = "NAME";
 
 WifiLoop wifi_loop(ssid, pass);
 HomeControlMagic hcm("GW_IP", deviceName);
