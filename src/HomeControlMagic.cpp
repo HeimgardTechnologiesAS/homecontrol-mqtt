@@ -1,15 +1,10 @@
 #include "HomeControlMagic.h"
-#include "WifiLoop.h"
 #include "Arduino.h"
-#include "PubSubClient.h"
 #include "helperFunctions.h"
 
 #include "Endpoints/EndpointZero.h"
 
 #define HCM_DEBUG
-
-WiFiClient wifiClient;
-PubSubClient m_client(wifiClient);
 
 static HomeControlMagic* hcm_ptr;
 
@@ -46,9 +41,11 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName)
+HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object)
   : m_number_of_endpoints(0)
   , m_name(deviceName)
+  , m_network_object(network_object)
+  , m_esp_client(*(new PubSubClient(*network_object.getClientPtr())))
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
@@ -57,16 +54,22 @@ HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName)
   epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
 
-  m_client.setServer(server_ip, 1883);
-  m_client.setCallback(callback);
+  m_esp_client.setServer(server_ip, 1883);
+  m_esp_client.setCallback(callback);
 
-  sprintf(m_id, "%d", ESP.getChipId());
+  m_id = m_network_object.getUniqueId();
+
+  strcat(m_base_topic, "d/");
+  strcat(m_base_topic, m_id.c_str());
+  strcat(m_base_topic, "/");
 
 }
 
-void HomeControlMagic::doMagic(bool connection_ok)
+void HomeControlMagic::doMagic()
 {
-  if(connection_ok)
+  m_network_object.loop();
+
+  if(m_network_object.isConnected())
   {
     mqttLoop(true);
     sendStatus();
@@ -76,9 +79,7 @@ void HomeControlMagic::doMagic(bool connection_ok)
 void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_id)
 {
   char buffer[50] = {0};
-  strcat(buffer, "d/");
-  strcat(buffer, m_id);
-  strcat(buffer, "/");
+  strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
   strcat(buffer, topic.c_str());
@@ -90,15 +91,13 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   Serial.println(message);
   #endif
 
-  m_client.publish(buffer, message.c_str());
+  m_esp_client.publish(buffer, message.c_str());
 }
 
 void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoint_id)
 {
   char buffer[50] = {0};
-  strcat(buffer, "d/");
-  strcat(buffer, m_id);
-  strcat(buffer, "/");
+  strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
   strcat(buffer, topic.c_str());
@@ -113,7 +112,7 @@ void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoin
   Serial.println(buffer1);
   #endif
 
-  m_client.publish(buffer, buffer1);
+  m_esp_client.publish(buffer, buffer1);
 }
 
 /*
@@ -122,7 +121,7 @@ void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoin
 void HomeControlMagic::mqttLoop(bool reconnect)
 {
   static long time;
-  if(!m_client.connected() && (millis() - time > 100))
+  if(!m_esp_client.connected() && (millis() - time > 100))
   {
     time = millis();
 #ifndef ARDUINO_ESP8266_ESP01
@@ -147,7 +146,7 @@ void HomeControlMagic::mqttLoop(bool reconnect)
         if(millis() - m_lastTimeConnected > 300000) //5 mins
         {
           //restart
-          ESP.restart();
+          m_network_object.restart();
         }
       }
     }
@@ -155,7 +154,7 @@ void HomeControlMagic::mqttLoop(bool reconnect)
   else
   {
     m_lastTimeConnected = millis();
-    m_client.loop();
+    m_esp_client.loop();
   }
 }
 
@@ -165,13 +164,13 @@ bool HomeControlMagic::reconnectMqtt()
   Serial.println("Trying to reconnect to mqtt broker");
 #endif
   // Attempt to connect
-  if(m_client.connect(m_id))
+  if(m_esp_client.connect(m_id.c_str()))
   {
 #ifdef HCM_DEBUG
     Serial.println("Success");
 #endif
     // ... and resubscribe
-    m_client.setCallback(callback);
+    m_esp_client.setCallback(callback);
     subscribeNow();
     announce();
     return true;
@@ -180,7 +179,7 @@ bool HomeControlMagic::reconnectMqtt()
   {
 #ifdef HCM_DEBUG
     Serial.print("failed, rc=");
-    Serial.println(m_client.state());
+    Serial.println(m_esp_client.state());
 #endif
     return false;
   }
@@ -194,14 +193,14 @@ void HomeControlMagic::announce()
 void HomeControlMagic::subscribeNow()
 {
   char buff[20] = {0};
-  strcat(buff, m_id);
+  strcat(buff, m_id.c_str());
   strcat(buff, "/#");
   #ifdef HCM_DEBUG
   Serial.println(buff);
   #endif
 
-  m_client.subscribe(buff);
-  m_client.subscribe("broadcast");
+  m_esp_client.subscribe(buff);
+  m_esp_client.subscribe("broadcast");
 }
 
 Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
@@ -214,7 +213,7 @@ Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
   return m_endpoints_pointers[number];
 }
 
-char* HomeControlMagic::getId()
+String HomeControlMagic::getId()
 {
   return m_id;
 }

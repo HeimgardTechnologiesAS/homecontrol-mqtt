@@ -1,17 +1,19 @@
 #pragma once
 
 #include "Endpoint.h"
+#include "LoopObject.hpp"
+#include "PubSubClient.h"
 
 class HomeControlMagic
 {
   public:
-    HomeControlMagic(char* server_ip, const String deviceName);
-    void doMagic(bool connection_ok);
+    HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object);
+    void doMagic();
 
     Endpoint* getEndpoint(uint8_t number);
     void addEndpoint(Endpoint* endpoint_ptr);
 
-    char* getId();
+    String getId();
     uint8_t getNumberOfEndpoints();
 
     void sendConfigs();
@@ -28,15 +30,19 @@ class HomeControlMagic
 
     String m_name;
 
+    LoopObject& m_network_object;
+    PubSubClient& m_esp_client;
 
     uint8_t m_number_of_endpoints;
     Endpoint* m_endpoints_pointers[10];
 
     const uint16_t m_mqtt_port = 1883;
-    char m_id[10];
+    String m_id;
 
     int m_reconnectTime = 30000;
     long m_lastTimeConnected = 0;
     long m_lastReconnectAttempt = 0;
+
+    char m_base_topic[20];
 };
 

@@ -1,4 +1,4 @@
-#include "WifiLoop.h"
+#include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointLevel.h"
 
@@ -8,7 +8,7 @@ const String ssid = "SSID";
 const String pass = "PASS";
 const String deviceName = "NAME";
 
-WifiLoop wifi_loop(ssid, pass);
+ESPLoop network(ssid, pass);
 HomeControlMagic hcm("GW_IP", deviceName);
 
 EndpointLevel enpointLevel(&hcm, LED_BUILTIN, false);
@@ -16,7 +16,7 @@ EndpointLevel enpointLevel(&hcm, LED_BUILTIN, false);
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
-  wifi_loop.setReconnectTime(5);
+  network.setReconnectTime(5);
   enpointLevel.setStatusTime(30);
 #ifdef DEBUG
   Serial.begin(115200);
@@ -27,6 +27,5 @@ void setup()
 
 void loop()
 {
-  wifi_loop.loop();
-  hcm.doMagic(wifi_loop.isWifiConnected());
+  hcm.doMagic();
 }
