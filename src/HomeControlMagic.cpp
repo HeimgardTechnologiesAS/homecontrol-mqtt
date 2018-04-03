@@ -36,10 +36,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   uint8_t endpoint_id = 0;
   for(int i = 0; i < diff; i++)
   {
-    //Serial.println(topic[start_position + i]);
     endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
   }
-  //Serial.println(endpoint_id);
 
   Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
   if(end_ptr != NULL)
@@ -94,29 +92,6 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
 
   m_client.publish(buffer, message.c_str());
 }
-
-// void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint_id)
-// {
-//   char buffer[50] = {0};
-//   strcat(buffer, "d/");
-//   strcat(buffer, m_id);
-//   strcat(buffer, "/");
-//   strcat(buffer, endpoint_id);
-//   strcat(buffer, "/");
-//   strcat(buffer, topic.c_str());
-//   #ifdef HCM_DEBUG
-//   Serial.println(buffer);
-//   #endif
-
-//   char buffer1[4] = {0};
-//   sprintf(buffer1, "%d", message);
-
-//   #ifdef HCM_DEBUG
-//   Serial.println(buffer1);
-//   #endif
-
-//   m_client.publish(buffer, buffer1);
-// }
 
 void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoint_id)
 {

@@ -12,18 +12,6 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin)
   m_resend_time = millis();
 }
 
-void EndpointOnOff::setStatusTime(int status_time)
-{
-  if(status_time < 2)
-  {
-    m_resend_status_time = 2;
-  }
-  else
-  {
-    m_resend_status_time = status_time;
-  }
-}
-
 void EndpointOnOff::sendConfig()
 {
   String buff = String("e:on_off;r=") + m_resend_status_time + String(";");
