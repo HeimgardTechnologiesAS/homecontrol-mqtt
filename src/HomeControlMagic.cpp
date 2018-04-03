@@ -4,7 +4,7 @@
 #include "PubSubClient.h"
 #include "helperFunctions.h"
 
-#include "EndpointZero.h"
+#include "Endpoints/EndpointZero.h"
 
 #define HCM_DEBUG
 
@@ -36,10 +36,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   uint8_t endpoint_id = 0;
   for(int i = 0; i < diff; i++)
   {
-    //Serial.println(topic[start_position + i]);
     endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
   }
-  //Serial.println(endpoint_id);
 
   Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
   if(end_ptr != NULL)
@@ -48,13 +46,13 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip)
+HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName)
   : m_number_of_endpoints(0)
-  , m_name("Reflektor tavan")
+  , m_name(deviceName)
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
- 
+
   EndpointZero* epZ = new EndpointZero(hcm_ptr);
   epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
@@ -63,7 +61,7 @@ HomeControlMagic::HomeControlMagic(char* server_ip)
   m_client.setCallback(callback);
 
   sprintf(m_id, "%d", ESP.getChipId());
-  
+
 }
 
 void HomeControlMagic::doMagic(bool connection_ok)
@@ -71,6 +69,7 @@ void HomeControlMagic::doMagic(bool connection_ok)
   if(connection_ok)
   {
     mqttLoop(true);
+    sendStatus();
   }
 }
 
@@ -87,10 +86,14 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   Serial.println(buffer);
   #endif
 
-  m_client.publish(buffer, message.c_str());  
+  #ifdef HCM_DEBUG
+  Serial.println(message);
+  #endif
+
+  m_client.publish(buffer, message.c_str());
 }
 
-void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint_id)
+void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, "d/");
@@ -106,7 +109,11 @@ void HomeControlMagic::sendMessage(String topic, uint8_t message, char* endpoint
   char buffer1[4] = {0};
   sprintf(buffer1, "%d", message);
 
-  m_client.publish(buffer, buffer1);  
+  #ifdef HCM_DEBUG
+  Serial.println(buffer1);
+  #endif
+
+  m_client.publish(buffer, buffer1);
 }
 
 /*
@@ -190,9 +197,9 @@ void HomeControlMagic::subscribeNow()
   strcat(buff, m_id);
   strcat(buff, "/#");
   #ifdef HCM_DEBUG
-  Serial.println(buff); 
-  #endif 
-  
+  Serial.println(buff);
+  #endif
+
   m_client.subscribe(buff);
   m_client.subscribe("broadcast");
 }
@@ -203,7 +210,7 @@ Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
   {
     return NULL;
   }
-  
+
   return m_endpoints_pointers[number];
 }
 
@@ -234,6 +241,14 @@ void HomeControlMagic::sendConfigs()
   for(uint8_t i = 0; i<m_number_of_endpoints; i++)
   {
       m_endpoints_pointers[i]->sendConfig();
+  }
+}
+
+void HomeControlMagic::sendStatus()
+{
+  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
+  {
+      m_endpoints_pointers[i]->sendStatusMessage();
   }
 }
 

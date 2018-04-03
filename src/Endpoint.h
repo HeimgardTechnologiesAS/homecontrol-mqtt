@@ -21,12 +21,28 @@ class Endpoint
         i++;
       }
     }
-    
+
+    void setStatusTime(int status_time)
+    {
+      // not allowed to set report status time under 2 seconds
+      if(status_time < 2)
+      {
+        m_resend_status_time = 2;
+      }
+      else
+      {
+        m_resend_status_time = status_time;
+      }
+    }
+
     virtual void sendConfig();
+    virtual void sendStatusMessage();
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
 
   protected:
     HomeControlMagic* m_owner;
     char m_id[4] = {0};
+    long m_resend_time;
+    int m_resend_status_time;
 };
 

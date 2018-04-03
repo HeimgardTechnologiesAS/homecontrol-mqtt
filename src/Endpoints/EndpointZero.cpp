@@ -12,18 +12,22 @@ void EndpointZero::sendConfig()
 {
   // nothing
 }
+void EndpointZero::sendStatusMessage()
+{
+  // nothing
+}
 
 void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
-  #ifdef ENDPOINT_ZERO_DEBUG
+#ifdef ENDPOINT_ZERO_DEBUG
   Serial.println("incoming message, endpoint zero");
-  
+
   for(int i=0; i< length; i++)
   {
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  #endif
+#endif
 
   uint8_t ep_num = m_owner->getNumberOfEndpoints();
   // TODO: change this

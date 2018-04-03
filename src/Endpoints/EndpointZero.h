@@ -8,6 +8,7 @@ class EndpointZero : public Endpoint
   EndpointZero(HomeControlMagic* hcm_ptr);
 
   void sendConfig();
-  void incomingMessage(char* topic, byte* payload, unsigned int length);    
+  void sendStatusMessage();
+  void incomingMessage(char* topic, byte* payload, unsigned int length);
 };
 
