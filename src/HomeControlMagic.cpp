@@ -46,6 +46,8 @@ HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, Loo
   , m_name(deviceName)
   , m_network_object(network_object)
   , m_esp_client(*(new PubSubClient(*network_object.getClientPtr())))
+  , m_led_time(0)
+  , m_last_loop_time(0)
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
@@ -120,30 +122,29 @@ void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoin
  */
 void HomeControlMagic::mqttLoop(bool reconnect)
 {
-  static long time;
-  if(!m_esp_client.connected() && (millis() - time > 100))
+  long current_time = millis();
+  if(!m_esp_client.connected() && (current_time - m_last_loop_time > 100))
   {
-    time = millis();
-#ifndef ARDUINO_ESP8266_ESP01
-    static long m_ledTime = millis();
-    if(millis() - m_ledTime > 2000)
+    m_last_loop_time = current_time;
+    // flash led for visual feedback
+    if(current_time - m_led_time > 2000)
     {
-      m_ledTime = millis();
-      digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN)); //flash led
+      m_led_time = current_time;
+      m_network_object.toggleLed();
     }
-#endif
-    if(millis() - m_lastReconnectAttempt > m_reconnectTime && reconnect)
+    if(current_time - m_last_reconnect_attempt > m_reconnect_time && reconnect)
     {
       // Attempt to reconnect
       if(reconnectMqtt())
       {
-        m_lastReconnectAttempt = 0;
-        digitalWrite(LED_BUILTIN, HIGH);
+        m_last_reconnect_attempt = 0;
+        m_network_object.controlLed(false);
       }
       else
       {
-        m_lastReconnectAttempt = millis();
-        if(millis() - m_lastTimeConnected > 300000) //5 mins
+        // reconnectMqtt takes few seconds if it is failing so just read new time
+        m_last_reconnect_attempt = millis();
+        if(current_time - m_last_time_connected > 300000) //5 mins
         {
           //restart
           m_network_object.restart();
@@ -153,7 +154,7 @@ void HomeControlMagic::mqttLoop(bool reconnect)
   }
   else
   {
-    m_lastTimeConnected = millis();
+    m_last_time_connected = current_time;
     m_esp_client.loop();
   }
 }
@@ -228,10 +229,10 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
   char buff[4] = {0};
   sprintf(buff, "%d", m_number_of_endpoints - 1);
-  #ifdef HCM_DEBUG
+#ifdef HCM_DEBUG
   Serial.print("Id to set: ");
   Serial.println(buff);
-  #endif
+#endif
   endpoint_ptr->setId(buff);
 }
 
@@ -249,6 +250,11 @@ void HomeControlMagic::sendStatus()
   {
       m_endpoints_pointers[i]->sendStatusMessage();
   }
+}
+
+void HomeControlMagic::setReconnectTime(uint16_t seconds)
+{
+  m_reconnect_time = seconds * 1000;
 }
 
 
