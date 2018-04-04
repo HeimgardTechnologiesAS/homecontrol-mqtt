@@ -28,7 +28,6 @@ class HomeControlMagic
 
     String m_name;
 
-
     uint8_t m_number_of_endpoints;
     Endpoint* m_endpoints_pointers[10];
 
