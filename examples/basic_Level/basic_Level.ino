@@ -9,7 +9,7 @@ const String pass = "PASS";
 const String deviceName = "NAME";
 
 ESPLoop network(ssid, pass);
-HomeControlMagic hcm("GW_IP", deviceName);
+HomeControlMagic hcm("GW_IP", deviceName, network);
 
 EndpointLevel enpointLevel(&hcm, LED_BUILTIN, false);
 
