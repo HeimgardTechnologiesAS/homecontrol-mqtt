@@ -7,7 +7,7 @@
 class HomeControlMagic
 {
   public:
-    HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object);
+    HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object, String username = "hc", String password = "magic");
     void doMagic();
 
     Endpoint* getEndpoint(uint8_t number);
@@ -46,6 +46,9 @@ class HomeControlMagic
     long m_last_reconnect_attempt = 0;
     long m_led_time;
     long m_last_loop_time;
+
+    String m_username;
+    String m_password;
 
     char m_base_topic[20];
 };
