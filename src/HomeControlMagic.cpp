@@ -41,13 +41,15 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object)
+HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object, String username, String password)
   : m_number_of_endpoints(0)
   , m_name(deviceName)
   , m_network_object(network_object)
   , m_esp_client(*(new PubSubClient(*network_object.getClientPtr())))
   , m_led_time(0)
   , m_last_loop_time(0)
+  , m_username(username)
+  , m_password(password)
 {
   // pointer that is used from callback to set messages
   hcm_ptr = this;
@@ -165,7 +167,7 @@ bool HomeControlMagic::reconnectMqtt()
   Serial.println("Trying to reconnect to mqtt broker");
 #endif
   // Attempt to connect
-  if(m_esp_client.connect(m_id.c_str()))
+  if(m_esp_client.connect(m_id.c_str(), m_username.c_str(), m_password.c_str()))
   {
 #ifdef HCM_DEBUG
     Serial.println("Success");
