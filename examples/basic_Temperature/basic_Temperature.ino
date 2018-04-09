@@ -7,10 +7,10 @@
 #define DHTPIN 4  // ESP8266 GPIO pin to use (D2).
 #define DHTTYPE DHT22
 
-const String ssid = "hcwifi";
-const String pass = "f008ar8ar";
-char* GW_IP = "192.168.1.182";
-const String deviceName = "TEMP_DHT22";
+const String ssid = "SSID";
+const String pass = "PASS";
+char* GW_IP = "GW_IP";
+const String deviceName = "TEMP_SENSOR";
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
