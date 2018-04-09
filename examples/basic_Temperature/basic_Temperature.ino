@@ -7,26 +7,28 @@
 #define DHTPIN 4  // ESP8266 GPIO pin to use (D2).
 #define DHTTYPE DHT22
 
-const String ssid = "SSID";
-const String pass = "PASS";
-const String deviceName = "NAME";
+const String ssid = "hcwifi";
+const String pass = "f008ar8ar";
+char* GW_IP = "192.168.1.182";
+const String deviceName = "TEMP_DHT22";
 
 ESPLoop network(ssid, pass);
-HomeControlMagic hcm("GW_IP", deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointTemperature enpointTemperature(&hcm, DHTPIN, false);
+EndpointTemperature enpointTemperature(&hcm);
 
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup()
 {
-  //pinMode(DHTPIN, INPUT);
   network.setReconnectTime(5);
   enpointTemperature.setStatusTime(30);
-#ifdef DEBUG
+
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-#endif
+  #endif
+
   hcm.addEndpoint(&enpointTemperature);
 
   dht.begin();
@@ -34,17 +36,30 @@ void setup()
 
 void loop()
 {
-  hcm.doMagic();
+  static int resend_time;
 
-  double t = dht.readTemperature();
+  if (millis() - resend_time > 2000)
+  {
+    resend_time = millis();
 
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
+    double temperature = dht.readTemperature();
+
+    // Check if any reads failed and exit early (to try again).
+    if (isnan(temperature)) {
+      Serial.println("Failed to read from DHT sensor!");
+      return;
+    }
+
+    #ifdef DEBUG
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.print(" *C ");
+    Serial.println();
+    #endif
+
+    enpointTemperature.setTemperature(temperature);
   }
 
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.print(" *C ");
+  hcm.doMagic();
+
 }
