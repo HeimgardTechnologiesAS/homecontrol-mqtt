@@ -15,7 +15,6 @@ public:
   virtual void setTemperature(double temperature);
 
 protected:
-
-  double m_temperature;
   int m_resend_status_time;
+  double m_temperature;
 };
