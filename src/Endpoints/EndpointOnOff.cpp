@@ -34,11 +34,11 @@ void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int len
   {
     bool state = extractBool(payload, length);
     digitalWrite(m_pin, state);
-    m_owner->sendMessage("sp", digitalRead(m_pin), m_id);
+    m_owner->sendMessage("sp", (bool)digitalRead(m_pin), m_id);
   }
   else if(lineContains(topic, "sp"))
   {
-    m_owner->sendMessage("sp", digitalRead(m_pin), m_id);
+    m_owner->sendMessage("sp", (bool)digitalRead(m_pin), m_id);
   }
 }
 
@@ -50,7 +50,7 @@ void EndpointOnOff::sendStatusMessage()
       #ifdef ENDPOINT_ON_OFF_DEBUG
         Serial.println("sending status message");
       #endif
-      m_owner->sendMessage("sp", digitalRead(m_pin), m_id);
+      m_owner->sendMessage("sp", (bool)digitalRead(m_pin), m_id);
     }
 }
 

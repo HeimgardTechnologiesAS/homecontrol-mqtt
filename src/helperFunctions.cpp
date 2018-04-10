@@ -70,6 +70,37 @@ float extractFloat(byte* text, unsigned int length)
   return temp;
 }
 
+double extractDouble(byte* text, unsigned int length)
+{
+  double temp = 0;
+  if(int n = lineContains((const char*)text, "."))
+  {
+    //it is double
+    if(length > n)
+    {
+      for(int i = n; i < length; i++)
+      {
+        temp += (text[i] - '0') * pow(10, ((-1) - (i - n)));
+      }
+    }
+    n--;
+    for(int i = 0; i < n; i++)
+    {
+      temp += (text[i] - '0') * pow(10, (n - 1 - i));
+    }
+  }
+  else
+  {
+    //not double
+    for(int i = 0; i < length; i++)
+    {
+      temp += (text[i] - '0') * pow(10, ((length - 1) - i));
+    }
+  }
+  clearString(text, length);
+  return temp;
+}
+
 int extractInteger(byte* text, unsigned int length)
 {
   int temp = 0;

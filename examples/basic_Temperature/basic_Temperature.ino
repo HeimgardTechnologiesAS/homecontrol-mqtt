@@ -22,7 +22,7 @@ DHT dht(DHTPIN, DHTTYPE);
 void setup()
 {
   network.setReconnectTime(5);
-  enpointTemperature.setStatusTime(30);
+  enpointTemperature.setStatusTime(60);
 
   #ifdef DEBUG
   Serial.begin(115200);
@@ -38,7 +38,7 @@ void loop()
 {
   static int resend_time;
 
-  if (millis() - resend_time > 2000)
+  if (millis() - resend_time > 10000)
   {
     resend_time = millis();
 

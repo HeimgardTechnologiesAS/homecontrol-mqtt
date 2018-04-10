@@ -6,16 +6,16 @@
 
 const String ssid = "SSID";
 const String pass = "PASS";
+char* GW_IP = "GW_IP";
 const String deviceName = "NAME";
 
 ESPLoop network(ssid, pass);
-HomeControlMagic hcm("GW_IP", deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointOnOff enpointOnOff(&hcm, LED_BUILTIN);
+EndpointOnOff enpointOnOff(&hcm, LED_BUILTIN, false);
 
 void setup()
 {
-  pinMode(LED_BUILTIN, OUTPUT);
   network.setReconnectTime(5);
   enpointOnOff.setStatusTime(30);
 #ifdef DEBUG

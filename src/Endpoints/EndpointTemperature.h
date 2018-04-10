@@ -5,10 +5,7 @@
 class EndpointTemperature : public Endpoint
 {
 public:
-  EndpointTemperature
-  (
-    HomeControlMagic* hcm_ptr
-  );
+  EndpointTemperature(HomeControlMagic* hcm_ptr);
 
   virtual void sendConfig();
   virtual void sendStatusMessage();

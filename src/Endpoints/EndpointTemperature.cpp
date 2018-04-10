@@ -43,6 +43,8 @@ void EndpointTemperature::incomingMessage(char* topic, byte* payload, unsigned i
 
   if(lineContains(topic, "st"))
   {
+    m_temperature = extractDouble(payload, length);
+
     m_owner->sendMessage("st", m_temperature, m_id);
   }
 }
