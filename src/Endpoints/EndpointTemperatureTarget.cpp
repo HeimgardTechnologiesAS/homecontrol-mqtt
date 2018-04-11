@@ -4,14 +4,11 @@
 
 #define ENDPOINT_TEMPERATURE_TARGET_DEBUG
 
-EndpointTemperatureTarget::EndpointTemperatureTarget(HomeControlMagic* hcm_ptr, int8_t pin, bool active_state)
+EndpointTemperatureTarget::EndpointTemperatureTarget(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
-  , m_pin(pin)
-  , m_active_state(active_state)
   , m_state(false)
   , m_temperature(0)
 {
-  pinMode(m_pin, OUTPUT);
   m_resend_time = millis();
 }
 
@@ -49,7 +46,7 @@ void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsi
   {
     m_temperature_target = extractDouble(payload, length);
 
-    controlPin();
+    //controlPin();
 
     m_owner->sendMessage("stt", m_temperature_target, m_id);
   }
@@ -79,27 +76,22 @@ void EndpointTemperatureTarget::sendStatusMessage()
     }
 }
 
-void EndpointTemperatureTarget::controlPin()
-{
-
-
-
-/*
-  if(m_state)
-  {
-    if(m_active_state)
-    {
-      analogWrite(m_pin, m_temperature/10);
-    }
-    else
-    {
-      analogWrite(m_pin, (10000 - m_temperature) / 10);
-    }
-  }
-  */
-}
-
 void EndpointTemperatureTarget::setTemperature(double temperature)
 {
   m_temperature = temperature;
+}
+
+void EndpointTemperatureTarget::setTemperatureTarget(double temperature)
+{
+  m_temperature_target = temperature;
+}
+
+double EndpointTemperatureTarget::getTemperature()
+{
+  return m_temperature;
+}
+
+double EndpointTemperatureTarget::getTemperatureTarget()
+{
+  return m_temperature_target;
 }

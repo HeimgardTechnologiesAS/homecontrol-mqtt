@@ -11,19 +11,24 @@
 const String ssid = "SSID";
 const String pass = "PASS";
 char* GW_IP = "GW_IP";
-const String deviceName = "NAME";
+const String deviceName = "TERMOSTAT";
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointTemperatureTarget enpointTemperatureTarget(&hcm, HEATER, false);
+EndpointTemperatureTarget enpointTemperatureTarget(&hcm);
 
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup()
 {
+  pinMode(HEATER, OUTPUT);
+
   network.setReconnectTime(5);
   enpointTemperatureTarget.setStatusTime(60);
+
+  double temperature = dht.readTemperature();
+  enpointTemperatureTarget.setTemperatureTarget(temperature);
 
   #ifdef DEBUG
   Serial.begin(115200);
@@ -50,15 +55,31 @@ void loop()
       Serial.println("Failed to read from DHT sensor!");
       return;
     }
+    else
+    {
+      enpointTemperatureTarget.setTemperature(temperature);
+    }
 
     #ifdef DEBUG
-    Serial.print("Temperature: ");
-    Serial.print(temperature);
+    Serial.print("Temperature from sensor: ");
+    Serial.print(enpointTemperatureTarget.getTemperature());
+    Serial.print(" *C ");
+    Serial.println();
+
+    Serial.print("Temperature target: ");
+    Serial.print(enpointTemperatureTarget.getTemperatureTarget());
     Serial.print(" *C ");
     Serial.println();
     #endif
 
-    enpointTemperatureTarget.setTemperature(temperature);
+    if(enpointTemperatureTarget.getTemperature() < enpointTemperatureTarget.getTemperatureTarget())
+    {
+      digitalWrite(HEATER, LOW);
+    }
+    else
+    {
+      digitalWrite(HEATER, HIGH);
+    }
   }
 
   hcm.doMagic();

@@ -7,7 +7,7 @@
 const String ssid = "SSID";
 const String pass = "PASS";
 char* GW_IP = "GW_IP";
-const String deviceName = "NAME";
+const String deviceName = "DEVICE_ON_OFF";
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
