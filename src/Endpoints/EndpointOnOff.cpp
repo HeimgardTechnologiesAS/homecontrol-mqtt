@@ -11,7 +11,7 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin, bool active_
   , m_state(false)
 {
   pinMode(m_pin, OUTPUT);
-  m_resend_time = millis();
+  m_last_send_time = millis();
 }
 
 void EndpointOnOff::sendConfig()
@@ -48,9 +48,9 @@ void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int len
 
 void EndpointOnOff::sendStatusMessage()
 {
-    if (millis() - m_resend_time > m_resend_status_time * 1000)
+    if (millis() - m_last_send_time > m_resend_status_time * 1000)
     {
-      m_resend_time = millis();
+      m_last_send_time = millis();
       #ifdef ENDPOINT_ON_OFF_DEBUG
         Serial.println("sending status message");
       #endif

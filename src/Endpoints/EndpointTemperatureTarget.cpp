@@ -9,7 +9,7 @@ EndpointTemperatureTarget::EndpointTemperatureTarget(HomeControlMagic* hcm_ptr)
   , m_state(false)
   , m_temperature(0)
 {
-  m_resend_time = millis();
+  m_last_send_time = millis();
 }
 
 void EndpointTemperatureTarget::setStatusTime(int status_time)
@@ -45,9 +45,6 @@ void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsi
   if(lineContains(topic, "ctt"))
   {
     m_temperature_target = extractDouble(payload, length);
-
-    //controlPin();
-
     m_owner->sendMessage("stt", m_temperature_target, m_id);
   }
 
@@ -64,9 +61,9 @@ void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsi
 
 void EndpointTemperatureTarget::sendStatusMessage()
 {
-    if (millis() - m_resend_time > m_resend_status_time * 1000)
+    if (millis() - m_last_send_time > m_resend_status_time * 1000)
     {
-      m_resend_time = millis();
+      m_last_send_time = millis();
       #ifdef ENDPOINT_TEMPERATURE_TARGET_DEBUG
         Serial.println("sending status message");
       #endif
