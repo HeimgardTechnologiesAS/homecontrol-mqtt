@@ -4,8 +4,13 @@
 #include "DHT.h"
 
 #define DEBUG
-#define DHTPIN 4  // ESP8266 GPIO pin to use (D2).
-#define DHTTYPE DHT22
+
+#define DHT_PIN 4                       // ESP8266 GPIO pin to use (D2).
+#define DHTTYPE DHT22                   // DHT type
+
+#define RECONNECTION_TIME 5             // network reconnection time in seconds
+#define STATUS_TIME 60                  // system update time in seconds
+#define READ_TIME 20                    // sensor reading time in seconds
 
 const String ssid = "SSID";
 const String pass = "PASS";
@@ -21,8 +26,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup()
 {
-  network.setReconnectTime(5);
-  enpointTemperature.setStatusTime(60);
+  network.setReconnectTime(RECONNECTION_TIME);
+  enpointTemperature.setStatusTime(STATUS_TIME);
 
   #ifdef DEBUG
   Serial.begin(115200);
@@ -38,7 +43,7 @@ void loop()
 {
   static int resend_time;
 
-  if (millis() - resend_time > 10000)
+  if (millis() - resend_time > READ_TIME * 1000)
   {
     resend_time = millis();
 

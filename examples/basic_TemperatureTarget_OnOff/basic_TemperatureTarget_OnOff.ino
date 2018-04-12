@@ -1,15 +1,14 @@
 #include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointTemperatureTarget.h"
+#include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
 
 #define DEBUG
 
-#define DEVICE_TYPE HEATER              // termostat device can be HEATER or COOLER
-
 #define DHT_PIN 4                       // ESP8266 GPIO pin to use (D2).
-#define DHTTYPE DHT22                   // DHT sensor type
-#define DEVICE_PIN LED_BUILTIN          // connected heater or cooler device pin, built in led as example
+#define DHTTYPE DHT22                   // DHT type
+#define DEVICE_PIN LED_BUILTIN          // connected heater or cooler device, built in led as example
 
 #define RECONNECTION_TIME 5             // network reconnection time in seconds
 #define STATUS_TIME 60                  // system update time in seconds
@@ -24,6 +23,7 @@ ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointTemperatureTarget enpointTemperatureTarget(&hcm);
+EndpointOnOff enpointOnOff(&hcm, DEVICE_PIN, false);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
@@ -33,6 +33,7 @@ void setup()
 
   network.setReconnectTime(RECONNECTION_TIME);
   enpointTemperatureTarget.setStatusTime(STATUS_TIME);
+  enpointOnOff.setStatusTime(STATUS_TIME);
 
   double temperature = dht.readTemperature();
   enpointTemperatureTarget.setTemperatureTarget(temperature);
@@ -43,6 +44,7 @@ void setup()
   #endif
 
   hcm.addEndpoint(&enpointTemperatureTarget);
+  hcm.addEndpoint(&enpointOnOff);
 
   dht.begin();
 }
@@ -78,27 +80,6 @@ void loop()
     Serial.print(" *C ");
     Serial.println();
     #endif
-
-    #ifdef DEVICE_TYPE == HEATER
-    if(enpointTemperatureTarget.getTemperature() < enpointTemperatureTarget.getTemperatureTarget())
-    #elif DEVICE_TYPE == COOLER
-    if(enpointTemperatureTarget.getTemperature() > enpointTemperatureTarget.getTemperatureTarget())
-    #endif
-    {
-      #ifdef DEVICE_TYPE == HEATER
-      digitalWrite(DEVICE_PIN, LOW);
-      #elif DEVICE_TYPE == COOLER
-      digitalWrite(DEVICE_PIN, HIGH);
-      #endif
-    }
-    else
-    {
-      #ifdef DEVICE_TYPE == HEATER
-      digitalWrite(DEVICE_PIN, HIGH);
-      #elif DEVICE_TYPE == COOLER
-      digitalWrite(DEVICE_PIN, LOW);
-      #endif
-    }
   }
 
   hcm.doMagic();
