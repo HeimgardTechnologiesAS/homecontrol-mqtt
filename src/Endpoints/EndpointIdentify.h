@@ -2,13 +2,14 @@
 
 #include "Endpoint.h"
 
-class EndpointZero : public Endpoint
+class EndpointIdentify : public Endpoint
 {
   public:
-    EndpointZero(HomeControlMagic* hcm_ptr);
+    EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin);
 
     void sendConfig();
-    void sendStatusMessage();
     void incomingMessage(char* topic, byte* payload, unsigned int length);
-};
 
+  private:
+    uint8_t m_pin;
+};

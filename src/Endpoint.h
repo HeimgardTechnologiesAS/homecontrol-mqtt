@@ -42,7 +42,7 @@ class Endpoint
   protected:
     HomeControlMagic* m_owner;
     char m_id[4] = {0};
-    long m_resend_time;
+    long m_last_send_time;
     int m_resend_status_time;
 };
 

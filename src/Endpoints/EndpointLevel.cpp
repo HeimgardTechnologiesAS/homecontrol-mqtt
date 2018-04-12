@@ -4,15 +4,15 @@
 
 #define ENDPOINT_LEVEL_DEBUG
 
-EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, int8_t pin, bool active_state)
+EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, int8_t pin, bool active_pin_state)
   : Endpoint(hcm_ptr)
   , m_pin(pin)
   , m_level(0)
-  , m_active_state(active_state)
+  , m_active_pin_state(active_pin_state)
   , m_state(false)
 {
   pinMode(m_pin, OUTPUT);
-  m_resend_time = millis();
+  m_last_send_time = millis();
 }
 
 void EndpointLevel::setStatusTime(int status_time)
@@ -76,9 +76,9 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
 
 void EndpointLevel::sendStatusMessage()
 {
-    if (millis() - m_resend_time > m_resend_status_time * 1000)
+    if (millis() - m_last_send_time > m_resend_status_time * 1000)
     {
-      m_resend_time = millis();
+      m_last_send_time = millis();
       #ifdef ENDPOINT_LEVEL_DEBUG
         Serial.println("sending status message");
       #endif
@@ -92,7 +92,7 @@ void EndpointLevel::controlPin()
 {
   if(m_state)
   {
-    if(m_active_state)
+    if(m_active_pin_state)
     {
       analogWrite(m_pin, m_level/10);
     }
@@ -103,6 +103,6 @@ void EndpointLevel::controlPin()
   }
   else
   {
-    digitalWrite(m_pin, !m_active_state);
+    digitalWrite(m_pin, !m_active_pin_state);
   }
 }

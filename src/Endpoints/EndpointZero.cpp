@@ -29,10 +29,9 @@ void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int leng
   Serial.println();
 #endif
 
-  uint8_t ep_num = m_owner->getNumberOfEndpoints();
-  // TODO: change this
-  m_owner->sendMessage("conf", "1;", m_id);
+  uint16_t ep_num = (m_owner->getNumberOfEndpoints() - 1);
 
+  m_owner->sendMessage("conf", ep_num, m_id);
   m_owner->sendConfigs();
 }
 
