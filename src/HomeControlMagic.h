@@ -53,5 +53,6 @@ class HomeControlMagic
     String m_password;
 
     char m_base_topic[20];
+    bool m_broker_connected;
 };
 

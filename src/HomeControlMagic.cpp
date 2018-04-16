@@ -76,7 +76,11 @@ void HomeControlMagic::doMagic()
   if(m_network_object.isConnected())
   {
     mqttLoop(true);
-    sendStatus();
+
+    if(m_broker_connected != false)
+    {
+      sendStatus();
+    }
   }
 }
 
@@ -218,6 +222,7 @@ bool HomeControlMagic::reconnectMqtt()
     m_esp_client.setCallback(callback);
     subscribeNow();
     announce();
+    m_broker_connected = true;
     return true;
   }
   else
@@ -226,6 +231,7 @@ bool HomeControlMagic::reconnectMqtt()
     Serial.print("failed, rc=");
     Serial.println(m_esp_client.state());
 #endif
+    m_broker_connected = false;
     return false;
   }
 }
