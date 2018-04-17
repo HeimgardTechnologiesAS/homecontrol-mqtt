@@ -11,16 +11,15 @@ EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
   m_last_send_time = millis();
 }
 
-void EndpointTemperature::setStatusTime(int status_time)
+void EndpointTemperature::setTemperature(double temperature)
 {
-  if(status_time < 2)
-  {
-    m_resend_status_time = 2;
-  }
-  else
-  {
-    m_resend_status_time = status_time;
-  }
+  m_temperature = temperature;
+  m_owner->sendMessage("st", m_temperature, m_id);
+}
+
+double EndpointTemperature::getTemperature()
+{
+  return m_temperature;
 }
 
 void EndpointTemperature::sendConfig()
@@ -60,7 +59,7 @@ void EndpointTemperature::sendStatusMessage()
     }
 }
 
-void EndpointTemperature::setTemperature(double temperature)
+void EndpointTemperature::sendFeedback()
 {
-  m_temperature = temperature;
+  m_owner->sendMessage("st", m_temperature, m_id);
 }

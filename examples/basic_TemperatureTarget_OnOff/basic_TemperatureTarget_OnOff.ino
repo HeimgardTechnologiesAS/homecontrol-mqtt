@@ -12,20 +12,35 @@
 
 #define RECONNECTION_TIME 5             // network reconnection time in seconds
 #define STATUS_TIME 60                  // system update time in seconds
-#define READ_TIME 20                    // sensor reading time in seconds
+#define READ_TIME 30                    // sensor reading time in seconds
 
 const String ssid = "SSID";
 const String pass = "PASS";
 char* GW_IP = "GW_IP";
 const String deviceName = "TERMOSTAT";
 
+bool active_pin_state = false;
+
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointTemperatureTarget enpointTemperatureTarget(&hcm);
-EndpointOnOff enpointOnOff(&hcm, DEVICE_PIN, false);
+EndpointOnOff enpointOnOff(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
+
+void controlPin()
+{
+  if(enpointOnOff.getState())
+  {
+    digitalWrite(DEVICE_PIN, active_pin_state);
+  }
+  else
+  {
+    digitalWrite(DEVICE_PIN, !active_pin_state);
+  }
+  enpointOnOff.sendFeedback();
+}
 
 void setup()
 {
@@ -82,6 +97,6 @@ void loop()
     #endif
   }
 
+  controlPin();
   hcm.doMagic();
-
 }

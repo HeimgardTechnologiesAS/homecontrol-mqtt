@@ -4,27 +4,34 @@
 
 #define ENDPOINT_LEVEL_DEBUG
 
-EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, int8_t pin, bool active_pin_state)
+EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
-  , m_pin(pin)
   , m_level(0)
-  , m_active_pin_state(active_pin_state)
   , m_state(false)
 {
-  pinMode(m_pin, OUTPUT);
   m_last_send_time = millis();
 }
 
-void EndpointLevel::setStatusTime(int status_time)
+void EndpointLevel::setState(bool state)
 {
-  if(status_time < 2)
-  {
-    m_resend_status_time = 2;
-  }
-  else
-  {
-    m_resend_status_time = status_time;
-  }
+  m_state = state;
+  m_owner->sendMessage("sp", m_state, m_id);
+}
+
+bool EndpointLevel::getState()
+{
+  return m_state;
+}
+
+void EndpointLevel::setLevel(uint16_t level)
+{
+  m_level = level;
+  m_owner->sendMessage("sl", m_level, m_id);
+}
+
+uint16_t EndpointLevel::getLevel()
+{
+  return m_level;
 }
 
 void EndpointLevel::sendConfig()
@@ -36,7 +43,7 @@ void EndpointLevel::sendConfig()
 void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_LEVEL_DEBUG
-  Serial.println("incoming message, endpoint level");
+  Serial.println(F("incoming message, endpoint level"));
 
   for(int i=0; i< length; i++)
   {
@@ -47,11 +54,7 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
 
   if(lineContains(topic, "cl"))
   {
-    m_level = extractInteger(payload, length);
-
-    controlPin();
-
-    m_owner->sendMessage("sl", m_level, m_id);
+    m_level = extractDouble(payload, length);
   }
 
   else if(lineContains(topic, "sl"))
@@ -62,10 +65,6 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
   else if(lineContains(topic, "cp"))
   {
     m_state = extractBool(payload, length);
-
-    controlPin();
-
-    m_owner->sendMessage("sp", m_state, m_id);
   }
 
   else if(lineContains(topic, "sp"))
@@ -80,7 +79,7 @@ void EndpointLevel::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_LEVEL_DEBUG
-        Serial.println("sending status message");
+        Serial.println(F("sending status message"));
       #endif
 
       m_owner->sendMessage("sp", m_state, m_id);
@@ -88,21 +87,8 @@ void EndpointLevel::sendStatusMessage()
     }
 }
 
-void EndpointLevel::controlPin()
+void EndpointLevel::sendFeedback()
 {
-  if(m_state)
-  {
-    if(m_active_pin_state)
-    {
-      analogWrite(m_pin, m_level/10);
-    }
-    else
-    {
-      analogWrite(m_pin, (10000 - m_level) / 10);
-    }
-  }
-  else
-  {
-    digitalWrite(m_pin, !m_active_pin_state);
-  }
+  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
 }

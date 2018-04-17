@@ -10,11 +10,12 @@ public:
   virtual void sendConfig();
   virtual void sendStatusMessage();
   virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
-  virtual void setStatusTime(int status_time);
 
   virtual void setTemperature(double temperature);
+  virtual double getTemperature();
+
+  virtual void sendFeedback();
 
 protected:
-  int m_resend_status_time;
   double m_temperature;
 };
