@@ -77,7 +77,7 @@ void HomeControlMagic::doMagic()
   {
     mqttLoop(true);
 
-    if(m_broker_connected != false)
+    if(m_broker_connected)
     {
       sendStatus();
     }
