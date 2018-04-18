@@ -5,7 +5,7 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // ESP8266 GPIO pin to use (D2).
+#define DHT_PIN 4                       // GPIO pin to use (D2).
 #define DHTTYPE DHT22                   // DHT type
 
 #define RECONNECTION_TIME 5             // network reconnection time in seconds
