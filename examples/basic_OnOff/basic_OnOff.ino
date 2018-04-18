@@ -14,23 +14,29 @@ char* GW_IP = "GW_IP";
 const String deviceName = "DEVICE_ON_OFF";
 
 bool active_pin_state = false;
+bool last_state = false;
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointOnOff enpointOnOff(&hcm);
+EndpointOnOff endpointOnOff(&hcm);
 
 void controlPin()
 {
-  if(enpointOnOff.getState())
+  bool state = endpointOnOff.getState();
+  if(state != last_state)
   {
-    digitalWrite(DEVICE_PIN, active_pin_state);
+    last_state = state;
+    if(state)
+    {
+      digitalWrite(DEVICE_PIN, active_pin_state);
+    }
+    else
+    {
+      digitalWrite(DEVICE_PIN, !active_pin_state);
+    }
+    endpointOnOff.sendFeedback();
   }
-  else
-  {
-    digitalWrite(DEVICE_PIN, !active_pin_state);
-  }
-  enpointOnOff.sendFeedback();
 }
 
 void setup()
@@ -38,12 +44,12 @@ void setup()
   pinMode(DEVICE_PIN, OUTPUT);
 
   network.setReconnectTime(RECONNECTION_TIME);
-  enpointOnOff.setStatusTime(STATUS_TIME);
+  endpointOnOff.setStatusTime(STATUS_TIME);
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
-  hcm.addEndpoint(&enpointOnOff);
+  hcm.addEndpoint(&endpointOnOff);
 }
 
 void loop()

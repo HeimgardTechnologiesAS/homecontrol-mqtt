@@ -62,7 +62,7 @@ void loop()
     Serial.println();
     #endif
 
-    // in this example we're setting temperature every 30s and update system every 60
+    // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
     enpointTemperature.setTemperature(temperature);
 

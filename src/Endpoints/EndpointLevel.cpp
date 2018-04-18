@@ -43,7 +43,7 @@ void EndpointLevel::sendConfig()
 void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_LEVEL_DEBUG
-  Serial.println(F("incoming message, endpoint level"));
+  Serial.println(F("incoming message, EndpointLevel"));
 
   for(int i=0; i< length; i++)
   {
@@ -79,7 +79,7 @@ void EndpointLevel::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_LEVEL_DEBUG
-        Serial.println(F("sending status message"));
+        Serial.println(F("sending status message, EndpointLevel"));
       #endif
 
       m_owner->sendMessage("sp", m_state, m_id);
@@ -89,6 +89,10 @@ void EndpointLevel::sendStatusMessage()
 
 void EndpointLevel::sendFeedback()
 {
+  #ifdef ENDPOINT_LEVEL_DEBUG
+  Serial.println(F("sending feedback message, EndpointLevel"));
+  #endif
+
   m_owner->sendMessage("sp", m_state, m_id);
   m_owner->sendMessage("sl", m_level, m_id);
 }

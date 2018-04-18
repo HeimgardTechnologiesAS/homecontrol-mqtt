@@ -4,7 +4,7 @@
 
 #define DEBUG
 
-#define DEVICE_PIN LED_BUILTIN          // ESP8266 GPIO pin to use, built in led as example
+#define DEVICE_PIN LED_BUILTIN          // GPIO pin to use, built in led as example
 #define RECONNECTION_TIME 5             // network reconnection time in seconds
 #define STATUS_TIME 30                  // system update time in seconds
 
@@ -15,29 +15,40 @@ const String deviceName = "DEVICE_LEVEL";
 
 bool active_pin_state = false;
 
+bool last_state = false;
+double last_level = 0.0;
+
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointLevel enpointLevel(&hcm);
+EndpointLevel endpointLevel(&hcm);
 
 void controlPin()
 {
-  if(enpointLevel.getState())
+  double state = endpointLevel.getState();
+  double level = endpointLevel.getLevel();
+
+  if((state != last_state) || (level != last_level))
   {
-    if(active_pin_state)
+    last_state = state;
+    last_level = level;
+    if(state)
     {
-      analogWrite(DEVICE_PIN, enpointLevel.getLevel() / 10);
+      if(active_pin_state)
+      {
+        analogWrite(DEVICE_PIN, endpointLevel.getLevel() / 10);
+      }
+      else
+      {
+        analogWrite(DEVICE_PIN, (10000 - endpointLevel.getLevel()) / 10);
+      }
     }
     else
     {
-      analogWrite(DEVICE_PIN, (10000 - enpointLevel.getLevel()) / 10);
+      digitalWrite(DEVICE_PIN, !active_pin_state);
     }
+    endpointLevel.sendFeedback();
   }
-  else
-  {
-    digitalWrite(DEVICE_PIN, !active_pin_state);
-  }
-  enpointLevel.sendFeedback();
 }
 
 void setup()
@@ -45,12 +56,12 @@ void setup()
   pinMode(DEVICE_PIN, OUTPUT);
 
   network.setReconnectTime(RECONNECTION_TIME);
-  enpointLevel.setStatusTime(STATUS_TIME);
+  endpointLevel.setStatusTime(STATUS_TIME);
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
-  hcm.addEndpoint(&enpointLevel);
+  hcm.addEndpoint(&endpointLevel);
 }
 
 void loop()

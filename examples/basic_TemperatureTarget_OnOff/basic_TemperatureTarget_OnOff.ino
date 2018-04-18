@@ -20,26 +20,32 @@ char* GW_IP = "GW_IP";
 const String deviceName = "TERMOSTAT";
 
 bool active_pin_state = false;
+bool last_state = false;
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointTemperatureTarget enpointTemperatureTarget(&hcm);
-EndpointOnOff enpointOnOff(&hcm);
+EndpointTemperatureTarget endpointTemperatureTarget(&hcm);
+EndpointOnOff endpointOnOff(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
 void controlPin()
 {
-  if(enpointOnOff.getState())
+  bool state = endpointOnOff.getState();
+  if(state != last_state)
   {
-    digitalWrite(DEVICE_PIN, active_pin_state);
+    last_state = state;
+    if(state)
+    {
+      digitalWrite(DEVICE_PIN, active_pin_state);
+    }
+    else
+    {
+      digitalWrite(DEVICE_PIN, !active_pin_state);
+    }
+    endpointOnOff.sendFeedback();
   }
-  else
-  {
-    digitalWrite(DEVICE_PIN, !active_pin_state);
-  }
-  enpointOnOff.sendFeedback();
 }
 
 void setup()
@@ -47,19 +53,19 @@ void setup()
   pinMode(DEVICE_PIN, OUTPUT);
 
   network.setReconnectTime(RECONNECTION_TIME);
-  enpointTemperatureTarget.setStatusTime(STATUS_TIME);
-  enpointOnOff.setStatusTime(STATUS_TIME);
+  endpointTemperatureTarget.setStatusTime(STATUS_TIME);
+  endpointOnOff.setStatusTime(STATUS_TIME);
 
   double temperature = dht.readTemperature();
-  enpointTemperatureTarget.setTemperatureTarget(temperature);
+  endpointTemperatureTarget.setTemperatureTarget(temperature);
 
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
-  hcm.addEndpoint(&enpointTemperatureTarget);
-  hcm.addEndpoint(&enpointOnOff);
+  hcm.addEndpoint(&endpointTemperatureTarget);
+  hcm.addEndpoint(&endpointOnOff);
 
   dht.begin();
 }
@@ -81,17 +87,17 @@ void loop()
     }
     else
     {
-      enpointTemperatureTarget.setTemperature(temperature);
+      endpointTemperatureTarget.setTemperature(temperature);
     }
 
     #ifdef DEBUG
     Serial.print("Temperature from sensor: ");
-    Serial.print(enpointTemperatureTarget.getTemperature());
+    Serial.print(endpointTemperatureTarget.getTemperature());
     Serial.print(" *C ");
     Serial.println();
 
     Serial.print("Temperature target: ");
-    Serial.print(enpointTemperatureTarget.getTemperatureTarget());
+    Serial.print(endpointTemperatureTarget.getTemperatureTarget());
     Serial.print(" *C ");
     Serial.println();
     #endif

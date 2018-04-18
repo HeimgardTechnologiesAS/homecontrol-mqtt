@@ -20,7 +20,7 @@ void EndpointIdentify::sendConfig()
 void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_IDENTIFY_DEBUG
-  Serial.println("incoming message, endpoint identify");
+  Serial.println(F("incoming message, EndpointIdentify"));
 
   for(int i=0; i< length; i++)
   {
