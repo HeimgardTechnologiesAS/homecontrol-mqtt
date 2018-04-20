@@ -54,7 +54,7 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
 
   if(lineContains(topic, "cl"))
   {
-    m_level = extractDouble(payload, length);
+    m_level = extractInteger(payload, length);
   }
 
   else if(lineContains(topic, "sl"))

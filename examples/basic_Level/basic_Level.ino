@@ -13,10 +13,10 @@ const String pass = "PASS";
 char* GW_IP = "GW_IP";
 const String deviceName = "DEVICE_LEVEL";
 
-bool active_pin_state = false;
+bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
 
 bool last_state = false;
-double last_level = 0.0;
+uint16_t last_level = 0;
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
@@ -25,10 +25,10 @@ EndpointLevel endpointLevel(&hcm);
 
 void controlPin()
 {
-  double state = endpointLevel.getState();
-  double level = endpointLevel.getLevel();
+  bool state = endpointLevel.getState();
+  uint16_t level = endpointLevel.getLevel();
 
-  if((state != last_state) || (level != last_level))
+  if((state != last_state) || ((abs(last_level - level)) > 0.1))
   {
     last_state = state;
     last_level = level;
@@ -36,11 +36,11 @@ void controlPin()
     {
       if(active_pin_state)
       {
-        analogWrite(DEVICE_PIN, endpointLevel.getLevel() / 10);
+        analogWrite(DEVICE_PIN, level / 10);
       }
       else
       {
-        analogWrite(DEVICE_PIN, (10000 - endpointLevel.getLevel()) / 10);
+        analogWrite(DEVICE_PIN, (10000 - level) / 10);
       }
     }
     else
@@ -57,10 +57,12 @@ void setup()
 
   network.setReconnectTime(RECONNECTION_TIME);
   endpointLevel.setStatusTime(STATUS_TIME);
+
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
+
   hcm.addEndpoint(&endpointLevel);
 }
 

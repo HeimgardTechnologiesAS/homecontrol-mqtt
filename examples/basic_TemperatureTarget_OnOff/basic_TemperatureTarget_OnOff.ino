@@ -6,7 +6,7 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // GPIO pin to use (D2).
+#define DHT_PIN 4                       // GPIO pin to use as example (D2)
 #define DHTTYPE DHT22                   // DHT type
 #define DEVICE_PIN LED_BUILTIN          // connected heater or cooler device, built in led as example
 
@@ -19,7 +19,7 @@ const String pass = "PASS";
 char* GW_IP = "GW_IP";
 const String deviceName = "TERMOSTAT";
 
-bool active_pin_state = false;
+bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
 bool last_state = false;
 
 ESPLoop network(ssid, pass);

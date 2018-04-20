@@ -13,7 +13,8 @@ const String pass = "PASS";
 char* GW_IP = "GW_IP";
 const String deviceName = "DEVICE_ON_OFF";
 
-bool active_pin_state = false;
+bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
+
 bool last_state = false;
 
 ESPLoop network(ssid, pass);
@@ -45,10 +46,12 @@ void setup()
 
   network.setReconnectTime(RECONNECTION_TIME);
   endpointOnOff.setStatusTime(STATUS_TIME);
+
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
+
   hcm.addEndpoint(&endpointOnOff);
 }
 
