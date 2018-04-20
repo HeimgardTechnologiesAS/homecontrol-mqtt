@@ -6,7 +6,7 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // GPIO pin to use (D2).
+#define DHT_PIN 4                       // GPIO pin to use as example (D2)
 #define DHTTYPE DHT22                   // DHT type
 #define DEVICE_PIN LED_BUILTIN          // connected heater or cooler device, built in led as example
 

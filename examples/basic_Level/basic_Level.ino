@@ -25,7 +25,7 @@ EndpointLevel endpointLevel(&hcm);
 
 void controlPin()
 {
-  double state = endpointLevel.getState();
+  bool state = endpointLevel.getState();
   double level = endpointLevel.getLevel();
 
   if((state != last_state) || (level != last_level))
@@ -36,11 +36,11 @@ void controlPin()
     {
       if(active_pin_state)
       {
-        analogWrite(DEVICE_PIN, endpointLevel.getLevel() / 10);
+        analogWrite(DEVICE_PIN, level / 10);
       }
       else
       {
-        analogWrite(DEVICE_PIN, (10000 - endpointLevel.getLevel()) / 10);
+        analogWrite(DEVICE_PIN, (10000 - level) / 10);
       }
     }
     else
