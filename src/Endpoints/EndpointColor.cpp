@@ -73,13 +73,29 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
   Serial.println();
   #endif
 
-  if(lineContains(topic, "cc"))
+  if(lineContains(topic, "cl"))
   {
-    //TODO: extract 6 integers x;y;z;r;g;b
+    m_level = extractDouble(payload, length);
+  }
 
+  else if(lineContains(topic, "sl"))
+  {
+    m_owner->sendMessage("sl", m_level, m_id);
+  }
+
+  else if(lineContains(topic, "cp"))
+  {
+    m_state = extractBool(payload, length);
+  }
+
+  else if(lineContains(topic, "sp"))
+  {
+    m_owner->sendMessage("sp", m_state, m_id);
+  }
+
+  else if(lineContains(topic, "cc"))
+  {
     m_rgb = extractRGB(payload, length);
-
-
   }
 
   else if(lineContains(topic, "sc"))
@@ -111,6 +127,8 @@ void EndpointColor::sendFeedback()
   Serial.println(F("sending feedback message, EndpointColor"));
   #endif
 
+  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
   //m_owner->sendMessage("sc", m_color_xyz, m_id);
   m_owner->sendMessage("sc", getRGBstring(), m_id);
 }

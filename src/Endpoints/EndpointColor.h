@@ -26,8 +26,6 @@ class EndpointColor : public Endpoint
 
     virtual void sendFeedback();
 
-    
-
   protected:
     struct RGB m_rgb;
     bool m_state;

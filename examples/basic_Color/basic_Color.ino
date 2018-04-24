@@ -19,7 +19,7 @@ const String deviceName = "DEVICE_COLOR";
 bool active_pin_state = false;
 
 bool last_state = false;
-double last_level = 0.0;
+uint16_t last_level = 0;
 int last_color_R = 0;
 int last_color_G = 0;
 int last_color_B = 0;
@@ -32,29 +32,42 @@ EndpointColor endpointColor(&hcm);
 void controlPin()
 {
   bool state = endpointColor.getState();
-  double level = endpointColor.getLevel();
+  uint16_t level = endpointColor.getLevel();
 
   int color_R = endpointColor.getColorR(); //0-1000
   int color_G = endpointColor.getColorG();
   int color_B = endpointColor.getColorB();
 
-  if((state != last_state) || (abs(last_level - level) > 0.1) || (color_R != last_color_B) || (color_G != last_color_G) || (color_B != last_color_B))
+  if((state != last_state) || (last_level != level) || (color_R != last_color_R) || (color_G != last_color_G) || (color_B != last_color_B))
   {
+    Serial.println("****************** color:");
+    Serial.println(color_R);
+    Serial.println(color_G);
+    Serial.println(color_B);
+    Serial.println("****************** color (calculated):");
+    Serial.println((int)(color_R * ((double)level / 10000)));
+    Serial.println((int)(color_G * ((double)level / 10000)));
+    Serial.println((int)(color_B * ((double)level / 10000)));
+    Serial.println("****************** level:");
+    Serial.println(level);
+    Serial.println("****************** state:");
+    Serial.println(state);
+    Serial.println("******************");
+
     last_state = state;
     last_level = level;
     last_color_R = color_R;
     last_color_G = color_G;
     last_color_B = color_B;
 
-
     if(state)
     {
       if(active_pin_state)
       {
         // RGB (0-1000) , level (0-1)
-        analogWrite(R_PIN, color_R * (level / 10000));
-        analogWrite(G_PIN, color_G * (level / 10000));
-        analogWrite(B_PIN, color_B * (level / 10000));
+        analogWrite(R_PIN, (int)(color_R * ((double)level / 10000)));
+        analogWrite(G_PIN, (int)(color_G * ((double)level / 10000)));
+        analogWrite(B_PIN, (int)(color_B * ((double)level / 10000)));
       }
       else
       {
