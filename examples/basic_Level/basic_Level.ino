@@ -28,7 +28,7 @@ void controlPin()
   bool state = endpointLevel.getState();
   uint16_t level = endpointLevel.getLevel();
 
-  if((state != last_state) || ((abs(last_level - level)) > 0.1))
+  if((state != last_state) || (level != last_level))
   {
     last_state = state;
     last_level = level;
