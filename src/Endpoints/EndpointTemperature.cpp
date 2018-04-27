@@ -11,16 +11,15 @@ EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
   m_last_send_time = millis();
 }
 
-void EndpointTemperature::setStatusTime(int status_time)
+void EndpointTemperature::setTemperature(double temperature)
 {
-  if(status_time < 2)
-  {
-    m_resend_status_time = 2;
-  }
-  else
-  {
-    m_resend_status_time = status_time;
-  }
+  m_temperature = temperature;
+  m_owner->sendMessage("st", m_temperature, m_id);
+}
+
+double EndpointTemperature::getTemperature()
+{
+  return m_temperature;
 }
 
 void EndpointTemperature::sendConfig()
@@ -32,7 +31,7 @@ void EndpointTemperature::sendConfig()
 void EndpointTemperature::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_TEMPERATURE_DEBUG
-  Serial.println("incoming message, endpoint temperature");
+  Serial.println(F("incoming message, EndpointTemperature"));
 
   for(int i=0; i< length; i++)
   {
@@ -53,14 +52,18 @@ void EndpointTemperature::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_TEMPERATURE_DEBUG
-        Serial.println("sending status message");
+        Serial.println(F("sending status message, EndpointTemperature"));
       #endif
 
       m_owner->sendMessage("st", m_temperature, m_id);
     }
 }
 
-void EndpointTemperature::setTemperature(double temperature)
+void EndpointTemperature::sendFeedback()
 {
-  m_temperature = temperature;
+  #ifdef ENDPOINT_TEMPERATURE_DEBUG
+  Serial.println(F("sending feedback message, EndpointTemperature"));
+  #endif
+
+  m_owner->sendMessage("st", m_temperature, m_id);
 }

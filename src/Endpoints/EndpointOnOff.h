@@ -5,15 +5,17 @@
 class EndpointOnOff : public Endpoint
 {
   public:
-    EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin, bool active_pin_state);
+    EndpointOnOff(HomeControlMagic* hcm_ptr);
 
     virtual void sendConfig();
     virtual void sendStatusMessage();
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
-    virtual void controlPin();
+
+    virtual void setState(bool state);
+    virtual bool getState();
+
+    virtual void sendFeedback();
 
   protected:
-    uint8_t m_pin;
-    bool m_active_pin_state;
     bool m_state;
 };

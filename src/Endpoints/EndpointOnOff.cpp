@@ -4,14 +4,22 @@
 
 #define ENDPOINT_ON_OFF_DEBUG
 
-EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, int8_t pin, bool active_pin_state)
+EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
-  , m_pin(pin)
-  , m_active_pin_state(active_pin_state)
   , m_state(false)
 {
-  pinMode(m_pin, OUTPUT);
   m_last_send_time = millis();
+}
+
+void EndpointOnOff::setState(bool state)
+{
+  m_state = state;
+  m_owner->sendMessage("sp", m_state, m_id);
+}
+
+bool EndpointOnOff::getState()
+{
+  return m_state;
 }
 
 void EndpointOnOff::sendConfig()
@@ -23,8 +31,7 @@ void EndpointOnOff::sendConfig()
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_ON_OFF_DEBUG
-  Serial.println("incoming message, endpoint on/off");
-
+  Serial.println(F("incoming message, EndpointOnOff"));
   for(int i=0; i< length; i++)
   {
     Serial.print((char)payload[i]);
@@ -35,10 +42,6 @@ void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int len
   if(lineContains(topic, "cp"))
   {
     m_state = extractBool(payload, length);
-
-    controlPin();
-
-    m_owner->sendMessage("sp", m_state, m_id);
   }
   else if(lineContains(topic, "sp"))
   {
@@ -52,20 +55,18 @@ void EndpointOnOff::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_ON_OFF_DEBUG
-        Serial.println("sending status message");
+        Serial.println(F("sending status message, EndpointOnOff"));
       #endif
+
       m_owner->sendMessage("sp", m_state, m_id);
     }
 }
 
-void EndpointOnOff::controlPin()
+void EndpointOnOff::sendFeedback()
 {
-  if(m_state)
-  {
-    digitalWrite(m_pin, m_active_pin_state);
-  }
-  else
-  {
-    digitalWrite(m_pin, !m_active_pin_state);
-  }
+  #ifdef ENDPOINT_ON_OFF_DEBUG
+  Serial.println(F("sending feedback message, EndpointOnOff"));
+  #endif
+
+  m_owner->sendMessage("sp", m_state, m_id);
 }

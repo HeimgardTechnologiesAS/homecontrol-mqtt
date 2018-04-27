@@ -5,12 +5,12 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // ESP8266 GPIO pin to use (D2).
+#define DHT_PIN 4                       // GPIO pin to use (D2).
 #define DHTTYPE DHT22                   // DHT type
 
 #define RECONNECTION_TIME 5             // network reconnection time in seconds
 #define STATUS_TIME 60                  // system update time in seconds
-#define READ_TIME 20                    // sensor reading time in seconds
+#define READ_TIME 30                    // sensor reading time in seconds
 
 const String ssid = "SSID";
 const String pass = "PASS";
@@ -22,7 +22,7 @@ HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointTemperature enpointTemperature(&hcm);
 
-DHT dht(DHTPIN, DHTTYPE);
+DHT dht(DHT_PIN, DHTTYPE);
 
 void setup()
 {
@@ -62,9 +62,11 @@ void loop()
     Serial.println();
     #endif
 
+    // this example read/set temperature every 30s and update system every 60
+    // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
     enpointTemperature.setTemperature(temperature);
+
   }
 
   hcm.doMagic();
-
 }
