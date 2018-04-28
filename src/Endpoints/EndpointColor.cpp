@@ -75,7 +75,7 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
 
   if(lineContains(topic, "cl"))
   {
-    m_level = extractDouble(payload, length);
+    m_level = extractInteger(payload, length);
   }
 
   else if(lineContains(topic, "sl"))
@@ -100,7 +100,7 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
 
   else if(lineContains(topic, "sc"))
   {
-    //m_owner->sendMessage("sc", m_color_xyz, m_id);
+    //m_owner->sendMessage("sc", getRGBstring() + getXYZstring(), m_id);
     m_owner->sendMessage("sc", getRGBstring(), m_id);
   }
 }
@@ -116,7 +116,7 @@ void EndpointColor::sendStatusMessage()
 
       m_owner->sendMessage("sp", m_state, m_id);
       m_owner->sendMessage("sl", m_level, m_id);
-      //m_owner->sendMessage("sc", m_color_xyz, m_id);
+      //m_owner->sendMessage("sc", getRGBstring() + getXYZstring(), m_id);
       m_owner->sendMessage("sc", getRGBstring(), m_id);
     }
 }
@@ -129,6 +129,6 @@ void EndpointColor::sendFeedback()
 
   m_owner->sendMessage("sp", m_state, m_id);
   m_owner->sendMessage("sl", m_level, m_id);
-  //m_owner->sendMessage("sc", m_color_xyz, m_id);
+  //m_owner->sendMessage("sc", getRGBstring() + getXYZstring(), m_id);
   m_owner->sendMessage("sc", getRGBstring(), m_id);
 }

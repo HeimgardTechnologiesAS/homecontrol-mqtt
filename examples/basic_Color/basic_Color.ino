@@ -16,7 +16,7 @@ const String pass = "PASS";
 char* GW_IP = "GW_IP";
 const String deviceName = "DEVICE_COLOR";
 
-bool active_pin_state = false;
+bool active_pin_state = true;
 
 bool last_state = false;
 uint16_t last_level = 0;
@@ -34,26 +34,12 @@ void controlPin()
   bool state = endpointColor.getState();
   uint16_t level = endpointColor.getLevel();
 
-  int color_R = endpointColor.getColorR(); //0-1000
+  int color_R = endpointColor.getColorR();
   int color_G = endpointColor.getColorG();
   int color_B = endpointColor.getColorB();
 
   if((state != last_state) || (last_level != level) || (color_R != last_color_R) || (color_G != last_color_G) || (color_B != last_color_B))
   {
-    Serial.println("****************** color:");
-    Serial.println(color_R);
-    Serial.println(color_G);
-    Serial.println(color_B);
-    Serial.println("****************** color (calculated):");
-    Serial.println((int)(color_R * ((double)level / 10000)));
-    Serial.println((int)(color_G * ((double)level / 10000)));
-    Serial.println((int)(color_B * ((double)level / 10000)));
-    Serial.println("****************** level:");
-    Serial.println(level);
-    Serial.println("****************** state:");
-    Serial.println(state);
-    Serial.println("******************");
-
     last_state = state;
     last_level = level;
     last_color_R = color_R;
