@@ -70,13 +70,3 @@ void EndpointOnOff::sendFeedback()
 
   m_owner->sendMessage("sp", m_state, m_id);
 }
-
-void EndpointOnOff::sendFeedback(bool state)
-{
-  #ifdef ENDPOINT_ON_OFF_DEBUG
-  Serial.println(F("sending feedback message, EndpointOnOff"));
-  #endif
-
-  m_state = state;
-  m_owner->sendMessage("sp", m_state, m_id);
-}

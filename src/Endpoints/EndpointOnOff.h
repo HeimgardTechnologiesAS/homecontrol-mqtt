@@ -15,7 +15,6 @@ class EndpointOnOff : public Endpoint
     virtual bool getState();
 
     virtual void sendFeedback();
-    virtual void sendFeedback(bool state);
 
   protected:
     bool m_state;
