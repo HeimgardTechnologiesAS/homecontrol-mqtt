@@ -4,16 +4,17 @@
 
 #define DEBUG
 
-#define DEVICE_PIN LED_BUILTIN          // GPIO pin to use, built in led as example
-#define RECONNECTION_TIME 5             // network reconnection time in seconds
-#define STATUS_TIME 30                  // system update time in seconds
+#define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example
 
-const String ssid = "SSID";
-const String pass = "PASS";
-char* GW_IP = "GW_IP";
-const String deviceName = "DEVICE_LEVEL";
+#define RECONNECTION_TIME 5                 // network reconnection time in seconds
+#define STATUS_TIME 30                      // system update time in seconds
 
-bool active_pin_state = false;
+const String ssid = "SSID";                 // wifi SSID
+const String pass = "PASS";                 // wifi password
+char* GW_IP = "GW_IP";                      // gateway IP address
+const String deviceName = "DEVICE_LEVEL";   // name of device
+
+bool active_pin_state = false;              // reverse initial pin state
 
 bool last_state = false;
 double last_level = 0.0;
@@ -26,7 +27,7 @@ EndpointLevel endpointLevel(&hcm);
 void controlPin()
 {
   bool state = endpointLevel.getState();
-  double level = endpointLevel.getLevel();
+  uint16_t level = endpointLevel.getLevel();
 
   if((state != last_state) || (level != last_level))
   {

@@ -5,17 +5,17 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // GPIO pin to use (D2).
-#define DHTTYPE DHT22                   // DHT type
+#define DHT_PIN 4                           // GPIO pin to use (D2).
+#define DHTTYPE DHT22                       // DHT type
 
-#define RECONNECTION_TIME 5             // network reconnection time in seconds
-#define STATUS_TIME 60                  // system update time in seconds
-#define READ_TIME 30                    // sensor reading time in seconds
+#define RECONNECTION_TIME 5                 // network reconnection time in seconds
+#define STATUS_TIME 60                      // system update time in seconds
+#define READ_TIME 30                        // sensor reading time in seconds
 
-const String ssid = "SSID";
-const String pass = "PASS";
-char* GW_IP = "GW_IP";
-const String deviceName = "TEMP_SENSOR";
+const String ssid = "SSID";                 // wifi SSID
+const String pass = "PASS";                 // wifi password
+char* GW_IP = "GW_IP";                      // gateway IP address
+const String deviceName = "TEMP_SENSOR";    // name of device
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
@@ -26,14 +26,13 @@ DHT dht(DHT_PIN, DHTTYPE);
 
 void setup()
 {
-  network.setReconnectTime(RECONNECTION_TIME);
-  enpointTemperature.setStatusTime(STATUS_TIME);
-
-  #ifdef DEBUG
+#ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-  #endif
+ #endif
 
+  network.setReconnectTime(RECONNECTION_TIME);
+  enpointTemperature.setStatusTime(STATUS_TIME);
   hcm.addEndpoint(&enpointTemperature);
 
   dht.begin();
@@ -55,12 +54,12 @@ void loop()
       return;
     }
 
-    #ifdef DEBUG
+#ifdef DEBUG
     Serial.print("Temperature: ");
     Serial.print(temperature);
     Serial.print(" *C ");
     Serial.println();
-    #endif
+#endif
 
     // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
