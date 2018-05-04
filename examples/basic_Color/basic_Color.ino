@@ -43,11 +43,11 @@ void controlPin()
   uint16_t color_B = endpointColor.getColorB();
 
   // TODO: delete this part when fixed initial color status in the app
-  if((color_R == 0  ) && (color_G == 0) && (color_B == 0))
+  if((color_R == 0) && (color_G == 0) && (color_B == 0))
   {
-    color_R = 1000;
-    color_G = 568;
-    color_B = 144;
+    color_R = 10000;
+    color_G = 5680;
+    color_B = 1440;
   }
 
   if((state != last_state) || (last_level != level) || (color_R != last_color_R) || (color_G != last_color_G) || (color_B != last_color_B))
