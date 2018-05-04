@@ -17,7 +17,7 @@ const String deviceName = "DEVICE_LEVEL";   // name of device
 bool active_pin_state = false;              // reverse initial pin state
 
 bool last_state = false;
-double last_level = 0.0;
+uint16_t last_level = 0;
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
@@ -58,10 +58,12 @@ void setup()
 
   network.setReconnectTime(RECONNECTION_TIME);
   endpointLevel.setStatusTime(STATUS_TIME);
+
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
+
   hcm.addEndpoint(&endpointLevel);
 }
 
