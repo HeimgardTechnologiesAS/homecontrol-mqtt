@@ -4,16 +4,17 @@
 
 #define DEBUG
 
-#define DEVICE_PIN LED_BUILTIN          // GPIO pin to use, built in led as example
-#define RECONNECTION_TIME 5             // network reconnection time in seconds
-#define STATUS_TIME 30                  // system update time in seconds
+#define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example
 
-const String ssid = "SSID";
-const String pass = "PASS";
-char* GW_IP = "GW_IP";
-const String deviceName = "DEVICE_LEVEL";
+#define RECONNECTION_TIME 5                 // network reconnection time in seconds
+#define STATUS_TIME 30                      // system update time in seconds
 
-bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
+const String ssid = "SSID";                 // wifi SSID
+const String pass = "PASS";                 // wifi password
+char* GW_IP = "GW_IP";                      // gateway IP address
+const String deviceName = "DEVICE_LEVEL";   // name of device
+
+bool active_pin_state = false;              // reverse initial pin state
 
 bool last_state = false;
 uint16_t last_level = 0;

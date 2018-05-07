@@ -6,20 +6,21 @@
 
 #define DEBUG
 
-#define DHT_PIN 4                       // GPIO pin to use as example (D2)
-#define DHTTYPE DHT22                   // DHT type
-#define DEVICE_PIN LED_BUILTIN          // connected heater or cooler device, built in led as example
+#define DHT_PIN 4                         // GPIO pin to use as example (D2)
+#define DHTTYPE DHT22                     // DHT type
+#define DEVICE_PIN LED_BUILTIN            // connected heater or cooler device, built in led as example
 
-#define RECONNECTION_TIME 5             // network reconnection time in seconds
-#define STATUS_TIME 60                  // system update time in seconds
-#define READ_TIME 30                    // sensor reading time in seconds
+#define RECONNECTION_TIME 5               // network reconnection time in seconds
+#define STATUS_TIME 60                    // system update time in seconds
+#define READ_TIME 30                      // sensor reading time in seconds
 
-const String ssid = "SSID";
-const String pass = "PASS";
-char* GW_IP = "GW_IP";
-const String deviceName = "TERMOSTAT";
+const String ssid = "SSID";               // wifi SSID
+const String pass = "PASS";               // wifi password
+char* GW_IP = "GW_IP";                    // gateway IP address
+const String deviceName = "TERMOSTAT";    // name of device
 
-bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
+bool active_pin_state = false;            // reverse initial pin state
+
 bool last_state = false;
 
 ESPLoop network(ssid, pass);
@@ -59,10 +60,10 @@ void setup()
   double temperature = dht.readTemperature();
   endpointTemperatureTarget.setTemperatureTarget(temperature);
 
-  #ifdef DEBUG
+#ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-  #endif
+#endif
 
   hcm.addEndpoint(&endpointTemperatureTarget);
   hcm.addEndpoint(&endpointOnOff);
@@ -90,7 +91,7 @@ void loop()
       endpointTemperatureTarget.setTemperature(temperature);
     }
 
-    #ifdef DEBUG
+#ifdef DEBUG
     Serial.print("Temperature from sensor: ");
     Serial.print(endpointTemperatureTarget.getTemperature());
     Serial.print(" *C ");
@@ -100,7 +101,7 @@ void loop()
     Serial.print(endpointTemperatureTarget.getTemperatureTarget());
     Serial.print(" *C ");
     Serial.println();
-    #endif
+#endif
   }
 
   controlPin();

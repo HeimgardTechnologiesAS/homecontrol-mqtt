@@ -4,16 +4,17 @@
 
 #define DEBUG
 
-#define DEVICE_PIN LED_BUILTIN          // GPIO pin to use, built in led as example
-#define RECONNECTION_TIME 5             // network reconnection time in seconds
-#define STATUS_TIME 30                  // system update time in seconds
+#define DEVICE_PIN LED_BUILTIN                // GPIO pin to use, built in led as example
 
-const String ssid = "SSID";
-const String pass = "PASS";
-char* GW_IP = "GW_IP";
-const String deviceName = "DEVICE_ON_OFF";
+#define RECONNECTION_TIME 5                   // network reconnection time in seconds
+#define STATUS_TIME 30                        // system update time in seconds
 
-bool active_pin_state = false;          // initialize output pin state (false for nodeMCU to turn on LED)
+const String ssid = "SSID";                   // wifi SSID
+const String pass = "PASS";                   // wifi password
+char* GW_IP = "GW_IP";                        // gateway IP address
+const String deviceName = "DEVICE_ON_OFF";    // name of device
+
+bool active_pin_state = false;                // reverse initial pin state
 
 bool last_state = false;
 
@@ -44,14 +45,13 @@ void setup()
 {
   pinMode(DEVICE_PIN, OUTPUT);
 
-  network.setReconnectTime(RECONNECTION_TIME);
-  endpointOnOff.setStatusTime(STATUS_TIME);
-
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
 
+  network.setReconnectTime(RECONNECTION_TIME);
+  endpointOnOff.setStatusTime(STATUS_TIME);
   hcm.addEndpoint(&endpointOnOff);
 }
 

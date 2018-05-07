@@ -159,3 +159,32 @@ bool extractBool(byte* text, unsigned int length)
   clearString(text, length);
   return temp;
 }
+
+RGB extractRGB(byte* text, unsigned int length)
+    {
+        RGB rgb;
+        if(text[length] != '\0')
+        {
+            text[length] = '\0';
+        }
+        int values[3] = {0};
+        for(int i = 2; i >= 0; i--)
+        {
+            char* k1 = strrchr((const char*)text, ';');
+            int k = k1 - (const char*)text + 1;
+            if(k < 0)
+                k = 0;
+            char temp[3];
+            for(int j = k, j1 = 0; j < length; j++, j1++)
+            {
+                temp[j1] = text[j];
+            }
+            text[k - 1] = '\0';
+            values[i] = atoi(temp);
+        }
+        rgb.r = values[0];
+        rgb.g = values[1];
+        rgb.b = values[2];
+        clearString(text, length);
+        return rgb;
+    }
