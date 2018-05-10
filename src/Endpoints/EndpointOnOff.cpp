@@ -24,8 +24,8 @@ bool EndpointOnOff::getState()
 
 void EndpointOnOff::sendConfig()
 {
-  String buff = String("e:on_off;r=") + m_resend_status_time + String(";");
-  m_owner->sendMessage("conf", buff, m_id);
+  sprintf(m_buff, "e:on_off;r=%d;", m_resend_status_time);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)

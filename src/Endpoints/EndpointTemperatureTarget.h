@@ -23,4 +23,5 @@ class EndpointTemperatureTarget : public Endpoint
   protected:
     double m_temperature;
     double m_temperature_target;
+    char m_buff[128];
 };

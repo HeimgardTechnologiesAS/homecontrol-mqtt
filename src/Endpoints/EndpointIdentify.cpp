@@ -13,8 +13,8 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
 
 void EndpointIdentify::sendConfig()
 {
-  String buff = String("e:identify;");
-  m_owner->sendMessage("conf", buff, m_id);
+  sprintf(m_buff, "e:identify;");
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int length)

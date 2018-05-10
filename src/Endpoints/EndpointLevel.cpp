@@ -36,8 +36,8 @@ uint16_t EndpointLevel::getLevel()
 
 void EndpointLevel::sendConfig()
 {
-  String buff = String("e:level;r=") + m_resend_status_time + String(";");
-  m_owner->sendMessage("conf", buff, m_id);
+  sprintf(m_buff, "e:level;r=%d;", m_resend_status_time);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)

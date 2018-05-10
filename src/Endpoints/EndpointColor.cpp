@@ -1,7 +1,6 @@
 #include "EndpointColor.h"
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
-#include <string>
 
 #define ENDPOINT_COLOR_DEBUG
 
@@ -50,15 +49,16 @@ int EndpointColor::getColorB()
   return m_rgb.b;
 }
 
-String EndpointColor::getRGBstring()
+char* EndpointColor::getRGBcharPtr()
 {
-  return String(m_rgb.r) + ";" + String(m_rgb.g) + ";" + String(m_rgb.b);
+  sprintf(m_buff, "%d;%d;%d", m_rgb.r, m_rgb.g, m_rgb.b);
+  return m_buff;
 }
 
 void EndpointColor::sendConfig()
 {
-  String buff = String("e:color;r=") + m_resend_status_time + String(";");
-  m_owner->sendMessage("conf", buff, m_id);
+  sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -100,7 +100,7 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
 
   else if(lineContains(topic, "sc"))
   {
-    m_owner->sendMessage("sc", getRGBstring(), m_id);
+    m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
   }
 }
 
@@ -115,7 +115,7 @@ void EndpointColor::sendStatusMessage()
 
       m_owner->sendMessage("sp", m_state, m_id);
       m_owner->sendMessage("sl", m_level, m_id);
-      m_owner->sendMessage("sc", getRGBstring(), m_id);
+      m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
     }
 }
 
@@ -127,5 +127,5 @@ void EndpointColor::sendFeedback()
 
   m_owner->sendMessage("sp", m_state, m_id);
   m_owner->sendMessage("sl", m_level, m_id);
-  m_owner->sendMessage("sc", getRGBstring(), m_id);
+  m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
 }

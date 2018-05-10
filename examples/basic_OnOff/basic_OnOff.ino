@@ -9,10 +9,10 @@
 #define RECONNECTION_TIME 5                   // network reconnection time in seconds
 #define STATUS_TIME 30                        // system update time in seconds
 
-const String ssid = "SSID";                   // wifi SSID
-const String pass = "PASS";                   // wifi password
+char* ssid = "SSID";                          // wifi SSID
+char* pass = "PASS";                          // wifi password
 char* GW_IP = "GW_IP";                        // gateway IP address
-const String deviceName = "DEVICE_ON_OFF";    // name of device
+char* deviceName = "DEVICE_ON_OFF";           // name of device
 
 bool active_pin_state = false;                // reverse initial pin state
 

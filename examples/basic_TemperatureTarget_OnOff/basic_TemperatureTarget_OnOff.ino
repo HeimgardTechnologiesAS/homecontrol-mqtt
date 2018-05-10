@@ -14,10 +14,10 @@
 #define STATUS_TIME 60                    // system update time in seconds
 #define READ_TIME 30                      // sensor reading time in seconds
 
-const String ssid = "SSID";               // wifi SSID
-const String pass = "PASS";               // wifi password
+char* ssid = "SSID";                      // wifi SSID
+char* pass = "PASS";                      // wifi password
 char* GW_IP = "GW_IP";                    // gateway IP address
-const String deviceName = "TERMOSTAT";    // name of device
+char* deviceName = "TERMOSTAT";           // name of device
 
 bool active_pin_state = false;            // reverse initial pin state
 
