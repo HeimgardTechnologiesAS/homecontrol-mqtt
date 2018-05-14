@@ -41,7 +41,7 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, LoopObject& network_object, String username, String password)
+HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, LoopObject& network_object, char* username, char* password)
   : m_number_of_endpoints(0)
   , m_name(deviceName)
   , m_network_object(network_object)
@@ -64,7 +64,7 @@ HomeControlMagic::HomeControlMagic(char* server_ip, const String deviceName, Loo
   m_id = m_network_object.getUniqueId();
 
   strcat(m_base_topic, "d/");
-  strcat(m_base_topic, m_id.c_str());
+  strcat(m_base_topic, m_id);
   strcat(m_base_topic, "/");
 
 }
@@ -84,13 +84,13 @@ void HomeControlMagic::doMagic()
   }
 }
 
-void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_id)
+void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
-  strcat(buffer, topic.c_str());
+  strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
   #endif
@@ -99,16 +99,16 @@ void HomeControlMagic::sendMessage(String topic, String message, char* endpoint_
   Serial.println(message);
   #endif
 
-  m_esp_client.publish(buffer, message.c_str());
+  m_esp_client.publish(buffer, message);
 }
 
-void HomeControlMagic::sendMessage(String topic, bool message, char* endpoint_id)
+void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
-  strcat(buffer, topic.c_str());
+  strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
   #endif
@@ -123,13 +123,13 @@ void HomeControlMagic::sendMessage(String topic, bool message, char* endpoint_id
   m_esp_client.publish(buffer, buffer1);
 }
 
-void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoint_id)
+void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
-  strcat(buffer, topic.c_str());
+  strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
   #endif
@@ -144,13 +144,13 @@ void HomeControlMagic::sendMessage(String topic, uint16_t message, char* endpoin
   m_esp_client.publish(buffer, buffer1);
 }
 
-void HomeControlMagic::sendMessage(String topic, double message, char* endpoint_id)
+void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_id)
 {
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
-  strcat(buffer, topic.c_str());
+  strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
   #endif
@@ -213,7 +213,7 @@ bool HomeControlMagic::reconnectMqtt()
   Serial.println("Trying to reconnect to mqtt broker");
 #endif
   // Attempt to connect
-  if(m_esp_client.connect(m_id.c_str(), m_username.c_str(), m_password.c_str()))
+  if(m_esp_client.connect(m_id, m_username, m_password))
   {
 #ifdef HCM_DEBUG
     Serial.println("Success");
@@ -244,7 +244,7 @@ void HomeControlMagic::announce()
 void HomeControlMagic::subscribeNow()
 {
   char buff[20] = {0};
-  strcat(buff, m_id.c_str());
+  strcat(buff, m_id);
   strcat(buff, "/#");
   #ifdef HCM_DEBUG
   Serial.println(buff);
@@ -264,7 +264,7 @@ Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
   return m_endpoints_pointers[number];
 }
 
-String HomeControlMagic::getId()
+char* HomeControlMagic::getId()
 {
   return m_id;
 }

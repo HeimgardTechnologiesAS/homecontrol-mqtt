@@ -22,7 +22,7 @@ class EndpointColor : public Endpoint
     virtual int getColorG();
     virtual int getColorB();
 
-    virtual String getRGBstring();
+    virtual char* getRGBcharPtr();
 
     virtual void sendFeedback();
 
@@ -30,4 +30,5 @@ class EndpointColor : public Endpoint
     struct RGB m_rgb;
     bool m_state;
     uint16_t m_level;
+    char m_buff[128];
 };

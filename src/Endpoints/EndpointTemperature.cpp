@@ -24,8 +24,8 @@ double EndpointTemperature::getTemperature()
 
 void EndpointTemperature::sendConfig()
 {
-  String buff = String("e:temperature;r=") + m_resend_status_time + String(";");
-  m_owner->sendMessage("conf", buff, m_id);
+  sprintf(m_buff, "e:temperature;r=%d;", m_resend_status_time);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointTemperature::incomingMessage(char* topic, byte* payload, unsigned int length)

@@ -12,4 +12,5 @@ class EndpointIdentify : public Endpoint
 
   private:
     uint8_t m_pin;
+    char m_buff[128];
 };

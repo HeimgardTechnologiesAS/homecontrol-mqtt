@@ -1,6 +1,6 @@
 #include "helperFunctions.h"
 
-void clearString(byte* text, unsigned int length)
+void clearByte(byte* text, unsigned int length)
 {
   for(int i = 0; i < length; i++)
   {
@@ -66,7 +66,7 @@ float extractFloat(byte* text, unsigned int length)
       temp += (text[i] - '0') * pow(10, ((length - 1) - i));
     }
   }
-  clearString(text, length);
+  clearByte(text, length);
   return temp;
 }
 
@@ -97,7 +97,7 @@ double extractDouble(byte* text, unsigned int length)
       temp += (text[i] - '0') * pow(10, ((length - 1) - i));
     }
   }
-  clearString(text, length);
+  clearByte(text, length);
   return temp;
 }
 
@@ -114,7 +114,7 @@ int extractInteger(byte* text, unsigned int length)
   {
     temp = atoi((const char*)text);
   }
-  clearString(text, length);
+  clearByte(text, length);
   return temp;
 }
 
@@ -132,7 +132,7 @@ bool extractState(byte* text, unsigned int length)
       temp = false;
     }
   }
-  clearString(text, length);
+  clearByte(text, length);
   return temp;
 }
 
@@ -156,7 +156,7 @@ bool extractBool(byte* text, unsigned int length)
       temp = false;
     }
   }
-  clearString(text, length);
+  clearByte(text, length);
   return temp;
 }
 
@@ -185,6 +185,6 @@ RGB extractRGB(byte* text, unsigned int length)
         rgb.r = values[0];
         rgb.g = values[1];
         rgb.b = values[2];
-        clearString(text, length);
+        clearByte(text, length);
         return rgb;
     }

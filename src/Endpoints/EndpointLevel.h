@@ -22,4 +22,5 @@ class EndpointLevel : public Endpoint
   protected:
     uint16_t m_level;
     bool m_state;
+    char m_buff[128];
 };

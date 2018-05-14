@@ -18,4 +18,5 @@ public:
 
 protected:
   double m_temperature;
+  char m_buff[128];
 };
