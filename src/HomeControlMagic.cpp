@@ -239,6 +239,8 @@ bool HomeControlMagic::reconnectMqtt()
 void HomeControlMagic::announce()
 {
   sendMessage("announce", m_name, "0");
+
+  sendFeedback();
 }
 
 void HomeControlMagic::subscribeNow()
@@ -299,6 +301,14 @@ void HomeControlMagic::sendStatus()
   for(uint8_t i = 0; i<m_number_of_endpoints; i++)
   {
       m_endpoints_pointers[i]->sendStatusMessage();
+  }
+}
+
+void HomeControlMagic::sendFeedback()
+{
+  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
+  {
+      m_endpoints_pointers[i]->sendFeedbackMessage();
   }
 }
 

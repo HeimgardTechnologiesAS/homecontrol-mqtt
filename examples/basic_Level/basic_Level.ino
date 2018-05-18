@@ -48,7 +48,7 @@ void controlPin()
     {
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
-    endpointLevel.sendFeedback();
+    endpointLevel.sendFeedbackMessage();
   }
 }
 

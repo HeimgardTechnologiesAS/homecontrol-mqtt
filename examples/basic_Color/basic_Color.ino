@@ -79,7 +79,7 @@ void controlPin()
       digitalWrite(G_PIN, !active_pin_state);
       digitalWrite(B_PIN, !active_pin_state);
     }
-    endpointColor.sendFeedback();
+    endpointColor.sendFeedbackMessage();
   }
 }
 

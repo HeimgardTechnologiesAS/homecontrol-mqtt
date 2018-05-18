@@ -87,7 +87,7 @@ void EndpointLevel::sendStatusMessage()
     }
 }
 
-void EndpointLevel::sendFeedback()
+void EndpointLevel::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_LEVEL_DEBUG
   Serial.println(F("sending feedback message, EndpointLevel"));

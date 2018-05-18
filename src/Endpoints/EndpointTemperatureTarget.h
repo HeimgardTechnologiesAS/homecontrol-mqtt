@@ -9,6 +9,8 @@ class EndpointTemperatureTarget : public Endpoint
 
     virtual void sendConfig();
     virtual void sendStatusMessage();
+    virtual void sendFeedbackMessage();
+
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
 
 
@@ -17,8 +19,6 @@ class EndpointTemperatureTarget : public Endpoint
 
     virtual double getTemperature();
     virtual double getTemperatureTarget();
-
-    virtual void sendFeedback();
 
   protected:
     double m_temperature;

@@ -62,7 +62,7 @@ void EndpointOnOff::sendStatusMessage()
     }
 }
 
-void EndpointOnOff::sendFeedback()
+void EndpointOnOff::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_ON_OFF_DEBUG
   Serial.println(F("sending feedback message, EndpointOnOff"));
