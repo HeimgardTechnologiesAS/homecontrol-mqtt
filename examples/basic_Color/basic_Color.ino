@@ -14,7 +14,7 @@
 char* ssid = "SSID";                        // wifi SSID
 char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "DEVICE_LEVEL";          // name of device
+char* deviceName = "TEST_COLOR";            // name of device
 
 bool active_pin_state = true;               // reverse initial pin state
 
@@ -26,8 +26,21 @@ uint16_t last_color_B = 0;
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
-
 EndpointColor endpointColor(&hcm);
+
+uint16_t adjLevel(uint16_t color_X, uint16_t level)
+{
+  if(active_pin_state)
+  {
+    // level 0-1000
+    return (int)((color_X / 10) * ((double)level / 10000));
+  }
+  else
+  {
+    // level 1000-0
+    return (int)((color_X / 10) * ((double)(10000 - level) / 10000));
+  }
+}
 
 void controlPin()
 {
@@ -42,14 +55,6 @@ void controlPin()
   uint16_t color_G = endpointColor.getColorG();
   uint16_t color_B = endpointColor.getColorB();
 
-  // TODO: delete this part when fixed initial color status in the app
-  if((color_R == 0) && (color_G == 0) && (color_B == 0))
-  {
-    color_R = 10000;
-    color_G = 5680;
-    color_B = 1440;
-  }
-
   if((state != last_state) || (last_level != level) || (color_R != last_color_R) || (color_G != last_color_G) || (color_B != last_color_B))
   {
     last_state = state;
@@ -60,18 +65,9 @@ void controlPin()
 
     if(state)
     {
-      if(active_pin_state)
-      {
-        analogWrite(R_PIN, (int)((color_R / 10) * ((double)level / 10000)));
-        analogWrite(G_PIN, (int)((color_G / 10) * ((double)level / 10000)));
-        analogWrite(B_PIN, (int)((color_B / 10) * ((double)level / 10000)));
-      }
-      else
-      {
-        analogWrite(R_PIN, (int)((color_R / 10) * ((double)(10000 - level) / 10000)));
-        analogWrite(G_PIN, (int)((color_G / 10) * ((double)(10000 - level) / 10000)));
-        analogWrite(B_PIN, (int)((color_B / 10) * ((double)(10000 - level) / 10000)));
-      }
+      analogWrite(R_PIN, adjLevel(color_R, level));
+      analogWrite(G_PIN, adjLevel(color_G, level));
+      analogWrite(B_PIN, adjLevel(color_B, level));
     }
     else
     {
@@ -95,12 +91,12 @@ void setup()
 #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  endpointColor.setStatusTime(STATUS_TIME);
   hcm.addEndpoint(&endpointColor);
+  endpointColor.setStatusTime(STATUS_TIME);
 }
 
 void loop()
 {
-  controlPin();
   hcm.doMagic();
+  controlPin();
 }

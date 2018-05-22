@@ -5,7 +5,7 @@
 #define DEBUG
 
 #define PIR_PIN 4                           // GPIO pin to use (D2).
-//#define DEVICE_PIN 5                        // GPIO pin to use, built in led as example
+//#define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define STATUS_TIME 60                      // system update time in seconds
@@ -14,7 +14,7 @@
 char* ssid = "SSID";                        // wifi SSID
 char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "MOTION_SENSOR";           // name of device
+char* deviceName = "MOTION_SENSOR";         // name of device
 
 bool active_pin_state = false;              // reverse initial pin state
 bool last_motion = false;
@@ -46,10 +46,10 @@ void controlPin()
 
 void setup()
 {
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
- #endif
+  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
   enpointMotion.setStatusTime(STATUS_TIME);
