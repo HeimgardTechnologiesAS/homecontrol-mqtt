@@ -9,6 +9,8 @@ class EndpointLevel : public Endpoint
 
     virtual void sendConfig();
     virtual void sendStatusMessage();
+    virtual void sendFeedbackMessage();
+
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
 
     virtual void setState(bool state);
@@ -16,8 +18,6 @@ class EndpointLevel : public Endpoint
 
     virtual void setLevel(uint16_t state);
     virtual uint16_t getLevel();
-
-    virtual void sendFeedback();
 
   protected:
     uint16_t m_level;

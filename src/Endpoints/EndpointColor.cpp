@@ -55,12 +55,6 @@ char* EndpointColor::getRGBcharPtr()
   return m_buff;
 }
 
-void EndpointColor::sendConfig()
-{
-  sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
-  m_owner->sendMessage("conf", m_buff, m_id);
-}
-
 void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_COLOR_DEBUG
@@ -104,6 +98,12 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
   }
 }
 
+void EndpointColor::sendConfig()
+{
+  sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+  m_owner->sendMessage("conf", m_buff, m_id);
+}
+
 void EndpointColor::sendStatusMessage()
 {
     if (millis() - m_last_send_time > m_resend_status_time * 1000)
@@ -119,7 +119,7 @@ void EndpointColor::sendStatusMessage()
     }
 }
 
-void EndpointColor::sendFeedback()
+void EndpointColor::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_COLOR_DEBUG
   Serial.println(F("sending feedback message, EndpointColor"));

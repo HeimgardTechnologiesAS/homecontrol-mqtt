@@ -79,7 +79,7 @@ void EndpointTemperatureTarget::sendStatusMessage()
     }
 }
 
-void EndpointTemperatureTarget::sendFeedback()
+void EndpointTemperatureTarget::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_TEMPERATURE_TARGET_DEBUG
   Serial.println(F("sending feedback message, EndpointTemperatureTarget"));

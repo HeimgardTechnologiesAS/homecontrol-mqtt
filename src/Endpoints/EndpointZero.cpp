@@ -16,6 +16,10 @@ void EndpointZero::sendStatusMessage()
 {
   // nothing
 }
+void EndpointZero::sendFeedbackMessage()
+{
+  // nothing
+}
 
 void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int length)
 {

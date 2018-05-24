@@ -37,6 +37,8 @@ class Endpoint
 
     virtual void sendConfig();
     virtual void sendStatusMessage();
+    virtual void sendFeedbackMessage();
+
     virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
 
   protected:

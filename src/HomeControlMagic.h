@@ -18,6 +18,8 @@ class HomeControlMagic
 
     void sendConfigs();
     void sendStatus();
+    void sendFeedback();
+
     void announce();
 
     void sendMessage(char* topic, char* message, char* endpoint_id);
