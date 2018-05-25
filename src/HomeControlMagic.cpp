@@ -4,7 +4,7 @@
 
 #include "Endpoints/EndpointZero.h"
 
-#define HCM_DEBUG
+//#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
@@ -209,15 +209,15 @@ void HomeControlMagic::mqttLoop(bool reconnect)
 
 bool HomeControlMagic::reconnectMqtt()
 {
-#ifdef HCM_DEBUG
+  #ifdef HCM_DEBUG
   Serial.println("Trying to reconnect to mqtt broker");
-#endif
+  #endif
   // Attempt to connect
   if(m_esp_client.connect(m_id, m_username, m_password))
   {
-#ifdef HCM_DEBUG
+    #ifdef HCM_DEBUG
     Serial.println("Success");
-#endif
+    #endif
     // ... and resubscribe
     m_esp_client.setCallback(callback);
     subscribeNow();
@@ -227,10 +227,10 @@ bool HomeControlMagic::reconnectMqtt()
   }
   else
   {
-#ifdef HCM_DEBUG
+    #ifdef HCM_DEBUG
     Serial.print("failed, rc=");
     Serial.println(m_esp_client.state());
-#endif
+    #endif
     m_broker_connected = false;
     return false;
   }
@@ -281,10 +281,10 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
   char buff[4] = {0};
   sprintf(buff, "%d", m_number_of_endpoints - 1);
-#ifdef HCM_DEBUG
+  #ifdef HCM_DEBUG
   Serial.print("Id to set: ");
   Serial.println(buff);
-#endif
+  #endif
   endpoint_ptr->setId(buff);
 }
 

@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-#define ENDPOINT_MOTION_DEBUG
+//#define ENDPOINT_MOTION_DEBUG
 
 EndpointMotion::EndpointMotion(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)

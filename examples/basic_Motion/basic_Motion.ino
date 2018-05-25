@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointMotion.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define PIR_PIN 4                           // GPIO pin to use (D2).
 //#define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example

@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-#define ENDPOINT_ON_OFF_DEBUG
+//#define ENDPOINT_ON_OFF_DEBUG
 
 EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)

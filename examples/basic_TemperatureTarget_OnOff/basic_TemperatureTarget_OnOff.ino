@@ -4,7 +4,7 @@
 #include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DHT_PIN 4                         // GPIO pin to use as example (D2)
 #define DHTTYPE DHT22                     // DHT type
@@ -60,10 +60,10 @@ void setup()
   double temperature = dht.readTemperature();
   endpointTemperatureTarget.setTemperatureTarget(temperature);
 
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-#endif
+  #endif
 
   hcm.addEndpoint(&endpointTemperatureTarget);
   hcm.addEndpoint(&endpointOnOff);
@@ -83,7 +83,9 @@ void loop()
 
     // Check if any reads failed and exit early (to try again).
     if (isnan(temperature)) {
+      #ifdef DEBUG
       Serial.println("Failed to read from DHT sensor!");
+      #endif
       return;
     }
     else
@@ -91,7 +93,7 @@ void loop()
       endpointTemperatureTarget.setTemperature(temperature);
     }
 
-#ifdef DEBUG
+    #ifdef DEBUG
     Serial.print("Temperature from sensor: ");
     Serial.print(endpointTemperatureTarget.getTemperature());
     Serial.print(" *C ");
@@ -101,7 +103,7 @@ void loop()
     Serial.print(endpointTemperatureTarget.getTemperatureTarget());
     Serial.print(" *C ");
     Serial.println();
-#endif
+    #endif
   }
 
   controlPin();

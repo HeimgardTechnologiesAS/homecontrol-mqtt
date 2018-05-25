@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointLevel.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example
 

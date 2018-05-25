@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-#define ENDPOINT_IDENTIFY_DEBUG
+//#define ENDPOINT_IDENTIFY_DEBUG
 
 EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
   : Endpoint(hcm_ptr)

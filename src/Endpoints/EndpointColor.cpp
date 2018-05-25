@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-#define ENDPOINT_COLOR_DEBUG
+//#define ENDPOINT_COLOR_DEBUG
 
 EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
