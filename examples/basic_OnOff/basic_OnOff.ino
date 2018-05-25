@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointOnOff.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DEVICE_PIN LED_BUILTIN                // GPIO pin to use, built in led as example
 
@@ -45,10 +45,10 @@ void setup()
 {
   pinMode(DEVICE_PIN, OUTPUT);
 
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-#endif
+  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
   endpointOnOff.setStatusTime(STATUS_TIME);

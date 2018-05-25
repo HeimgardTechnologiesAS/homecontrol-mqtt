@@ -3,7 +3,7 @@
 #include "Endpoints/EndpointTemperature.h"
 #include "DHT.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DHT_PIN 4                           // GPIO pin to use (D2).
 #define DHTTYPE DHT22                       // DHT type
@@ -50,16 +50,18 @@ void loop()
 
     // Check if any reads failed and exit early (to try again).
     if (isnan(temperature)) {
+      #ifdef DEBUG
       Serial.println("Failed to read from DHT sensor!");
+      #endif
       return;
     }
 
-#ifdef DEBUG
+    #ifdef DEBUG
     Serial.print("Temperature: ");
     Serial.print(temperature);
     Serial.print(" *C ");
     Serial.println();
-#endif
+    #endif
 
     // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event

@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-#define ENDPOINT_LEVEL_DEBUG
+//#define ENDPOINT_LEVEL_DEBUG
 
 EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)

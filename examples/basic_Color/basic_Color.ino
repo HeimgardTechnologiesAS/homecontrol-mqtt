@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointColor.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define R_PIN 5                             // GPIO pin to use, as example R color - (D1)
 #define G_PIN 4                             // GPIO pin to use, as example G color - (D2)
@@ -85,10 +85,10 @@ void setup()
   pinMode(G_PIN, OUTPUT);
   pinMode(B_PIN, OUTPUT);
 
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
-#endif
+  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointColor);
