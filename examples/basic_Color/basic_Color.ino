@@ -16,7 +16,7 @@ char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "TEST_COLOR";            // name of device
 
-bool active_pin_state = true;               // reverse initial pin state
+bool active_pin_state = true;               // reverse pin state
 
 bool last_state = false;
 uint16_t last_level = 0;
@@ -33,12 +33,12 @@ uint16_t adjLevel(uint16_t color_X, uint16_t level)
   if(active_pin_state)
   {
     // level 0-1000
-    return (int)((color_X / 10) * ((double)level / 10000));
+    return (int)((color_X / 10.) * ((double)level / 10000));
   }
   else
   {
     // level 1000-0
-    return (int)((color_X / 10) * ((double)(10000 - level) / 10000));
+    return (int)((color_X / 10.) * ((double)(10000 - level) / 10000));
   }
 }
 

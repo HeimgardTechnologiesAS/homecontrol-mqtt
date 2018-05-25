@@ -14,7 +14,7 @@ char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "DEVICE_LEVEL";          // name of device
 
-bool active_pin_state = false;              // reverse initial pin state
+bool active_pin_state = false;              // reverse pin state
 
 bool last_state = false;
 uint16_t last_level = 0;
