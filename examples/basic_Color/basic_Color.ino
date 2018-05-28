@@ -4,9 +4,9 @@
 
 //#define DEBUG
 
-#define R_PIN 5                             // GPIO pin to use, as example R color - (D1)
-#define G_PIN 4                             // GPIO pin to use, as example G color - (D2)
-#define B_PIN 0                             // GPIO pin to use, as example B color - (D3)
+#define R_PIN 5                             // GPIO pin, as example R color - (D1)
+#define G_PIN 4                             // GPIO pin, as example G color - (D2)
+#define B_PIN 0                             // GPIO pin, as example B color - (D3)
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define STATUS_TIME 30                      // system update time in seconds
@@ -14,7 +14,7 @@
 char* ssid = "SSID";                        // wifi SSID
 char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "TEST_COLOR";            // name of device
+char* deviceName = "COLOR_DEVICE";          // name of device
 
 bool active_pin_state = true;               // reverse pin state
 
