@@ -15,7 +15,7 @@
 char* ssid = "SSID";                        // wifi SSID
 char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "TEMP_SENSOR";           // name of device
+char* deviceName = "TEMPERATURE_SENSOR";    // name of device
 
 ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);

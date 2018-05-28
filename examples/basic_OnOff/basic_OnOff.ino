@@ -12,7 +12,7 @@
 char* ssid = "SSID";                          // wifi SSID
 char* pass = "PASS";                          // wifi password
 char* GW_IP = "GW_IP";                        // gateway IP address
-char* deviceName = "DEVICE_ON_OFF";           // name of device
+char* deviceName = "ON_OFF_DEVICE";           // name of device
 
 bool active_pin_state = false;                // reverse pin state
 
