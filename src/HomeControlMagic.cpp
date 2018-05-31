@@ -66,12 +66,11 @@ HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, LoopObject
   strcat(m_base_topic, "d/");
   strcat(m_base_topic, m_id);
   strcat(m_base_topic, "/");
-
 }
 
 void HomeControlMagic::doMagic()
 {
-  m_network_object.loop();
+  m_network_object.loop(true);
 
   if(m_network_object.isConnected())
   {
@@ -284,7 +283,7 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   #ifdef HCM_DEBUG
   Serial.print("Id to set: ");
   Serial.println(buff);
-  #endif
+  #endif  
   endpoint_ptr->setId(buff);
 }
 
