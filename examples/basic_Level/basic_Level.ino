@@ -1,6 +1,9 @@
-#include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointLevel.h"
+#define ESP_LOOP
+#define WIFI_SSID ""
+#define WIFI_PASS ""
+#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
@@ -9,8 +12,6 @@
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define STATUS_TIME 30                      // system update time in seconds
 
-char* ssid = "SSID";                        // wifi SSID
-char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "LEVEL_DEVICE";          // name of device
 
@@ -19,7 +20,6 @@ bool active_pin_state = false;              // reverse pin state
 bool last_state = false;
 uint16_t last_level = 0;
 
-ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointLevel endpointLevel(&hcm);

@@ -1,8 +1,11 @@
-#include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointTemperatureTarget.h"
 #include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
+#define ESP_LOOP
+#define WIFI_SSID ""
+#define WIFI_PASS ""
+#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
@@ -14,8 +17,6 @@
 #define STATUS_TIME 60                    // system update time in seconds
 #define READ_TIME 30                      // sensor reading time in seconds
 
-char* ssid = "SSID";                      // wifi SSID
-char* pass = "PASS";                      // wifi password
 char* GW_IP = "GW_IP";                    // gateway IP address
 char* deviceName = "TERMOSTAT";           // name of device
 
@@ -23,7 +24,6 @@ bool active_pin_state = false;            // reverse pin state
 
 bool last_state = false;
 
-ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointTemperatureTarget endpointTemperatureTarget(&hcm);

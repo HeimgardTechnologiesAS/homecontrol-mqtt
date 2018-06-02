@@ -1,6 +1,9 @@
-#include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointMotion.h"
+#define ESP_LOOP
+#define WIFI_SSID ""
+#define WIFI_PASS ""
+#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
@@ -10,15 +13,12 @@
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define STATUS_TIME 60                      // system update time in seconds
 
-char* ssid = "SSID";                        // wifi SSID
-char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "MOTION_SENSOR";         // name of device
 
 bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
-ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
 EndpointMotion enpointMotion(&hcm);

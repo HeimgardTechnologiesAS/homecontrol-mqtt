@@ -1,6 +1,9 @@
-#include "ESPLoop.hpp"
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointColor.h"
+#define ESP_LOOP
+#define WIFI_SSID ""
+#define WIFI_PASS ""
+#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
@@ -11,8 +14,6 @@
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define STATUS_TIME 30                      // system update time in seconds
 
-char* ssid = "SSID";                        // wifi SSID
-char* pass = "PASS";                        // wifi password
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "COLOR_DEVICE";          // name of device
 
@@ -24,7 +25,6 @@ uint16_t last_color_R = 0;
 uint16_t last_color_G = 0;
 uint16_t last_color_B = 0;
 
-ESPLoop network(ssid, pass);
 HomeControlMagic hcm(GW_IP, deviceName, network);
 EndpointColor endpointColor(&hcm);
 
