@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Endpoint.h"
-#include "LoopObject.hpp"
+#include "NetworkObject.hpp"
 #include "PubSubClient.h"
 
 class HomeControlMagic
 {
   public:
-    HomeControlMagic(char* server_ip, char* deviceName, LoopObject& network_object, char* username = "hc", char* password = "magic");
+    HomeControlMagic(char* server_ip, char* deviceName, NetworkObject& network_object, char* username = "hc", char* password = "magic");
     void doMagic();
 
     Endpoint* getEndpoint(uint8_t number);
@@ -36,8 +36,8 @@ class HomeControlMagic
 
     char* m_name;
 
-    LoopObject& m_network_object;
-    PubSubClient& m_esp_client;
+    NetworkObject& m_network_object;
+    PubSubClient& m_mqtt_client;
 
     uint8_t m_number_of_endpoints;
     Endpoint* m_endpoints_pointers[10];
@@ -54,7 +54,9 @@ class HomeControlMagic
     char* m_username;
     char* m_password;
 
-    char m_base_topic[20];
+    char m_base_topic[40];
     bool m_broker_connected;
+
+    bool m_start_done;
 };
 
