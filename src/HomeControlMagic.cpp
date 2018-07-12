@@ -163,8 +163,8 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
   Serial.println(buffer);
   #endif
 
-  char buffer1[4] = {0};
-  sprintf(buffer1, "%.2f", message);
+  char buffer1[12] = {0};
+  dtostrf(message, 4, 2, buffer1);
 
   #ifdef HCM_DEBUG
   Serial.println(buffer1);
@@ -292,7 +292,7 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   #ifdef HCM_DEBUG
   Serial.print("Id to set: ");
   Serial.println(buff);
-  #endif  
+  #endif
   endpoint_ptr->setId(buff);
 }
 
