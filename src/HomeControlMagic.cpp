@@ -164,11 +164,7 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
   #endif
 
   char buffer1[12] = {0};
-  #if defined(ARDUINO_AVR_UNO)
   dtostrf(message, 4, 2, buffer1);
-  #else
-  sprintf(buffer1, "%.2f", message);
-  #endif
 
   #ifdef HCM_DEBUG
   Serial.println(buffer1);
