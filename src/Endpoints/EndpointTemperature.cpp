@@ -9,6 +9,7 @@ EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
   , m_temperature(0)
 {
   m_last_send_time = millis();
+  m_resend_status_time = 60;
 }
 
 void EndpointTemperature::setTemperature(double temperature)

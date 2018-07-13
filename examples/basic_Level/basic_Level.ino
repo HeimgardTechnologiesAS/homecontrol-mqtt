@@ -10,7 +10,6 @@
 #define DEVICE_PIN LED_BUILTIN              // GPIO pin, built in led as example
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
-#define STATUS_TIME 30                      // system update time in seconds
 
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "LEVEL_DEVICE";          // name of device
@@ -57,7 +56,6 @@ void setup()
   pinMode(DEVICE_PIN, OUTPUT);
 
   network.setReconnectTime(RECONNECTION_TIME);
-  endpointLevel.setStatusTime(STATUS_TIME);
 
 #ifdef DEBUG
   Serial.begin(115200);

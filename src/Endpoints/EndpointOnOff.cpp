@@ -9,6 +9,7 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
   , m_state(false)
 {
   m_last_send_time = millis();
+  m_resend_status_time = 30;
 }
 
 void EndpointOnOff::setState(bool state)

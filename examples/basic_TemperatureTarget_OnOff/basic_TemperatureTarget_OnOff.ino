@@ -14,7 +14,6 @@
 #define DEVICE_PIN LED_BUILTIN            // connected heater or cooler device, built in led as example
 
 #define RECONNECTION_TIME 5               // network reconnection time in seconds
-#define STATUS_TIME 60                    // system update time in seconds
 #define READ_TIME 30                      // sensor reading time in seconds
 
 char* GW_IP = "GW_IP";                    // gateway IP address
@@ -54,8 +53,6 @@ void setup()
   pinMode(DEVICE_PIN, OUTPUT);
 
   network.setReconnectTime(RECONNECTION_TIME);
-  endpointTemperatureTarget.setStatusTime(STATUS_TIME);
-  endpointOnOff.setStatusTime(STATUS_TIME);
 
   double temperature = dht.readTemperature();
   endpointTemperatureTarget.setTemperatureTarget(temperature);

@@ -2,6 +2,7 @@
 
 #include "Arduino.h"
 
+#define MIN_STATUS_TIME 2
 class HomeControlMagic;
 
 class Endpoint
@@ -25,9 +26,9 @@ class Endpoint
     void setStatusTime(int status_time)
     {
       // not allowed to set report status time under 2 seconds
-      if(status_time < 2)
+      if(status_time < MIN_STATUS_TIME)
       {
-        m_resend_status_time = 2;
+        m_resend_status_time = MIN_STATUS_TIME;
       }
       else
       {
