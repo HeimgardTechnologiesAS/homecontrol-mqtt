@@ -54,7 +54,7 @@ class HomeControlMagic
     char* m_username;
     char* m_password;
 
-    char m_base_topic[40];
+    char m_base_topic[20];
     bool m_broker_connected;
 
     bool m_start_done;
