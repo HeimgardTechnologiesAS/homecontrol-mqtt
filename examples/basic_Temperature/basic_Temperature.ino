@@ -12,7 +12,6 @@
 #define DHTTYPE DHT22                       // DHT type
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
-#define STATUS_TIME 60                      // system update time in seconds
 #define READ_TIME 30                        // sensor reading time in seconds
 
 char* GW_IP = "GW_IP";                      // gateway IP address
@@ -32,7 +31,6 @@ void setup()
  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  enpointTemperature.setStatusTime(STATUS_TIME);
   hcm.addEndpoint(&enpointTemperature);
 
   dht.begin();
@@ -66,7 +64,6 @@ void loop()
     // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
     enpointTemperature.setTemperature(temperature);
-
   }
 
   hcm.doMagic();

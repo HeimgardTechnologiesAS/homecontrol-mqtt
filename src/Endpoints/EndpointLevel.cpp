@@ -10,6 +10,7 @@ EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
   , m_state(false)
 {
   m_last_send_time = millis();
+  m_resend_status_time = 30;
 }
 
 void EndpointLevel::setState(bool state)

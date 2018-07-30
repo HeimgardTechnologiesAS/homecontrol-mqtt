@@ -12,7 +12,6 @@
 #define B_PIN 0                             // GPIO pin, as example B color - (D3)
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
-#define STATUS_TIME 30                      // system update time in seconds
 
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "COLOR_DEVICE";          // name of device
@@ -92,7 +91,6 @@ void setup()
 
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointColor);
-  endpointColor.setStatusTime(STATUS_TIME);
 }
 
 void loop()

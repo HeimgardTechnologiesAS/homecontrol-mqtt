@@ -11,7 +11,6 @@
 #define DEVICE_PIN LED_BUILTIN              // GPIO pin to use, built in led as example
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
-#define STATUS_TIME 60                      // system update time in seconds
 
 char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "MOTION_SENSOR";         // name of device
@@ -51,7 +50,6 @@ void setup()
   #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  enpointMotion.setStatusTime(STATUS_TIME);
   hcm.addEndpoint(&enpointMotion);
 
   pinMode(PIR_PIN, INPUT);
