@@ -13,8 +13,8 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
 
 void EndpointIdentify::sendConfig()
 {
-  sprintf(m_buff, F("e:identify;"));
-  m_owner->sendMessage(F("conf"), m_buff, m_id);
+  sprintf(m_buff, "e:identify;");
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -29,7 +29,7 @@ void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int 
   Serial.println();
   #endif
 
-  if(lineContains(topic, F("ci")))
+  if(lineContains(topic, "ci"))
   {
     bool state = extractBool(payload, length);
     digitalWrite(m_pin, state);

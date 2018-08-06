@@ -16,7 +16,7 @@ EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
 void EndpointColor::setState(bool state)
 {
   m_state = state;
-  m_owner->sendMessage(F("sp"), m_state, m_id);
+  m_owner->sendMessage("sp", m_state, m_id);
 }
 
 bool EndpointColor::getState()
@@ -27,7 +27,7 @@ bool EndpointColor::getState()
 void EndpointColor::setLevel(uint16_t level)
 {
   m_level = level;
-  m_owner->sendMessage(F("sl"), m_level, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
 }
 
 uint16_t EndpointColor::getLevel()
@@ -68,34 +68,34 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
   Serial.println();
   #endif
 
-  if(lineContains(topic, F("cl")))
+  if(lineContains(topic, "cl"))
   {
     m_level = extractInteger(payload, length);
   }
 
-  else if(lineContains(topic, F("sl")))
+  else if(lineContains(topic, "sl"))
   {
-    m_owner->sendMessage(F("sl"), m_level, m_id);
+    m_owner->sendMessage("sl", m_level, m_id);
   }
 
-  else if(lineContains(topic, F("cp")))
+  else if(lineContains(topic, "cp"))
   {
     m_state = extractBool(payload, length);
   }
 
-  else if(lineContains(topic, F("sp")))
+  else if(lineContains(topic, "sp"))
   {
-    m_owner->sendMessage(F("sp"), m_state, m_id);
+    m_owner->sendMessage("sp", m_state, m_id);
   }
 
-  else if(lineContains(topic, F("cc")))
+  else if(lineContains(topic, "cc"))
   {
     m_rgb = extractRGB(payload, length);
   }
 
-  else if(lineContains(topic, F("sc")))
+  else if(lineContains(topic, "sc"))
   {
-    m_owner->sendMessage(F("sc"), getRGBcharPtr(), m_id);
+    m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
   }
 }
 
@@ -103,14 +103,14 @@ void EndpointColor::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, F("e:color;r=%d;name=%s"), m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, F("e:color;r=%d;"), m_resend_status_time);
+    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
   }
 
-  m_owner->sendMessage(F("conf"), m_buff, m_id);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointColor::sendStatusMessage()
@@ -122,9 +122,9 @@ void EndpointColor::sendStatusMessage()
         Serial.println(F("sending status message, EndpointColor"));
       #endif
 
-      m_owner->sendMessage(F("sp"), m_state, m_id);
-      m_owner->sendMessage(F("sl"), m_level, m_id);
-      m_owner->sendMessage(F("sc"), getRGBcharPtr(), m_id);
+      m_owner->sendMessage("sp", m_state, m_id);
+      m_owner->sendMessage("sl", m_level, m_id);
+      m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
     }
 }
 
@@ -134,7 +134,7 @@ void EndpointColor::sendFeedbackMessage()
   Serial.println(F("sending feedback message, EndpointColor"));
   #endif
 
-  m_owner->sendMessage(F("sp"), m_state, m_id);
-  m_owner->sendMessage(F("sl"), m_level, m_id);
-  m_owner->sendMessage(F("sc"), getRGBcharPtr(), m_id);
+  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
+  m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
 }

@@ -7,7 +7,7 @@
 class HomeControlMagic
 {
   public:
-    HomeControlMagic(char* server_ip, char* deviceName, NetworkObject& network_object, char* username = F("hc"), char* password = F("magic"));
+    HomeControlMagic(char* server_ip, char* deviceName, NetworkObject& network_object, char* username = "hc", char* password = "magic");
     void doMagic();
 
     Endpoint* getEndpoint(uint8_t number);

@@ -35,7 +35,7 @@ void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int leng
 
   uint16_t ep_num = (m_owner->getNumberOfEndpoints() - 1);
 
-  m_owner->sendMessage(F("conf"), ep_num, m_id);
+  m_owner->sendMessage("conf", ep_num, m_id);
   m_owner->sendConfigs();
 }
 

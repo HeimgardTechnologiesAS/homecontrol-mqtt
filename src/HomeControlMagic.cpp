@@ -11,12 +11,12 @@ static HomeControlMagic* hcm_ptr;
 void callback(char* topic, byte* payload, unsigned int length)
 {
   #ifdef HCM_DEBUG
-  Serial.println(F("got in callback"));
+  Serial.println("got in callback");
   #endif
   // check for server announce
-  if(lineContains(topic, F("broadcast")))
+  if(lineContains(topic, "broadcast"))
   {
-    if(lineContains((char*)payload, F("serverannounce")))
+    if(lineContains((char*)payload, "serverannounce"))
     {
       hcm_ptr->announce();
       return;
@@ -24,8 +24,8 @@ void callback(char* topic, byte* payload, unsigned int length)
   }
 
   // it is not server announce
-  uint8_t start_position = lineContains(topic, F("/"));
-  uint8_t end_position = lineContains(topic + start_position, F("/")) + start_position - 1;
+  uint8_t start_position = lineContains(topic, "/");
+  uint8_t end_position = lineContains(topic + start_position, "/") + start_position - 1;
   uint8_t diff = end_position - start_position;
 
   uint8_t endpoint_id = 0;
@@ -56,7 +56,7 @@ HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, NetworkObj
   hcm_ptr = this;
 
   EndpointZero* epZ = new EndpointZero(hcm_ptr);
-  epZ->setId(F("0"));
+  epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
 
   m_mqtt_client.setServer(server_ip, 1883);
@@ -64,9 +64,9 @@ HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, NetworkObj
 
   m_id = m_network_object.getUniqueId();
 
-  strcat(m_base_topic, F("d/"));
+  strcat(m_base_topic, "d/");
   strcat(m_base_topic, m_id);
-  strcat(m_base_topic, F("/"));
+  strcat(m_base_topic, "/");
 }
 
 void HomeControlMagic::doMagic()
@@ -97,7 +97,7 @@ void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
-  strcat(buffer, F("/"));
+  strcat(buffer, "/");
   strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
@@ -115,7 +115,7 @@ void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
-  strcat(buffer, F("/"));
+  strcat(buffer, "/");
   strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
@@ -136,7 +136,7 @@ void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
-  strcat(buffer, F("/"));
+  strcat(buffer, "/");
   strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
@@ -157,7 +157,7 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
   char buffer[50] = {0};
   strcat(buffer, m_base_topic);
   strcat(buffer, endpoint_id);
-  strcat(buffer, F("/"));
+  strcat(buffer, "/");
   strcat(buffer, topic);
   #ifdef HCM_DEBUG
   Serial.println(buffer);
@@ -218,13 +218,13 @@ void HomeControlMagic::mqttLoop(bool reconnect)
 bool HomeControlMagic::reconnectMqtt()
 {
   #ifdef HCM_DEBUG
-  Serial.println(F("Trying to reconnect to mqtt broker"));
+  Serial.println("Trying to reconnect to mqtt broker");
   #endif
   // Attempt to connect
   if(m_mqtt_client.connect(m_id, m_username, m_password))
   {
     #ifdef HCM_DEBUG
-    Serial.println(F("Success"));
+    Serial.println("Success");
     #endif
     // ... and resubscribe
     m_mqtt_client.setCallback(callback);
@@ -236,7 +236,7 @@ bool HomeControlMagic::reconnectMqtt()
   else
   {
     #ifdef HCM_DEBUG
-    Serial.print(F("failed, rc="));
+    Serial.print("failed, rc=");
     Serial.println(m_mqtt_client.state());
     #endif
     m_broker_connected = false;
@@ -246,7 +246,7 @@ bool HomeControlMagic::reconnectMqtt()
 
 void HomeControlMagic::announce()
 {
-  sendMessage(F("announce"), m_name, F("0"));
+  sendMessage("announce", m_name, "0");
 
   sendFeedback();
 }
@@ -255,13 +255,13 @@ void HomeControlMagic::subscribeNow()
 {
   char buff[20] = {0};
   strcat(buff, m_id);
-  strcat(buff, F("/#"));
+  strcat(buff, "/#");
   #ifdef HCM_DEBUG
   Serial.println(buff);
   #endif
 
   m_mqtt_client.subscribe(buff);
-  m_mqtt_client.subscribe(F("broadcast"));
+  m_mqtt_client.subscribe("broadcast");
 }
 
 Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
@@ -290,7 +290,7 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   char buff[4] = {0};
   sprintf(buff, "%d", m_number_of_endpoints - 1);
   #ifdef HCM_DEBUG
-  Serial.print(F("Id to set: "));
+  Serial.print("Id to set: ");
   Serial.println(buff);
   #endif
   endpoint_ptr->setId(buff);

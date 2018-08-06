@@ -16,7 +16,7 @@ EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
 void EndpointLevel::setState(bool state)
 {
   m_state = state;
-  m_owner->sendMessage(F("sp"), m_state, m_id);
+  m_owner->sendMessage("sp", m_state, m_id);
 }
 
 bool EndpointLevel::getState()
@@ -27,7 +27,7 @@ bool EndpointLevel::getState()
 void EndpointLevel::setLevel(uint16_t level)
 {
   m_level = level;
-  m_owner->sendMessage(F("sl"), m_level, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
 }
 
 uint16_t EndpointLevel::getLevel()
@@ -39,14 +39,14 @@ void EndpointLevel::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, F("e:color;r=%d;name=%s"), m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, F("e:color;r=%d;"), m_resend_status_time);
+    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
   }
 
-  m_owner->sendMessage(F("conf"), m_buff, m_id);
+  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -61,24 +61,24 @@ void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int len
   Serial.println();
   #endif
 
-  if(lineContains(topic, F("cl")))
+  if(lineContains(topic, "cl"))
   {
     m_level = extractInteger(payload, length);
   }
 
-  else if(lineContains(topic, F("sl")))
+  else if(lineContains(topic, "sl"))
   {
-    m_owner->sendMessage(F("sl"), m_level, m_id);
+    m_owner->sendMessage("sl", m_level, m_id);
   }
 
-  else if(lineContains(topic, F("cp")))
+  else if(lineContains(topic, "cp"))
   {
     m_state = extractBool(payload, length);
   }
 
-  else if(lineContains(topic, F("sp")))
+  else if(lineContains(topic, "sp"))
   {
-    m_owner->sendMessage(F("sp"), m_state, m_id);
+    m_owner->sendMessage("sp", m_state, m_id);
   }
 }
 
@@ -91,8 +91,8 @@ void EndpointLevel::sendStatusMessage()
         Serial.println(F("sending status message, EndpointLevel"));
       #endif
 
-      m_owner->sendMessage(F("sp"), m_state, m_id);
-      m_owner->sendMessage(F("sl"), m_level, m_id);
+      m_owner->sendMessage("sp", m_state, m_id);
+      m_owner->sendMessage("sl", m_level, m_id);
     }
 }
 
@@ -102,6 +102,6 @@ void EndpointLevel::sendFeedbackMessage()
   Serial.println(F("sending feedback message, EndpointLevel"));
   #endif
 
-  m_owner->sendMessage(F("sp"), m_state, m_id);
-  m_owner->sendMessage(F("sl"), m_level, m_id);
+  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage("sl", m_level, m_id);
 }
