@@ -30,8 +30,6 @@ void setup()
   Serial.println("Started serial");
  #endif
 
-  enpointTemperature.setEndpointName("temperature");
-
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&enpointTemperature);
 

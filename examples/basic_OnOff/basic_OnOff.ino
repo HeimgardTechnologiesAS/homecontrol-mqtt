@@ -49,8 +49,6 @@ void setup()
   Serial.println("Started serial");
   #endif
 
-  endpointOnOff.setEndpointName("OnOff");
-
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointOnOff);
 }

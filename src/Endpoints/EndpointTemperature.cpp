@@ -10,7 +10,6 @@ EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 60;
-  m_endpoint_name = "endpointTemperature";
 }
 
 void EndpointTemperature::setTemperature(double temperature)
@@ -26,7 +25,15 @@ double EndpointTemperature::getTemperature()
 
 void EndpointTemperature::sendConfig()
 {
-  sprintf(m_buff, "e:temperature;r=%d;name=%c", m_resend_status_time, m_endpoint_name);
+  if(m_endpoint_name != nullptr)
+  {
+    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+  }
+  else
+  {
+    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+  }
+
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 

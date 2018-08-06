@@ -54,8 +54,6 @@ void setup()
   Serial.println("Started serial");
   #endif
 
-  enpointMotion.setEndpointName("motion");
-
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&enpointMotion);
 }

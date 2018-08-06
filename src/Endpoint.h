@@ -57,6 +57,6 @@ class Endpoint
     char m_id[4] = {0};
     long m_last_send_time;
     int m_resend_status_time;
-    char* m_endpoint_name;
+    char* m_endpoint_name = nullptr;
 };
 

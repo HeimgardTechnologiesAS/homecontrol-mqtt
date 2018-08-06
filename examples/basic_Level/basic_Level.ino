@@ -60,8 +60,6 @@ void setup()
   Serial.println("Started serial");
 #endif
 
-  endpointLevel.setEndpointName("level");
-
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointLevel);
 }
