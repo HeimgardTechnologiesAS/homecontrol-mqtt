@@ -34,10 +34,10 @@ DHT dht_4(DHT_4_PIN, DHTTYPE);
 
 void setup()
 {
-  enpointTemperature_1.setEndpointName("temperature_1");
-  enpointTemperature_2.setEndpointName("temperature_2");
-  enpointTemperature_3.setEndpointName("temperature_3");
-  enpointTemperature_4.setEndpointName("temperature_4");
+  enpointTemperature_1.setEndpointName(F("temperature_1"));
+  enpointTemperature_2.setEndpointName(F("temperature_2"));
+  enpointTemperature_3.setEndpointName(F("temperature_3"));
+  enpointTemperature_4.setEndpointName(F("temperature_4"));
 
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&enpointTemperature_1);
