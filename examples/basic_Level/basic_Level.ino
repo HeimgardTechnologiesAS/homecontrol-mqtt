@@ -55,13 +55,14 @@ void setup()
 {
   pinMode(DEVICE_PIN, OUTPUT);
 
-  network.setReconnectTime(RECONNECTION_TIME);
-
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
 #endif
 
+  endpointLevel.setEndpointName("level");
+
+  network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointLevel);
 }
 

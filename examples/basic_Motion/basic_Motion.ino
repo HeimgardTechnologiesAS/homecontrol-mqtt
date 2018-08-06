@@ -44,18 +44,20 @@ void controlPin()
 
 void setup()
 {
+  pinMode(PIR_PIN, INPUT);
+  #ifdef DEVICE_PIN
+  pinMode(DEVICE_PIN, OUTPUT);
+  #endif
+
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
+  enpointMotion.setEndpointName("motion");
+
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&enpointMotion);
-
-  pinMode(PIR_PIN, INPUT);
-  #ifdef DEVICE_PIN
-  pinMode(DEVICE_PIN, OUTPUT);
-  #endif
 }
 
 void loop()

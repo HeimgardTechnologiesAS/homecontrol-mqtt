@@ -89,6 +89,8 @@ void setup()
   Serial.println("Started serial");
   #endif
 
+  endpointColor.setEndpointName("color");
+
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointColor);
 }

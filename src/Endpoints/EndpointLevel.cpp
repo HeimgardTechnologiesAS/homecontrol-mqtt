@@ -11,6 +11,7 @@ EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 30;
+  m_endpoint_name = "endpointLevel";
 }
 
 void EndpointLevel::setState(bool state)
@@ -37,7 +38,7 @@ uint16_t EndpointLevel::getLevel()
 
 void EndpointLevel::sendConfig()
 {
-  sprintf(m_buff, "e:level;r=%d;", m_resend_status_time);
+  sprintf(m_buff, "e:level;r=%d;name=%c", m_resend_status_time, m_endpoint_name);
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 

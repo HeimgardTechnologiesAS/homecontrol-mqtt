@@ -10,6 +10,7 @@ EndpointTemperatureTarget::EndpointTemperatureTarget(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 60;
+  m_endpoint_name = "endpointTemperatureTarget";
 }
 
 void EndpointTemperatureTarget::setTemperature(double temperature)
@@ -34,7 +35,7 @@ double EndpointTemperatureTarget::getTemperatureTarget()
 
 void EndpointTemperatureTarget::sendConfig()
 {
-  sprintf(m_buff, "e:temp_target;r=%d;", m_resend_status_time);
+  sprintf(m_buff, "e:temp_target;r=%d;name=%c", m_resend_status_time, m_endpoint_name);
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 

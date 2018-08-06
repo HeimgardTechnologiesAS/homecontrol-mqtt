@@ -62,6 +62,9 @@ void setup()
   Serial.println("Started serial");
   #endif
 
+  endpointTemperatureTarget.setEndpointName("tempTarget");
+  endpointOnOff.setEndpointName("OnOff");
+
   hcm.addEndpoint(&endpointTemperatureTarget);
   hcm.addEndpoint(&endpointOnOff);
 

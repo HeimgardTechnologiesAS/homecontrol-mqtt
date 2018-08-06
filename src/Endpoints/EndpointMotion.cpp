@@ -10,6 +10,7 @@ EndpointMotion::EndpointMotion(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 60;
+  m_endpoint_name = "endpointMotion";
 }
 
 void EndpointMotion::setState(bool state)
@@ -25,7 +26,7 @@ bool EndpointMotion::getState()
 
 void EndpointMotion::sendConfig()
 {
-  sprintf(m_buff, "e:motion;r=%d;", m_resend_status_time);
+  sprintf(m_buff, "e:motion;r=%d;name=%c", m_resend_status_time, m_endpoint_name);
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 
