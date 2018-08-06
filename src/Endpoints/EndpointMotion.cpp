@@ -15,7 +15,7 @@ EndpointMotion::EndpointMotion(HomeControlMagic* hcm_ptr)
 void EndpointMotion::setState(bool state)
 {
   m_state = state;
-  m_owner->sendMessage("sm", m_state, m_id);
+  m_owner->sendMessage(F("sm"), m_state, m_id);
 }
 
 bool EndpointMotion::getState()
@@ -27,14 +27,14 @@ void EndpointMotion::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, F("e:color;r=%d;name=%s"), m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+    sprintf(m_buff, F("e:color;r=%d;"), m_resend_status_time);
   }
 
-  m_owner->sendMessage("conf", m_buff, m_id);
+  m_owner->sendMessage(F("conf"), m_buff, m_id);
 }
 
 void EndpointMotion::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -48,9 +48,9 @@ void EndpointMotion::incomingMessage(char* topic, byte* payload, unsigned int le
   Serial.println();
   #endif
 
-  if(lineContains(topic, "sm"))
+  if(lineContains(topic, F("sm")))
   {
-    m_owner->sendMessage("sm", m_state, m_id);
+    m_owner->sendMessage(F("sm"), m_state, m_id);
   }
 }
 
@@ -63,7 +63,7 @@ void EndpointMotion::sendStatusMessage()
         Serial.println(F("sending status message, EndpointMotion"));
       #endif
 
-      m_owner->sendMessage("sm", m_state, m_id);
+      m_owner->sendMessage(F("sm"), m_state, m_id);
     }
 }
 
@@ -73,5 +73,5 @@ void EndpointMotion::sendFeedbackMessage()
   Serial.println(F("sending feedback message, EndpointMotion"));
   #endif
 
-  m_owner->sendMessage("sm", m_state, m_id);
+  m_owner->sendMessage(F("sm"), m_state, m_id);
 }

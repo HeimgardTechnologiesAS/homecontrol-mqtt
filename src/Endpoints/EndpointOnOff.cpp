@@ -15,7 +15,7 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
 void EndpointOnOff::setState(bool state)
 {
   m_state = state;
-  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage(F("sp"), m_state, m_id);
 }
 
 bool EndpointOnOff::getState()
@@ -27,14 +27,14 @@ void EndpointOnOff::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, F("e:color;r=%d;name=%s"), m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+    sprintf(m_buff, F("e:color;r=%d;"), m_resend_status_time);
   }
 
-  m_owner->sendMessage("conf", m_buff, m_id);
+  m_owner->sendMessage(F("conf"), m_buff, m_id);
 }
 
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -48,13 +48,13 @@ void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int len
   Serial.println();
   #endif
 
-  if(lineContains(topic, "cp"))
+  if(lineContains(topic, F("cp")))
   {
     m_state = extractBool(payload, length);
   }
-  else if(lineContains(topic, "sp"))
+  else if(lineContains(topic, F("sp")))
   {
-    m_owner->sendMessage("sp", m_state, m_id);
+    m_owner->sendMessage(F("sp"), m_state, m_id);
   }
 }
 
@@ -67,7 +67,7 @@ void EndpointOnOff::sendStatusMessage()
         Serial.println(F("sending status message, EndpointOnOff"));
       #endif
 
-      m_owner->sendMessage("sp", m_state, m_id);
+      m_owner->sendMessage(F("sp"), m_state, m_id);
     }
 }
 
@@ -77,5 +77,5 @@ void EndpointOnOff::sendFeedbackMessage()
   Serial.println(F("sending feedback message, EndpointOnOff"));
   #endif
 
-  m_owner->sendMessage("sp", m_state, m_id);
+  m_owner->sendMessage(F("sp"), m_state, m_id);
 }

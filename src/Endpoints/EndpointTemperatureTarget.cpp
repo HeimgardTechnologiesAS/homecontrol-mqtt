@@ -36,14 +36,14 @@ void EndpointTemperatureTarget::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, F("e:color;r=%d;name=%s"), m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+    sprintf(m_buff, F("e:color;r=%d;"), m_resend_status_time);
   }
 
-  m_owner->sendMessage("conf", m_buff, m_id);
+  m_owner->sendMessage(F("conf"), m_buff, m_id);
 }
 
 void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -58,19 +58,19 @@ void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsi
   Serial.println();
   #endif
 
-  if(lineContains(topic, "ctt"))
+  if(lineContains(topic, F("ctt")))
   {
     m_temperature_target = extractDouble(payload, length);
   }
 
-  else if(lineContains(topic, "stt"))
+  else if(lineContains(topic, F("stt")))
   {
-    m_owner->sendMessage("stt", m_temperature_target, m_id);
+    m_owner->sendMessage(F("stt"), m_temperature_target, m_id);
   }
 
-  else if(lineContains(topic, "st"))
+  else if(lineContains(topic, F("st")))
   {
-    m_owner->sendMessage("st", m_temperature, m_id);
+    m_owner->sendMessage(F("st"), m_temperature, m_id);
   }
 }
 
@@ -83,8 +83,8 @@ void EndpointTemperatureTarget::sendStatusMessage()
         Serial.println(F("sending status message, EndpointTemperatureTarget"));
       #endif
 
-      m_owner->sendMessage("st", m_temperature, m_id);
-      m_owner->sendMessage("stt", m_temperature_target, m_id);
+      m_owner->sendMessage(F("st"), m_temperature, m_id);
+      m_owner->sendMessage(F("stt"), m_temperature_target, m_id);
     }
 }
 
@@ -94,7 +94,7 @@ void EndpointTemperatureTarget::sendFeedbackMessage()
   Serial.println(F("sending feedback message, EndpointTemperatureTarget"));
   #endif
 
-  m_owner->sendMessage("st", m_temperature, m_id);
-  m_owner->sendMessage("stt", m_temperature_target, m_id);
+  m_owner->sendMessage(F("st"), m_temperature, m_id);
+  m_owner->sendMessage(F("stt"), m_temperature_target, m_id);
 
 }
