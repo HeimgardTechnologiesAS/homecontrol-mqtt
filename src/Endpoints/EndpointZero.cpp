@@ -1,7 +1,7 @@
 #include "EndpointZero.h"
 #include "HomeControlMagic.h"
 
-//#define ENDPOINT_ZERO_DEBUG
+#define ENDPOINT_ZERO_DEBUG
 
 EndpointZero::EndpointZero(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
@@ -24,7 +24,7 @@ void EndpointZero::sendFeedbackMessage()
 void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
 #ifdef ENDPOINT_ZERO_DEBUG
-  Serial.println(F("incoming message, EndpointZero"));
+  Serial.println("incoming message, EndpointZero");
 
   for(int i=0; i< length; i++)
   {

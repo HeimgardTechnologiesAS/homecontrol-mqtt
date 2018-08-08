@@ -6,7 +6,7 @@
 #define WIFI_PASS ""
 #include "NetworkLoops.hpp"
 
-//#define DEBUG
+#define DEBUG
 
 #define DHT_1_PIN 4                         // GPIO pin
 #define DHT_2_PIN 5                         // GPIO pin
@@ -34,10 +34,15 @@ DHT dht_4(DHT_4_PIN, DHTTYPE);
 
 void setup()
 {
-  enpointTemperature_1.setEndpointName(F("temperature_1"));
-  enpointTemperature_2.setEndpointName(F("temperature_2"));
-  enpointTemperature_3.setEndpointName(F("temperature_3"));
-  enpointTemperature_4.setEndpointName(F("temperature_4"));
+  #ifdef DEBUG
+  Serial.begin(115200);
+  Serial.println("Started serial");
+  #endif
+
+  enpointTemperature_1.setEndpointName("TempNAME_1");
+  enpointTemperature_2.setEndpointName("TempNAME_2");
+  enpointTemperature_3.setEndpointName("TempNAME_3");
+  enpointTemperature_4.setEndpointName("TempNAME_4");
 
   network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&enpointTemperature_1);
@@ -63,6 +68,13 @@ void loop()
     double temp_2 = dht_2.readTemperature();
     double temp_3 = dht_3.readTemperature();
     double temp_4 = dht_4.readTemperature();
+
+    if (isnan(temp_1) || isnan(temp_2) || isnan(temp_3) || isnan(temp_4)) {
+      #ifdef DEBUG
+      Serial.println("Failed to read from DHT sensor!");
+      #endif
+      return;
+    }
 
     enpointTemperature_1.setTemperature(temp_1);
     enpointTemperature_2.setTemperature(temp_2);

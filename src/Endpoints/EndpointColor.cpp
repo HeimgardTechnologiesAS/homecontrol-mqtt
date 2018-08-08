@@ -59,7 +59,7 @@ char* EndpointColor::getRGBcharPtr()
 void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_COLOR_DEBUG
-  Serial.println(F("incoming message, EndpointColor"));
+  Serial.println("incoming message, EndpointColor");
 
   for(int i=0; i< length; i++)
   {
@@ -119,7 +119,7 @@ void EndpointColor::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_COLOR_DEBUG
-        Serial.println(F("sending status message, EndpointColor"));
+        Serial.println("sending status message, EndpointColor");
       #endif
 
       m_owner->sendMessage("sp", m_state, m_id);
@@ -131,7 +131,7 @@ void EndpointColor::sendStatusMessage()
 void EndpointColor::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_COLOR_DEBUG
-  Serial.println(F("sending feedback message, EndpointColor"));
+  Serial.println("sending feedback message, EndpointColor");
   #endif
 
   m_owner->sendMessage("sp", m_state, m_id);

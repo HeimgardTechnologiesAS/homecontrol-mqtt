@@ -4,7 +4,7 @@
 
 #include "Endpoints/EndpointZero.h"
 
-//#define HCM_DEBUG
+#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
@@ -13,11 +13,14 @@ void callback(char* topic, byte* payload, unsigned int length)
   #ifdef HCM_DEBUG
   Serial.println("got in callback");
   #endif
+  Serial.println("TU SAM - callback prije broadcasta");
   // check for server announce
   if(lineContains(topic, "broadcast"))
   {
+    Serial.println("TU SAM - broadcast");
     if(lineContains((char*)payload, "serverannounce"))
     {
+      Serial.println("TU SAM - serverannounce");
       hcm_ptr->announce();
       return;
     }
@@ -105,6 +108,7 @@ void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id
 
   #ifdef HCM_DEBUG
   Serial.println(message);
+  Serial.println("TU SAM - hcm sendmsg");
   #endif
 
   m_mqtt_client.publish(buffer, message);
@@ -249,6 +253,7 @@ void HomeControlMagic::announce()
   sendMessage("announce", m_name, "0");
 
   sendFeedback();
+  Serial.println("TU SAM - announce");
 }
 
 void HomeControlMagic::subscribeNow()
@@ -314,6 +319,7 @@ void HomeControlMagic::sendStatus()
 
 void HomeControlMagic::sendFeedback()
 {
+  Serial.println("TU SAM - sending feedback");
   for(uint8_t i = 0; i<m_number_of_endpoints; i++)
   {
       m_endpoints_pointers[i]->sendFeedbackMessage();
