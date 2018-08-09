@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include "helperFunctions.h"
 
 #define MIN_STATUS_TIME 2
 class HomeControlMagic;

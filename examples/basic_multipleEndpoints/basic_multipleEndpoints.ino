@@ -2,8 +2,8 @@
 #include "Endpoints/EndpointTemperature.h"
 #include "DHT.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                        // Wifi network name
+#define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"
 
 #define DEBUG
@@ -22,10 +22,10 @@ char* deviceName = "TEMPERATURE_SENSORS";   // name of device
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointTemperature enpointTemperature_1(&hcm);
-EndpointTemperature enpointTemperature_2(&hcm);
-EndpointTemperature enpointTemperature_3(&hcm);
-EndpointTemperature enpointTemperature_4(&hcm);
+EndpointTemperature* endpointTemperature_1 = new EndpointTemperature(&hcm);
+EndpointTemperature* endpointTemperature_2 = new EndpointTemperature(&hcm);
+EndpointTemperature* endpointTemperature_3 = new EndpointTemperature(&hcm);
+EndpointTemperature* endpointTemperature_4 = new EndpointTemperature(&hcm);
 
 DHT dht_1(DHT_1_PIN, DHTTYPE);
 DHT dht_2(DHT_2_PIN, DHTTYPE);
@@ -39,16 +39,16 @@ void setup()
   Serial.println("Started serial");
   #endif
 
-  enpointTemperature_1.setEndpointName("TempNAME_1");
-  enpointTemperature_2.setEndpointName("TempNAME_2");
-  enpointTemperature_3.setEndpointName("TempNAME_3");
-  enpointTemperature_4.setEndpointName("TempNAME_4");
+  endpointTemperature_1->setEndpointName("NAME_1");
+  endpointTemperature_2->setEndpointName("NAME_2");
+  endpointTemperature_3->setEndpointName("NAME_3");
+  endpointTemperature_4->setEndpointName("NAME_4");
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(&enpointTemperature_1);
-  hcm.addEndpoint(&enpointTemperature_2);
-  hcm.addEndpoint(&enpointTemperature_3);
-  hcm.addEndpoint(&enpointTemperature_4);
+  hcm.addEndpoint(endpointTemperature_1);
+  hcm.addEndpoint(endpointTemperature_2);
+  hcm.addEndpoint(endpointTemperature_3);
+  hcm.addEndpoint(endpointTemperature_4);
 
   dht_1.begin();
   dht_2.begin();
@@ -76,10 +76,10 @@ void loop()
       return;
     }
 
-    enpointTemperature_1.setTemperature(temp_1);
-    enpointTemperature_2.setTemperature(temp_2);
-    enpointTemperature_3.setTemperature(temp_3);
-    enpointTemperature_4.setTemperature(temp_4);
+    endpointTemperature_1->setTemperature(temp_1);
+    endpointTemperature_2->setTemperature(temp_2);
+    endpointTemperature_3->setTemperature(temp_3);
+    endpointTemperature_4->setTemperature(temp_4);
   }
 
   hcm.doMagic();

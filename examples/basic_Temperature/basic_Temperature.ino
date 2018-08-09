@@ -2,8 +2,8 @@
 #include "Endpoints/EndpointTemperature.h"
 #include "DHT.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                        // Wifi network name
+#define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"
 
 //#define DEBUG
@@ -18,8 +18,7 @@ char* GW_IP = "GW_IP";                      // gateway IP address
 char* deviceName = "TEMPERATURE_SENSOR";    // name of device
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-
-EndpointTemperature enpointTemperature(&hcm);
+EndpointTemperature* endpointTemperature = new EndpointTemperature(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
@@ -31,7 +30,7 @@ void setup()
  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(&enpointTemperature);
+  hcm.addEndpoint(endpointTemperature);
 
   dht.begin();
 }
@@ -63,7 +62,7 @@ void loop()
 
     // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
-    enpointTemperature.setTemperature(temperature);
+    endpointTemperature->setTemperature(temperature);
   }
 
   hcm.doMagic();

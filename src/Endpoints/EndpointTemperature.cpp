@@ -27,15 +27,11 @@ void EndpointTemperature::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, "e:color;r=%d;name=%s;", m_resend_status_time, m_endpoint_name);
-
-    Serial.print("endpoint_name: ");
-    Serial.print(m_endpoint_name);
-    Serial.println();
+    sprintf(m_buff, "e:tmp;r=%d;name=%s;", m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+    sprintf(m_buff, "e:tmp;r=%d;", m_resend_status_time);
   }
 
   m_owner->sendMessage("conf", m_buff, m_id);

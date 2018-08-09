@@ -13,7 +13,7 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
 
 void EndpointIdentify::sendConfig()
 {
-  sprintf(m_buff, "e:identify;");
+  sprintf(m_buff, "e:id;");
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 

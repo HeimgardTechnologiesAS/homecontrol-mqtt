@@ -39,11 +39,11 @@ void EndpointLevel::sendConfig()
 {
   if(m_endpoint_name != nullptr)
   {
-    sprintf(m_buff, "e:color;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+    sprintf(m_buff, "e:lev;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
   }
   else
   {
-    sprintf(m_buff, "e:color;r=%d;", m_resend_status_time);
+    sprintf(m_buff, "e:lev;r=%d;", m_resend_status_time);
   }
 
   m_owner->sendMessage("conf", m_buff, m_id);

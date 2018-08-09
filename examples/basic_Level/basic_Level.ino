@@ -1,8 +1,8 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointLevel.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                        // Wifi network name
+#define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"
 
 //#define DEBUG
@@ -20,13 +20,12 @@ bool last_state = false;
 uint16_t last_level = 0;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-
-EndpointLevel endpointLevel(&hcm);
+EndpointLevel* endpointLevel = new EndpointLevel(&hcm);
 
 void controlPin()
 {
-  bool state = endpointLevel.getState();
-  uint16_t level = endpointLevel.getLevel();
+  bool state = endpointLevel->getState();
+  uint16_t level = endpointLevel->getLevel();
 
   if((state != last_state) || (level != last_level))
   {
@@ -47,7 +46,7 @@ void controlPin()
     {
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
-    endpointLevel.sendFeedbackMessage();
+    endpointLevel->sendFeedbackMessage();
   }
 }
 
@@ -61,7 +60,7 @@ void setup()
 #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(&endpointLevel);
+  hcm.addEndpoint(endpointLevel);
 }
 
 void loop()
