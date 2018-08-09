@@ -1,7 +1,7 @@
 #include "EndpointZero.h"
 #include "HomeControlMagic.h"
 
-#define ENDPOINT_ZERO_DEBUG
+//#define ENDPOINT_ZERO_DEBUG
 
 EndpointZero::EndpointZero(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
