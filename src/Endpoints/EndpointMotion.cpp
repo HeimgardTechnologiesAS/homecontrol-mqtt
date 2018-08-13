@@ -40,7 +40,7 @@ void EndpointMotion::sendConfig()
 void EndpointMotion::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_MOTION_DEBUG
-  Serial.println("incoming message, EndpointMotion");
+  Serial.println(F("incoming message, EndpointMotion"));
   for(int i=0; i< length; i++)
   {
     Serial.print((char)payload[i]);
@@ -60,7 +60,7 @@ void EndpointMotion::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_MOTION_DEBUG
-        Serial.println("sending status message, EndpointMotion");
+        Serial.println(F("sending status message, EndpointMotion"));
       #endif
 
       m_owner->sendMessage("sm", m_state, m_id);
@@ -70,7 +70,7 @@ void EndpointMotion::sendStatusMessage()
 void EndpointMotion::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_MOTION_DEBUG
-  Serial.println("sending feedback message, EndpointMotion");
+  Serial.println(F("sending feedback message, EndpointMotion"));
   #endif
 
   m_owner->sendMessage("sm", m_state, m_id);

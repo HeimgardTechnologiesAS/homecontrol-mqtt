@@ -24,7 +24,7 @@ void EndpointZero::sendFeedbackMessage()
 void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
 #ifdef ENDPOINT_ZERO_DEBUG
-  Serial.println("incoming message, EndpointZero");
+  Serial.println(F("incoming message, EndpointZero"));
 
   for(int i=0; i< length; i++)
   {

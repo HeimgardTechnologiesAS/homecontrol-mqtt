@@ -40,7 +40,7 @@ void EndpointTemperature::sendConfig()
 void EndpointTemperature::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_TEMPERATURE_DEBUG
-  Serial.println("incoming message, EndpointTemperature");
+  Serial.println(F("incoming message, EndpointTemperature"));
 
   for(int i=0; i< length; i++)
   {
@@ -61,7 +61,7 @@ void EndpointTemperature::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_TEMPERATURE_DEBUG
-        Serial.println("sending status message, EndpointTemperature");
+        Serial.println(F("sending status message, EndpointTemperature"));
       #endif
 
       m_owner->sendMessage("st", m_temperature, m_id);
@@ -71,7 +71,7 @@ void EndpointTemperature::sendStatusMessage()
 void EndpointTemperature::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_TEMPERATURE_DEBUG
-  Serial.println("sending feedback message, EndpointTemperature");
+  Serial.println(F("sending feedback message, EndpointTemperature"));
   #endif
 
   m_owner->sendMessage("st", m_temperature, m_id);

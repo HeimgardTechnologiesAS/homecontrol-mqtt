@@ -40,7 +40,7 @@ void EndpointOnOff::sendConfig()
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
 {
   #ifdef ENDPOINT_ON_OFF_DEBUG
-  Serial.println("incoming message, EndpointOnOff");
+  Serial.println(F("incoming message, EndpointOnOff"));
   for(int i=0; i< length; i++)
   {
     Serial.print((char)payload[i]);
@@ -64,7 +64,7 @@ void EndpointOnOff::sendStatusMessage()
     {
       m_last_send_time = millis();
       #ifdef ENDPOINT_ON_OFF_DEBUG
-        Serial.println("sending status message, EndpointOnOff");
+        Serial.println(F("sending status message, EndpointOnOff"));
       #endif
 
       m_owner->sendMessage("sp", m_state, m_id);
@@ -74,7 +74,7 @@ void EndpointOnOff::sendStatusMessage()
 void EndpointOnOff::sendFeedbackMessage()
 {
   #ifdef ENDPOINT_ON_OFF_DEBUG
-  Serial.println("sending feedback message, EndpointOnOff");
+  Serial.println(F("sending feedback message, EndpointOnOff"));
   #endif
 
   m_owner->sendMessage("sp", m_state, m_id);
