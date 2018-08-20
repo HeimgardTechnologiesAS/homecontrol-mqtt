@@ -11,7 +11,7 @@ static HomeControlMagic* hcm_ptr;
 void callback(char* topic, byte* payload, unsigned int length)
 {
   #ifdef HCM_DEBUG
-  Serial.println("got in callback");
+  Serial.println(F("got in callback"));
   #endif
   // check for server announce
   if(lineContains(topic, "broadcast"))
@@ -99,11 +99,9 @@ void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id
   strcat(buffer, endpoint_id);
   strcat(buffer, "/");
   strcat(buffer, topic);
-  #ifdef HCM_DEBUG
-  Serial.println(buffer);
-  #endif
 
   #ifdef HCM_DEBUG
+  Serial.println(buffer);
   Serial.println(message);
   #endif
 
@@ -218,13 +216,13 @@ void HomeControlMagic::mqttLoop(bool reconnect)
 bool HomeControlMagic::reconnectMqtt()
 {
   #ifdef HCM_DEBUG
-  Serial.println("Trying to reconnect to mqtt broker");
+  Serial.println(F("Trying to reconnect to mqtt broker"));
   #endif
   // Attempt to connect
   if(m_mqtt_client.connect(m_id, m_username, m_password))
   {
     #ifdef HCM_DEBUG
-    Serial.println("Success");
+    Serial.println(F("Success"));
     #endif
     // ... and resubscribe
     m_mqtt_client.setCallback(callback);
@@ -236,7 +234,7 @@ bool HomeControlMagic::reconnectMqtt()
   else
   {
     #ifdef HCM_DEBUG
-    Serial.print("failed, rc=");
+    Serial.print(F("failed, rc="));
     Serial.println(m_mqtt_client.state());
     #endif
     m_broker_connected = false;
@@ -290,7 +288,7 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   char buff[4] = {0};
   sprintf(buff, "%d", m_number_of_endpoints - 1);
   #ifdef HCM_DEBUG
-  Serial.print("Id to set: ");
+  Serial.print(F("Id to set: "));
   Serial.println(buff);
   #endif
   endpoint_ptr->setId(buff);

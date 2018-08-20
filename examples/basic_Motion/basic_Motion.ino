@@ -1,8 +1,8 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointMotion.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                        // Wifi network name
+#define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"
 
 //#define DEBUG
@@ -19,8 +19,7 @@ bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-
-EndpointMotion enpointMotion(&hcm);
+EndpointMotion* endpointMotion = new EndpointMotion(&hcm);
 
 void controlPin()
 {
@@ -38,24 +37,24 @@ void controlPin()
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
     #endif
-    enpointMotion.setState(motion);
+    endpointMotion->setState(motion);
   }
 }
 
 void setup()
 {
+  pinMode(PIR_PIN, INPUT);
+  #ifdef DEVICE_PIN
+  pinMode(DEVICE_PIN, OUTPUT);
+  #endif
+
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(&enpointMotion);
-
-  pinMode(PIR_PIN, INPUT);
-  #ifdef DEVICE_PIN
-  pinMode(DEVICE_PIN, OUTPUT);
-  #endif
+  hcm.addEndpoint(endpointMotion);
 }
 
 void loop()

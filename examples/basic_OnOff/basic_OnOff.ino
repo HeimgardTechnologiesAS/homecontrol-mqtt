@@ -1,8 +1,8 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointOnOff.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                          // Wifi network name
+#define WIFI_PASS ""                          // Wifi password
 #include "NetworkLoops.hpp"
 
 //#define DEBUG
@@ -15,16 +15,14 @@ char* GW_IP = "GW_IP";                        // gateway IP address
 char* deviceName = "ON_OFF_DEVICE";           // name of device
 
 bool active_pin_state = false;                // reverse pin state
-
 bool last_state = false;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-
-EndpointOnOff endpointOnOff(&hcm);
+EndpointOnOff* endpointOnOff = new EndpointOnOff(&hcm);
 
 void controlPin()
 {
-  bool state = endpointOnOff.getState();
+  bool state = endpointOnOff->getState();
   if(state != last_state)
   {
     last_state = state;
@@ -36,7 +34,7 @@ void controlPin()
     {
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
-    endpointOnOff.sendFeedbackMessage();
+    endpointOnOff->sendFeedbackMessage();
   }
 }
 
@@ -50,7 +48,7 @@ void setup()
   #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(&endpointOnOff);
+  hcm.addEndpoint(endpointOnOff);
 }
 
 void loop()

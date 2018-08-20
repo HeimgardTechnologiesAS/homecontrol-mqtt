@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include "helperFunctions.h"
 
 #define MIN_STATUS_TIME 2
 class HomeControlMagic;
@@ -36,6 +37,16 @@ class Endpoint
       }
     }
 
+    void setEndpointName(char* name_endpoint)
+    {
+      m_endpoint_name = name_endpoint;
+    }
+
+    char* getEndpointName()
+    {
+      return m_endpoint_name;
+    }
+
     virtual void sendConfig();
     virtual void sendStatusMessage();
     virtual void sendFeedbackMessage();
@@ -47,5 +58,6 @@ class Endpoint
     char m_id[4] = {0};
     long m_last_send_time;
     int m_resend_status_time;
+    char* m_endpoint_name = nullptr;
 };
 

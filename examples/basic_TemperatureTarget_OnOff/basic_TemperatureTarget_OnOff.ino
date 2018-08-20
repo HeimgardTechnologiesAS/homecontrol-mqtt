@@ -3,13 +3,13 @@
 #include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
 #define ESP_LOOP
-#define WIFI_SSID ""
-#define WIFI_PASS ""
+#define WIFI_SSID ""                      // Wifi network name
+#define WIFI_PASS ""                      // Wifi password
 #include "NetworkLoops.hpp"
 
 //#define DEBUG
 
-#define DHT_PIN 4                         // GPIO pin to use as example (D2)
+#define DHT_PIN 4                         // GPIO pin to use as example
 #define DHTTYPE DHT22                     // DHT type
 #define DEVICE_PIN LED_BUILTIN            // connected heater or cooler device, built in led as example
 
@@ -20,19 +20,18 @@ char* GW_IP = "GW_IP";                    // gateway IP address
 char* deviceName = "TERMOSTAT";           // name of device
 
 bool active_pin_state = false;            // reverse pin state
-
 bool last_state = false;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
 
-EndpointTemperatureTarget endpointTemperatureTarget(&hcm);
-EndpointOnOff endpointOnOff(&hcm);
+EndpointTemperatureTarget* endpointTemperatureTarget = new EndpointTemperatureTarget(&hcm);
+EndpointOnOff* endpointOnOff = new EndpointOnOff(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
 void controlPin()
 {
-  bool state = endpointOnOff.getState();
+  bool state = endpointOnOff->getState();
   if(state != last_state)
   {
     last_state = state;
@@ -44,7 +43,7 @@ void controlPin()
     {
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
-    endpointOnOff.sendFeedbackMessage();
+    endpointOnOff->sendFeedbackMessage();
   }
 }
 
@@ -55,15 +54,15 @@ void setup()
   network.setReconnectTime(RECONNECTION_TIME);
 
   double temperature = dht.readTemperature();
-  endpointTemperatureTarget.setTemperatureTarget(temperature);
+  endpointTemperatureTarget->setTemperatureTarget(temperature);
 
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
-  hcm.addEndpoint(&endpointTemperatureTarget);
-  hcm.addEndpoint(&endpointOnOff);
+  hcm.addEndpoint(endpointTemperatureTarget);
+  hcm.addEndpoint(endpointOnOff);
 
   dht.begin();
 }
@@ -87,17 +86,17 @@ void loop()
     }
     else
     {
-      endpointTemperatureTarget.setTemperature(temperature);
+      endpointTemperatureTarget->setTemperature(temperature);
     }
 
     #ifdef DEBUG
     Serial.print("Temperature from sensor: ");
-    Serial.print(endpointTemperatureTarget.getTemperature());
+    Serial.print(endpointTemperatureTarget->getTemperature());
     Serial.print(" *C ");
     Serial.println();
 
     Serial.print("Temperature target: ");
-    Serial.print(endpointTemperatureTarget.getTemperatureTarget());
+    Serial.print(endpointTemperatureTarget->getTemperatureTarget());
     Serial.print(" *C ");
     Serial.println();
     #endif

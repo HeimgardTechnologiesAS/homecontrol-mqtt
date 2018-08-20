@@ -37,7 +37,15 @@ uint16_t EndpointLevel::getLevel()
 
 void EndpointLevel::sendConfig()
 {
-  sprintf(m_buff, "e:level;r=%d;", m_resend_status_time);
+  if(m_endpoint_name != nullptr)
+  {
+    sprintf(m_buff, "e:lev;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
+  }
+  else
+  {
+    sprintf(m_buff, "e:lev;r=%d;", m_resend_status_time);
+  }
+
   m_owner->sendMessage("conf", m_buff, m_id);
 }
 
