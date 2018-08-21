@@ -4,12 +4,15 @@
 
 //#define ENDPOINT_ON_OFF_DEBUG
 
+static char* const CONFIG = "pwr";
+
 EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
   , m_state(false)
 {
   m_last_send_time = millis();
   m_resend_status_time = 30;
+  m_config = CONFIG;
 }
 
 void EndpointOnOff::setState(bool state)
@@ -21,20 +24,6 @@ void EndpointOnOff::setState(bool state)
 bool EndpointOnOff::getState()
 {
   return m_state;
-}
-
-void EndpointOnOff::sendConfig()
-{
-  if(m_endpoint_name != nullptr)
-  {
-    sprintf(m_buff, "e:pwr;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
-  }
-  else
-  {
-    sprintf(m_buff, "e:pwr;r=%d;", m_resend_status_time);
-  }
-
-  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)

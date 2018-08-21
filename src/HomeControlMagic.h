@@ -27,12 +27,15 @@ class HomeControlMagic
     void sendMessage(char* topic, uint16_t message, char* endpoint_id);
     void sendMessage(char* topic, double message, char* endpoint_id);
 
+    void sendConfig(char* config, uint8_t, char* endpoint_name, char* endpoint_id);
+
     void setReconnectTime(uint16_t seconds);
 
   private:
     bool reconnectMqtt();
     void subscribeNow();
     void mqttLoop(bool reconnect);
+    void setTopic(char* topic, char* endpoint_id);
 
     char* m_name;
 

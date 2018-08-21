@@ -7,7 +7,6 @@ class EndpointOnOff : public Endpoint
   public:
     EndpointOnOff(HomeControlMagic* hcm_ptr);
 
-    virtual void sendConfig();
     virtual void sendStatusMessage();
     virtual void sendFeedbackMessage();
 
