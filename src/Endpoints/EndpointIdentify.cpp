@@ -4,17 +4,14 @@
 
 //#define ENDPOINT_IDENTIFY_DEBUG
 
+static char* const CONFIG = "id";
+
 EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
   : Endpoint(hcm_ptr)
   , m_pin(pin)
 {
   pinMode(m_pin, OUTPUT);
-}
-
-void EndpointIdentify::sendConfig()
-{
-  sprintf(m_buff, "e:id;");
-  m_owner->sendMessage("conf", m_buff, m_id);
+  m_config = CONFIG;
 }
 
 void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int length)

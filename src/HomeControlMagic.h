@@ -22,7 +22,7 @@ class HomeControlMagic
 
     void announce();
 
-    void sendMessage(char* topic, char* message, char* endpoint_id);
+    void sendStringMessage(char* topic, char* endpoint_id);
     void sendMessage(char* topic, bool message, char* endpoint_id);
     void sendMessage(char* topic, uint16_t message, char* endpoint_id);
     void sendMessage(char* topic, double message, char* endpoint_id);
@@ -30,6 +30,8 @@ class HomeControlMagic
     void sendConfig(char* config, uint8_t, char* endpoint_name, char* endpoint_id);
 
     void setReconnectTime(uint16_t seconds);
+
+    char* getMessageBufferPtr();
 
   private:
     bool reconnectMqtt();

@@ -4,12 +4,15 @@
 
 //#define ENDPOINT_TEMPERATURE_DEBUG
 
+static char* const CONFIG = "tmp";
+
 EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
   , m_temperature(0)
 {
   m_last_send_time = millis();
   m_resend_status_time = 60;
+  m_config = CONFIG;
 }
 
 void EndpointTemperature::setTemperature(double temperature)
@@ -21,20 +24,6 @@ void EndpointTemperature::setTemperature(double temperature)
 double EndpointTemperature::getTemperature()
 {
   return m_temperature;
-}
-
-void EndpointTemperature::sendConfig()
-{
-  if(m_endpoint_name != nullptr)
-  {
-    sprintf(m_buff, "e:tmp;r=%d;name=%s;", m_resend_status_time, m_endpoint_name);
-  }
-  else
-  {
-    sprintf(m_buff, "e:tmp;r=%d;", m_resend_status_time);
-  }
-
-  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointTemperature::incomingMessage(char* topic, byte* payload, unsigned int length)

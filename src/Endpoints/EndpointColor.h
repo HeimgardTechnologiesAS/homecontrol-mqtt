@@ -8,7 +8,6 @@ class EndpointColor : public Endpoint
   public:
     EndpointColor(HomeControlMagic* hcm_ptr);
 
-    virtual void sendConfig();
     virtual void sendStatusMessage();
     virtual void sendFeedbackMessage();
 
@@ -24,11 +23,10 @@ class EndpointColor : public Endpoint
     virtual int getColorG();
     virtual int getColorB();
 
-    virtual char* getRGBcharPtr();
+    virtual void getRGBcharPtr(char* buffer);
 
   protected:
     struct RGB m_rgb;
     bool m_state;
     uint16_t m_level;
-    char m_buff[128];
 };

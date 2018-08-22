@@ -17,5 +17,4 @@ class EndpointOnOff : public Endpoint
 
   protected:
     bool m_state;
-    char m_buff[128];
 };

@@ -111,17 +111,21 @@ void HomeControlMagic::setTopic(char* topic, char* endpoint_id)
   strcat(m_topic_buffer, topic);
 }
 
-void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id)
+/*
+* Use with m_message_buffer. Get it by calling getMessageBufferPtr()
+*/
+void HomeControlMagic::sendStringMessage(char* topic, char* endpoint_id)
 {
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
   Serial.println(m_topic_buffer);
-  Serial.println(message);
+  Serial.println(m_message_buffer);
   #endif
 
-  m_mqtt_client.publish(m_topic_buffer, message);
+  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
   clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
@@ -368,6 +372,11 @@ void HomeControlMagic::sendFeedback()
 void HomeControlMagic::setReconnectTime(uint16_t seconds)
 {
   m_reconnect_time = seconds * 1000;
+}
+
+char* HomeControlMagic::getMessageBufferPtr()
+{
+  return m_message_buffer;
 }
 
 

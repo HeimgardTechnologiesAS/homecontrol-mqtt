@@ -4,6 +4,8 @@
 
 //#define ENDPOINT_COLOR_DEBUG
 
+static char* const CONFIG = "col";
+
 EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
   , m_level(0)
@@ -11,6 +13,7 @@ EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 30;
+  m_config = CONFIG;
 }
 
 void EndpointColor::setState(bool state)
@@ -50,10 +53,20 @@ int EndpointColor::getColorB()
   return m_rgb.b;
 }
 
-char* EndpointColor::getRGBcharPtr()
+void EndpointColor::getRGBcharPtr(char* buffer)
 {
-  sprintf(m_buff, "%d;%d;%d", m_rgb.r, m_rgb.g, m_rgb.b);
-  return m_buff;
+  char buff[6];
+
+  itoa(m_rgb.r, buff, 10);
+  strcat(buffer, buff);
+  strcat(buffer, ";");
+
+  itoa(m_rgb.g, buff, 10);
+  strcat(buffer, buff);
+  strcat(buffer, ";");
+
+  itoa(m_rgb.b, buff, 10);
+  strcat(buffer, buff);
 }
 
 void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int length)
@@ -95,22 +108,9 @@ void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int len
 
   else if(lineContains(topic, "sc"))
   {
-    m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
+    getRGBcharPtr(m_owner->getMessageBufferPtr());
+    m_owner->sendStringMessage("sc", m_id);
   }
-}
-
-void EndpointColor::sendConfig()
-{
-  if(m_endpoint_name != nullptr)
-  {
-    sprintf(m_buff, "e:col;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
-  }
-  else
-  {
-    sprintf(m_buff, "e:col;r=%d;", m_resend_status_time);
-  }
-
-  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointColor::sendStatusMessage()
@@ -124,7 +124,8 @@ void EndpointColor::sendStatusMessage()
 
       m_owner->sendMessage("sp", m_state, m_id);
       m_owner->sendMessage("sl", m_level, m_id);
-      m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
+      getRGBcharPtr(m_owner->getMessageBufferPtr());
+      m_owner->sendStringMessage("sc", m_id);
     }
 }
 
@@ -136,5 +137,6 @@ void EndpointColor::sendFeedbackMessage()
 
   m_owner->sendMessage("sp", m_state, m_id);
   m_owner->sendMessage("sl", m_level, m_id);
-  m_owner->sendMessage("sc", getRGBcharPtr(), m_id);
+  getRGBcharPtr(m_owner->getMessageBufferPtr());
+  m_owner->sendStringMessage("sc", m_id);
 }
