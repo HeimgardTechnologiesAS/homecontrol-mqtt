@@ -8,6 +8,14 @@ void clearByte(byte* text, unsigned int length)
   }
 }
 
+void clearBuffer(char* text, uint8_t length)
+{
+  for(uint8_t i = 0; i < length; i++)
+  {
+    text[i] = 0;
+  }
+}
+
 int lineContains(const char *str, const char *sfind)
 {
   int found = 0;

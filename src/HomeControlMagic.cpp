@@ -4,17 +4,25 @@
 
 #include "Endpoints/EndpointZero.h"
 
-//#define HCM_DEBUG
+#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
-static char m_topic_buffer[30];
-static char m_message_buffer[50];
+#define TOPIC_BUFFER_LENGTH 30
+#define MESSAGE_BUFFER_LENGTH 50
+static char m_topic_buffer[TOPIC_BUFFER_LENGTH];
+static char m_message_buffer[MESSAGE_BUFFER_LENGTH];
 
 void callback(char* topic, byte* payload, unsigned int length)
 {
   #ifdef HCM_DEBUG
   Serial.println(F("got in callback"));
+  Serial.println(topic);
+  for(uint8_t i = 0; i < length; i++)
+  {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
   #endif
   // check for server announce
   if(lineContains(topic, "broadcast"))
@@ -108,11 +116,12 @@ void HomeControlMagic::sendMessage(char* topic, char* message, char* endpoint_id
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(buffer);
+  Serial.println(m_topic_buffer);
   Serial.println(message);
   #endif
 
   m_mqtt_client.publish(m_topic_buffer, message);
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
@@ -120,16 +129,25 @@ void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(buffer);
+  Serial.println(m_topic_buffer);
   #endif
 
-  dtostrf(message, 1, 0, m_message_buffer);
+  if(message)
+  {
+    m_message_buffer[0] = '1';
+  }
+  else
+  {
+    m_message_buffer[0] = '0';
+  }
 
   #ifdef HCM_DEBUG
   Serial.println(m_message_buffer);
   #endif
 
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint_id)
@@ -137,16 +155,18 @@ void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(buffer);
+  Serial.println(m_topic_buffer);
   #endif
 
-  dtostrf(message, 4, 0, m_message_buffer);
+  itoa(message, m_message_buffer, 10);
 
   #ifdef HCM_DEBUG
   Serial.println(m_message_buffer);
   #endif
 
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_id)
@@ -164,6 +184,8 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
   #endif
 
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpoint_name, char* endpoint_id)
@@ -174,7 +196,7 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
   strcat(m_message_buffer, config);
   strcat(m_message_buffer, ";r:");
   char buff[5];
-  dtostrf(resend_time, 4, 0, buff);
+  itoa(resend_time, buff, 10);
   strcat(m_message_buffer, buff);
 
   if(endpoint_name != nullptr)
@@ -186,6 +208,8 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
 
   strcat(m_message_buffer, ";");
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 /*
@@ -268,14 +292,16 @@ void HomeControlMagic::announce()
 
 void HomeControlMagic::subscribeNow()
 {
-  setTopic("#", "");
 
+  strcat(m_topic_buffer, m_id);
+  strcat(m_topic_buffer, "/#");
   #ifdef HCM_DEBUG
-  Serial.println(buff);
+  Serial.println(m_topic_buffer);
   #endif
 
   m_mqtt_client.subscribe(m_topic_buffer);
   m_mqtt_client.subscribe("broadcast");
+  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
 }
 
 Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
@@ -301,12 +327,13 @@ uint8_t HomeControlMagic::getNumberOfEndpoints()
 void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
   m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-  dtostrf(m_number_of_endpoints - 1, 2, 0, m_message_buffer);
+  itoa(m_number_of_endpoints - 1, m_message_buffer, 10);
   #ifdef HCM_DEBUG
   Serial.print(F("Id to set: "));
   Serial.println(m_message_buffer);
   #endif
   endpoint_ptr->setId(m_message_buffer);
+  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
 
 void HomeControlMagic::sendConfigs()
