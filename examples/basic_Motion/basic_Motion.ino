@@ -12,14 +12,14 @@
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 
-char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "MOTION_SENSOR";         // name of device
+static char* const GW_IP = "GW_IP";                      // gateway IP address
+static char* const deviceName = "MOTION_SENSOR";         // name of device
 
 bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-EndpointMotion* endpointMotion = new EndpointMotion(&hcm);
+EndpointMotion endpointMotion(&hcm);
 
 void controlPin()
 {
@@ -37,7 +37,7 @@ void controlPin()
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
     #endif
-    endpointMotion->setState(motion);
+    endpointMotion.setState(motion);
   }
 }
 
@@ -54,7 +54,7 @@ void setup()
   #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(endpointMotion);
+  hcm.addEndpoint(&endpointMotion);
 }
 
 void loop()

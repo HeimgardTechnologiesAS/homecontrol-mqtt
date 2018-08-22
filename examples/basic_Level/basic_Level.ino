@@ -11,8 +11,8 @@
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 
-char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "LEVEL_DEVICE";          // name of device
+static char* const GW_IP = "GW_IP";                      // gateway IP address
+static char* const deviceName = "LEVEL_DEVICE";          // name of device
 
 bool active_pin_state = false;              // reverse pin state
 
@@ -20,12 +20,12 @@ bool last_state = false;
 uint16_t last_level = 0;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-EndpointLevel* endpointLevel = new EndpointLevel(&hcm);
+EndpointLevel endpointLevel(&hcm);
 
 void controlPin()
 {
-  bool state = endpointLevel->getState();
-  uint16_t level = endpointLevel->getLevel();
+  bool state = endpointLevel.getState();
+  uint16_t level = endpointLevel.getLevel();
 
   if((state != last_state) || (level != last_level))
   {
@@ -46,7 +46,7 @@ void controlPin()
     {
       digitalWrite(DEVICE_PIN, !active_pin_state);
     }
-    endpointLevel->sendFeedbackMessage();
+    endpointLevel.sendFeedbackMessage();
   }
 }
 
@@ -60,7 +60,7 @@ void setup()
 #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(endpointLevel);
+  hcm.addEndpoint(&endpointLevel);
 }
 
 void loop()

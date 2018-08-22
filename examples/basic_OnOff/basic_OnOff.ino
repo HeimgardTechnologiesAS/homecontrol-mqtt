@@ -11,8 +11,8 @@
 
 #define RECONNECTION_TIME 5                   // network reconnection time in seconds
 
-static char* GW_IP = "GW_IP";                        // gateway IP address
-static char* deviceName = "ON_OFF_DEVICE";           // name of device
+static char* const GW_IP = "GW_IP";                        // gateway IP address
+static char* const deviceName = "ON_OFF_DEVICE";           // name of device
 
 bool active_pin_state = false;                // reverse pin state
 bool last_state = false;

@@ -13,8 +13,8 @@
 
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 
-char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "COLOR_DEVICE";          // name of device
+static char* const GW_IP = "GW_IP";                      // gateway IP address
+static char* const deviceName = "COLOR_DEVICE";          // name of device
 
 bool active_pin_state = true;               // reverse pin state
 
@@ -25,7 +25,7 @@ uint16_t last_color_G = 0;
 uint16_t last_color_B = 0;
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-EndpointColor* endpointColor = new EndpointColor(&hcm);
+EndpointColor endpointColor(&hcm);
 
 uint16_t adjLevel(uint16_t color_X, uint16_t level)
 {
@@ -44,15 +44,15 @@ uint16_t adjLevel(uint16_t color_X, uint16_t level)
 void controlPin()
 {
   // state 0/1
-  bool state = endpointColor->getState();
+  bool state = endpointColor.getState();
 
   // level 0-10000
-  uint16_t level = endpointColor->getLevel();
+  uint16_t level = endpointColor.getLevel();
 
   // RGB color 0-10000
-  uint16_t color_R = endpointColor->getColorR();
-  uint16_t color_G = endpointColor->getColorG();
-  uint16_t color_B = endpointColor->getColorB();
+  uint16_t color_R = endpointColor.getColorR();
+  uint16_t color_G = endpointColor.getColorG();
+  uint16_t color_B = endpointColor.getColorB();
 
   if((state != last_state) || (last_level != level) || (color_R != last_color_R) || (color_G != last_color_G) || (color_B != last_color_B))
   {
@@ -74,7 +74,7 @@ void controlPin()
       digitalWrite(G_PIN, !active_pin_state);
       digitalWrite(B_PIN, !active_pin_state);
     }
-    endpointColor->sendFeedbackMessage();
+    endpointColor.sendFeedbackMessage();
   }
 }
 
@@ -90,7 +90,7 @@ void setup()
   #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(endpointColor);
+  hcm.addEndpoint(&endpointColor);
 }
 
 void loop()
