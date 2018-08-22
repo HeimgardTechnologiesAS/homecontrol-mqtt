@@ -16,7 +16,7 @@ public:
   void setEndpointName(char* name_endpoint);
   char* getEndpointName();
 
-  void sendConfig();
+  virtual void sendConfig();
 
   virtual void sendStatusMessage() = 0;
   virtual void sendFeedbackMessage() = 0;

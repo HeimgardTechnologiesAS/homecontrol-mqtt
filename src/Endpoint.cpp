@@ -1,6 +1,8 @@
 #include "Endpoint.h"
 #include "HomeControlMagic.h"
 
+//#define ENDPOINT_DEBUG
+
 Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
     : m_owner(hcm_ptr)
 {
@@ -42,5 +44,9 @@ char* Endpoint::getEndpointName()
 
 void Endpoint::sendConfig()
 {
+#ifdef ENDPOINT_DEBUG
+    Serial.print("sending config for endpoint: ");
+    Serial.println(m_id);
+#endif
     m_owner->sendConfig(m_config, m_resend_status_time, m_endpoint_name, m_id);
 }

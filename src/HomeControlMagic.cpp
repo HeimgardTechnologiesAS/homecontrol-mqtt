@@ -4,7 +4,7 @@
 
 #include "Endpoints/EndpointZero.h"
 
-#define HCM_DEBUG
+//#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
@@ -15,7 +15,7 @@ static char m_message_buffer[MESSAGE_BUFFER_LENGTH];
 
 void callback(char* topic, byte* payload, unsigned int length)
 {
-  #ifdef HCM_DEBUG
+#ifdef HCM_DEBUG
   Serial.println(F("got in callback"));
   Serial.println(topic);
   for(uint8_t i = 0; i < length; i++)
@@ -23,7 +23,7 @@ void callback(char* topic, byte* payload, unsigned int length)
     Serial.print((char)payload[i]);
   }
   Serial.println();
-  #endif
+#endif
   // check for server announce
   if(lineContains(topic, "broadcast"))
   {
@@ -190,11 +190,11 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
 
 void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpoint_name, char* endpoint_id)
 {
-  setTopic("config", endpoint_id);
+  setTopic("conf", endpoint_id);
 
   strcat(m_message_buffer, "e:");
   strcat(m_message_buffer, config);
-  strcat(m_message_buffer, ";r:");
+  strcat(m_message_buffer, ";r=");
   char buff[5];
   itoa(resend_time, buff, 10);
   strcat(m_message_buffer, buff);
@@ -202,11 +202,16 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
   if(endpoint_name != nullptr)
   {
     // TODO: replace name with just n
-    strcat(m_message_buffer, ";name:");
+    strcat(m_message_buffer, ";name=");
     strcat(m_message_buffer, endpoint_name);
   }
 
   strcat(m_message_buffer, ";");
+
+#ifdef HCM_DEBUG
+Serial.println(m_topic_buffer);
+Serial.println(m_message_buffer);
+#endif
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
   clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
   clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
@@ -328,10 +333,10 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
   m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
   itoa(m_number_of_endpoints - 1, m_message_buffer, 10);
-  #ifdef HCM_DEBUG
+#ifdef HCM_DEBUG
   Serial.print(F("Id to set: "));
   Serial.println(m_message_buffer);
-  #endif
+#endif
   endpoint_ptr->setId(m_message_buffer);
   clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
 }
