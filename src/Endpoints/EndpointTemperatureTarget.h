@@ -7,7 +7,6 @@ class EndpointTemperatureTarget : public Endpoint
   public:
     EndpointTemperatureTarget(HomeControlMagic* hcm_ptr);
 
-    virtual void sendConfig();
     virtual void sendStatusMessage();
     virtual void sendFeedbackMessage();
 
@@ -23,5 +22,4 @@ class EndpointTemperatureTarget : public Endpoint
   protected:
     double m_temperature;
     double m_temperature_target;
-    char m_buff[128];
 };

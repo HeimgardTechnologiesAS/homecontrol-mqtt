@@ -14,11 +14,11 @@
 #define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define READ_TIME 30                        // sensor reading time in seconds
 
-char* GW_IP = "GW_IP";                      // gateway IP address
-char* deviceName = "TEMPERATURE_SENSOR";    // name of device
+static char* const GW_IP = "GW_IP";                      // gateway IP address
+static char* const deviceName = "TEMPERATURE_SENSOR";    // name of device
 
 HomeControlMagic hcm(GW_IP, deviceName, network);
-EndpointTemperature* endpointTemperature = new EndpointTemperature(&hcm);
+EndpointTemperature endpointTemperature(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
@@ -30,7 +30,7 @@ void setup()
  #endif
 
   network.setReconnectTime(RECONNECTION_TIME);
-  hcm.addEndpoint(endpointTemperature);
+  hcm.addEndpoint(&endpointTemperature);
 
   dht.begin();
 }
@@ -62,7 +62,7 @@ void loop()
 
     // this example read/set temperature every 30s and update system every 60
     // use enpointTemperature.sendFeedback() if is neccessary to update system after specific event
-    endpointTemperature->setTemperature(temperature);
+    endpointTemperature.setTemperature(temperature);
   }
 
   hcm.doMagic();

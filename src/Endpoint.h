@@ -1,63 +1,34 @@
 #pragma once
 
 #include "Arduino.h"
-#include "helperFunctions.h"
 
 #define MIN_STATUS_TIME 2
 class HomeControlMagic;
 
 class Endpoint
 {
-  public:
-    Endpoint(HomeControlMagic* hcm_ptr)
-    : m_owner(hcm_ptr)
-    {
-    }
+public:
+  Endpoint(HomeControlMagic* hcm_ptr);
 
-    void setId(char* id)
-    {
-      uint8_t i = 0;
-      while(*(id + i) != '\0')
-      {
-        *(m_id + i) = *(id + i);
-        i++;
-      }
-    }
+  void setStatusTime(int status_time);
+  void setId(char* id);
 
-    void setStatusTime(int status_time)
-    {
-      // not allowed to set report status time under 2 seconds
-      if(status_time < MIN_STATUS_TIME)
-      {
-        m_resend_status_time = MIN_STATUS_TIME;
-      }
-      else
-      {
-        m_resend_status_time = status_time;
-      }
-    }
+  void setEndpointName(char* name_endpoint);
+  char* getEndpointName();
 
-    void setEndpointName(char* name_endpoint)
-    {
-      m_endpoint_name = name_endpoint;
-    }
+  virtual void sendConfig();
 
-    char* getEndpointName()
-    {
-      return m_endpoint_name;
-    }
+  virtual void sendStatusMessage() = 0;
+  virtual void sendFeedbackMessage() = 0;
 
-    virtual void sendConfig();
-    virtual void sendStatusMessage();
-    virtual void sendFeedbackMessage();
+  virtual void incomingMessage(char* topic, byte* payload, unsigned int length) = 0;
 
-    virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
-
-  protected:
-    HomeControlMagic* m_owner;
-    char m_id[4] = {0};
-    long m_last_send_time;
-    int m_resend_status_time;
-    char* m_endpoint_name = nullptr;
+protected:
+  HomeControlMagic* m_owner;
+  char m_id[4] = {0};
+  long m_last_send_time;
+  uint8_t m_resend_status_time;
+  char* m_endpoint_name = nullptr;
+  char* m_config = nullptr;
 };
 

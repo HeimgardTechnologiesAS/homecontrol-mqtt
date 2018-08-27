@@ -11,6 +11,9 @@ EndpointZero::EndpointZero(HomeControlMagic* hcm_ptr)
 void EndpointZero::sendConfig()
 {
   // nothing
+#ifdef ENDPOINT_ZERO_DEBUG
+  Serial.println("handling endpoint zero config");
+#endif
 }
 void EndpointZero::sendStatusMessage()
 {
@@ -38,4 +41,3 @@ void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int leng
   m_owner->sendMessage("conf", ep_num, m_id);
   m_owner->sendConfigs();
 }
-

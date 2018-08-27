@@ -4,12 +4,15 @@
 
 //#define ENDPOINT_MOTION_DEBUG
 
+static char* const CONFIG = "mot";
+
 EndpointMotion::EndpointMotion(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
   , m_state(false)
 {
   m_last_send_time = millis();
   m_resend_status_time = 60;
+  m_config = CONFIG;
 }
 
 void EndpointMotion::setState(bool state)
@@ -21,20 +24,6 @@ void EndpointMotion::setState(bool state)
 bool EndpointMotion::getState()
 {
   return m_state;
-}
-
-void EndpointMotion::sendConfig()
-{
-  if(m_endpoint_name != nullptr)
-  {
-    sprintf(m_buff, "e:mot;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
-  }
-  else
-  {
-    sprintf(m_buff, "e:mot;r=%d;", m_resend_status_time);
-  }
-
-  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointMotion::incomingMessage(char* topic, byte* payload, unsigned int length)

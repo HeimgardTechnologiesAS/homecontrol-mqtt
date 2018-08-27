@@ -9,6 +9,7 @@ struct RGB
   int b;
 };
 
+void clearBuffer(char* text, uint8_t length);
 void clearByte(byte* text, unsigned int length);
 int lineContains(const char *str, const char *sfind);
 float extractFloat(byte* text, unsigned int length);

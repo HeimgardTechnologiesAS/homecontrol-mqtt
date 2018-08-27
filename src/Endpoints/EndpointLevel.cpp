@@ -4,6 +4,8 @@
 
 //#define ENDPOINT_LEVEL_DEBUG
 
+static char* const CONFIG = "lev";
+
 EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
   : Endpoint(hcm_ptr)
   , m_level(0)
@@ -11,6 +13,7 @@ EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
 {
   m_last_send_time = millis();
   m_resend_status_time = 30;
+  m_config = CONFIG;
 }
 
 void EndpointLevel::setState(bool state)
@@ -33,20 +36,6 @@ void EndpointLevel::setLevel(uint16_t level)
 uint16_t EndpointLevel::getLevel()
 {
   return m_level;
-}
-
-void EndpointLevel::sendConfig()
-{
-  if(m_endpoint_name != nullptr)
-  {
-    sprintf(m_buff, "e:lev;r=%d;name=%s", m_resend_status_time, m_endpoint_name);
-  }
-  else
-  {
-    sprintf(m_buff, "e:lev;r=%d;", m_resend_status_time);
-  }
-
-  m_owner->sendMessage("conf", m_buff, m_id);
 }
 
 void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)
