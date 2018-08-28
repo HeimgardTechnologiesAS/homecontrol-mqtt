@@ -3,6 +3,7 @@
 #include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
 #define ESP_LOOP
+#define SECURE
 #define WIFI_SSID ""                      // Wifi network name
 #define WIFI_PASS ""                      // Wifi password
 #include "NetworkLoops.hpp"

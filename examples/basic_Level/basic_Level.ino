@@ -1,6 +1,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointLevel.h"
 #define ESP_LOOP
+#define SECURE
 #define WIFI_SSID ""                        // Wifi network name
 #define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"

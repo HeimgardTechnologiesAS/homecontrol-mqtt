@@ -70,7 +70,13 @@ HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, NetworkObj
   epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
 
-  m_mqtt_client.setServer(server_ip, 1883);
+  uint16_t port = 1883;
+  if(m_network_object.isSecure())
+  {
+    port = 8883;
+  }
+
+  m_mqtt_client.setServer(server_ip, port);
   m_mqtt_client.setCallback(callback);
 
   m_id = m_network_object.getUniqueId();
@@ -294,7 +300,8 @@ bool HomeControlMagic::reconnectMqtt()
 
 void HomeControlMagic::announce()
 {
-  sendMessage("announce", m_name, "0");
+  strcat(m_message_buffer, m_name);
+  sendStringMessage("announce", "0");
 
   sendFeedback();
 }
