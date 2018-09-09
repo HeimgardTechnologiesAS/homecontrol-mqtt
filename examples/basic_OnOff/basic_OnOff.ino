@@ -1,23 +1,26 @@
+#define ARDUINO
+//#define SECURE  // should we use SSL encryption?
 #include "HomeControlMagic.h"
+#include "arduinoWrapper/ArduinoWrapper.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "Endpoints/EndpointOnOff.h"
-#define ESP_LOOP
-#define WIFI_SSID ""                          // Wifi network name
-#define WIFI_PASS ""                          // Wifi password
-#include "NetworkLoops.hpp"
+
 
 //#define DEBUG
 
 #define DEVICE_PIN LED_BUILTIN                // GPIO pin to use, built in led as example
 
-#define RECONNECTION_TIME 5                   // network reconnection time in seconds
-
-static char* const GW_IP = "GW_IP";                        // gateway IP address
-static char* const deviceName = "ON_OFF_DEVICE";           // name of device
+IPAddress gw_ip = {192, 168, 1, 2};
+static const char* const deviceName = "ON_OFF_DEVICE";           // name of device
+static const char* const wifi_ssid = "ssid";
+static const char* const wifi_pass = "pass";
+static const char* const mqtt_username = "hc";
+static const char* const mqtt_password = "magic";
 
 bool active_pin_state = false;                // reverse pin state
 bool last_state = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(deviceName);
 EndpointOnOff endpointOnOff(&hcm);
 
 void controlPin()
@@ -47,7 +50,13 @@ void setup()
   Serial.println("Started serial");
   #endif
 
-  network.setReconnectTime(RECONNECTION_TIME);
+  networkSetSsid(wifi_ssid);
+  networkSetPass(wifi_pass);
+  networkSetSecure(false); // this must be called before setServer
+
+  wrapperSetServer(gw_ip);
+  wrapperSetUsernamePassword(mqtt_username, mqtt_password);
+
   hcm.addEndpoint(&endpointOnOff);
 }
 

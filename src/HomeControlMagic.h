@@ -1,13 +1,11 @@
 #pragma once
 
 #include "Endpoint.h"
-#include "NetworkObject.hpp"
-#include "PubSubClient.h"
 
 class HomeControlMagic
 {
   public:
-    HomeControlMagic(char* server_ip, char* deviceName, NetworkObject& network_object, char* username = "hc", char* password = "magic");
+    HomeControlMagic(const char* deviceName);
     void doMagic();
 
     Endpoint* getEndpoint(uint8_t number);
@@ -29,39 +27,17 @@ class HomeControlMagic
 
     void sendConfig(char* config, uint8_t, char* endpoint_name, char* endpoint_id);
 
-    void setReconnectTime(uint16_t seconds);
-
     char* getMessageBufferPtr();
 
   private:
-    bool reconnectMqtt();
-    void subscribeNow();
-    void mqttLoop(bool reconnect);
     void setTopic(char* topic, char* endpoint_id);
 
-    char* m_name;
-
-    NetworkObject& m_network_object;
-    PubSubClient& m_mqtt_client;
-
-    uint8_t m_number_of_endpoints;
-    Endpoint* m_endpoints_pointers[10];
-
-    const uint16_t m_mqtt_port = 1883;
+    const char* m_name;
     char* m_id;
 
-    int m_reconnect_time = 5000;
-    long m_last_time_connected = 0;
-    long m_last_reconnect_attempt = 0;
-    long m_led_time;
-    long m_last_loop_time;
-
-    char* m_username;
-    char* m_password;
-
+    uint8_t m_number_of_endpoints;
+    Endpoint* m_endpoints_pointers[10];  
     char m_base_topic[20];
-    bool m_broker_connected;
-
-    bool m_start_done;
+    bool m_broker_was_connected;
 };
 
