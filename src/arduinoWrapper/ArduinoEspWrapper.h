@@ -7,6 +7,7 @@ void networkSetup();
 void networkStart();
 void networkChipRestart();
 Client& networkGetClient();
+bool networkIsConnected();
 
 void networkSetSecure(bool secure);
 bool networkIsSecure();

@@ -7,6 +7,7 @@ class HomeControlMagic
   public:
     HomeControlMagic(const char* deviceName);
     void doMagic();
+    void setup();
 
     Endpoint* getEndpoint(uint8_t number);
     void addEndpoint(Endpoint* endpoint_ptr);

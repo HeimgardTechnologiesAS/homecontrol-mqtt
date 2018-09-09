@@ -11,7 +11,7 @@
 #include "STMWrapper.h"
 #endif
 
-//#define HCM_DEBUG
+#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
@@ -70,16 +70,24 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
   EndpointZero* epZ = new EndpointZero(hcm_ptr);
   epZ->setId("0");
   m_endpoints_pointers[m_number_of_endpoints++] = epZ;
+}
 
+void HomeControlMagic::setup()
+{
   m_id = getUniqueId();
 
   strcat(m_base_topic, "d/");
   strcat(m_base_topic, m_id);
   strcat(m_base_topic, "/");
+
+  wrapperSetCallback(callback);
 }
 
 void HomeControlMagic::doMagic()
 {
+  /*
+  On arduino this is calling loop for pubsubclient and network. Network is calling debugLed loop
+  */
   wrapperLoop();
 
   if(wrapperIsMqttConnected())
@@ -125,7 +133,7 @@ void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
+  Serial.println(m_topic_buffer_ptr);
   #endif
 
   if(message)
@@ -149,7 +157,7 @@ void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
+  Serial.println(m_topic_buffer_ptr);
   #endif
 
   itoa(message, m_message_buffer_ptr, 10);
@@ -166,7 +174,7 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
   setTopic(topic, endpoint_id);
 
   #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
+  Serial.println(m_topic_buffer_ptr);
   #endif
 
   dtostrf(message, 4, 2, m_message_buffer_ptr);
@@ -207,7 +215,8 @@ Serial.println(m_message_buffer_ptr);
 
 void HomeControlMagic::announce()
 {
-  sendMessage("announce", m_name, "0");
+  strcat(m_message_buffer_ptr, m_name);
+  sendStringMessage("announce", "0");
 
   sendFeedback();
 }
@@ -238,7 +247,7 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
   itoa(m_number_of_endpoints - 1, m_message_buffer_ptr, 10);
 #ifdef HCM_DEBUG
   Serial.print(F("Id to set: "));
-  Serial.println(m_message_buffer);
+  Serial.println(m_message_buffer_ptr);
 #endif
   endpoint_ptr->setId(m_message_buffer_ptr);
   wrapperClearMessageBuffer();

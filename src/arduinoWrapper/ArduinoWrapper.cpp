@@ -5,6 +5,8 @@
 #include "ArduinoNetworkInterface.h"
 #include "helperFunctions.h"
 
+#define ARDUINO_WRAPPER_DEBUG
+
 // private vars:
 #define TOPIC_BUFFER_LENGTH 30
 #define MESSAGE_BUFFER_LENGTH 50
@@ -13,7 +15,7 @@ static char m_message_buffer[MESSAGE_BUFFER_LENGTH];
 uint32_t m_last_reconnect_attempt = 0;
 uint32_t m_reconnect_time = 5000; // 5 seconds
 uint32_t m_last_time_connected = 0;
-static PubSubClient m_mqtt_client(networkGetClient());
+static PubSubClient m_mqtt_client;
 const char* m_username = nullptr;
 const char* m_password = nullptr;
 
@@ -26,6 +28,11 @@ static void wrapperSubscribeNow();
 void wrapperLoop(bool reconnect)
 {
   networkLoop();
+
+  if(!networkIsConnected())
+  {
+    return;
+  }
 
   long current_time = millis();
   if(!m_mqtt_client.connected() && (current_time - m_last_loop_time > 100))
@@ -58,11 +65,13 @@ void wrapperLoop(bool reconnect)
     m_last_time_connected = current_time;
     m_mqtt_client.loop();
   }
+  
 
 }
 
 void wrapperSetup()
 {
+  m_mqtt_client.setClient(networkGetClient());
 }
 
 char* wrapperGetTopicBuffer()
@@ -77,6 +86,12 @@ char* wrapperGetMessageBuffer()
 
 void wrapperPublish()
 {
+  #ifdef ARDUINO_WRAPPER_DEBUG
+    Serial.print("Publishing on topic: ");
+    Serial.println(m_topic_buffer);
+    Serial.println(m_message_buffer);
+  #endif
+
   m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
   wrapperClearTopicBuffer();
   wrapperClearMessageBuffer();
@@ -147,14 +162,20 @@ void wrapperSetUsernamePassword(const char* const username, const char* const pa
 // private functions:
 bool wrapperReconnectMqtt()
 {
-  #ifdef HCM_DEBUG
+  #ifdef ARDUINO_WRAPPER_DEBUG
+  if(m_username == nullptr)
+    Serial.println(F("mqtt username is null"));
+  if(m_password == nullptr)
+    Serial.println(F("mqtt pass is null"));
+  
   Serial.println(F("Trying to reconnect to mqtt broker"));
   #endif
   // Attempt to connect
   if(m_mqtt_client.connect(getUniqueId(), m_username, m_password))
   {
-    #ifdef HCM_DEBUG
+    #ifdef ARDUINO_WRAPPER_DEBUG
     Serial.println(F("Success"));
+    Serial.flush();
     #endif
     // ... and resubscribe
     wrapperSubscribeNow();
@@ -162,9 +183,10 @@ bool wrapperReconnectMqtt()
   }
   else
   {
-    #ifdef HCM_DEBUG
+    #ifdef ARDUINO_WRAPPER_DEBUG
     Serial.print(F("failed, rc="));
     Serial.println(m_mqtt_client.state());
+    Serial.flush();
     #endif
     return false;
   }
@@ -172,10 +194,9 @@ bool wrapperReconnectMqtt()
 
 void wrapperSubscribeNow()
 {
-
   strcat(m_topic_buffer, getUniqueId());
   strcat(m_topic_buffer, "/#");
-  #ifdef HCM_DEBUG
+  #ifdef ARDUINO_WRAPPER_DEBUG
   Serial.println(m_topic_buffer);
   #endif
 

@@ -26,7 +26,12 @@ void networkLoop()
     if(m_client == nullptr || m_ssid == nullptr || m_password == nullptr)
     {
 #ifdef ESP_WRAPPER_DEBUG
-        Serial.println(F("ESP settings not set!!!"));
+        if(m_client == nullptr)
+            Serial.println(F("m_client is null!!!"));
+        if(m_ssid == nullptr)
+            Serial.println(F("m_ssid is null!!!"));
+        if(m_password == nullptr)
+            Serial.println(F("m_password is null!!!"));
 #endif
         return;
     }
@@ -78,6 +83,10 @@ void networkSetup()
     }
     // TODO: remove sprintf
     sprintf(m_uid, "%d", ESP.getChipId());
+#ifdef ESP_WRAPPER_DEBUG
+    Serial.print(F("unique id: "));
+    Serial.println(m_uid);
+#endif
 
     // turn off access point
     WiFi.mode(WIFI_STA);
