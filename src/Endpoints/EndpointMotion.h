@@ -4,7 +4,7 @@
 
 class EndpointMotion : public Endpoint
 {
-  public:
+public:
     EndpointMotion(HomeControlMagic* hcm_ptr);
 
     virtual void sendStatusMessage();
@@ -15,6 +15,6 @@ class EndpointMotion : public Endpoint
     virtual void setState(bool state);
     virtual bool getState();
 
-  protected:
+protected:
     bool m_state;
 };

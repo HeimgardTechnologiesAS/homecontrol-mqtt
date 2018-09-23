@@ -8,11 +8,10 @@ Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
 {
 }
 
-
 void Endpoint::setId(char* id)
 {
     uint8_t i = 0;
-    while (*(id + i) != '\0')
+    while(*(id + i) != '\0')
     {
         *(m_id + i) = *(id + i);
         i++;
@@ -22,7 +21,7 @@ void Endpoint::setId(char* id)
 void Endpoint::setStatusTime(int status_time)
 {
     // not allowed to set report status time under 2 seconds
-    if (status_time < MIN_STATUS_TIME)
+    if(status_time < MIN_STATUS_TIME)
     {
         m_resend_status_time = MIN_STATUS_TIME;
     }
