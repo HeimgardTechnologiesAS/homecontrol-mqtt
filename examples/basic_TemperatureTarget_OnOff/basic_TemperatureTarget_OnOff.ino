@@ -1,11 +1,14 @@
 #include "HomeControlMagic.h"
+
+// in Config file define ethernet options
+#include "arduinoWrapper/ArduinoConfig.h"
+#include "arduinoWrapper/ArduinoWrapper.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
+
 #include "Endpoints/EndpointTemperatureTarget.h"
 #include "Endpoints/EndpointOnOff.h"
 #include "DHT.h"
-#define ESP_LOOP
-#define WIFI_SSID ""                      // Wifi network name
-#define WIFI_PASS ""                      // Wifi password
-#include "NetworkLoops.hpp"
+
 
 //#define DEBUG
 
@@ -16,13 +19,17 @@
 #define RECONNECTION_TIME 5               // network reconnection time in seconds
 #define READ_TIME 30                      // sensor reading time in seconds
 
-static char* const GW_IP = "GW_IP";                    // gateway IP address
+IPAddress gw_ip = {192, 168, 1, 10};
 static char* const deviceName = "TERMOSTAT";           // name of device
+static const char* const wifi_ssid = "WIFI-SSID";
+static const char* const wifi_pass = "WIFI-PASS";
+static const char* const mqtt_username = "hc";
+static const char* const mqtt_password = "magic";
 
 bool active_pin_state = false;            // reverse pin state
 bool last_state = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(deviceName);
 
 EndpointTemperatureTarget endpointTemperatureTarget(&hcm);
 EndpointOnOff endpointOnOff(&hcm);
@@ -49,22 +56,34 @@ void controlPin()
 
 void setup()
 {
-  pinMode(DEVICE_PIN, OUTPUT);
-
-  network.setReconnectTime(RECONNECTION_TIME);
-
-  double temperature = dht.readTemperature();
-  endpointTemperatureTarget.setTemperatureTarget(temperature);
-
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
+  networkSetSsid(wifi_ssid);
+  networkSetPass(wifi_pass);
+  networkSetSecure(true); // this must be called before setServer and networkSetup
+  networkSetup();
+  networkStart();
+
+  wrapperSetServer(gw_ip);
+  wrapperSetUsernamePassword(mqtt_username, mqtt_password);
+  wrapperSetup();
+
+  hcm.setup();
+
+  // DO NOT TOUCH ANYTHING BEFORE THIS LINE IN SETUP FUNCTION
+
+  pinMode(DEVICE_PIN, OUTPUT);
+
   hcm.addEndpoint(&endpointTemperatureTarget);
   hcm.addEndpoint(&endpointOnOff);
 
   dht.begin();
+
+  double temperature = dht.readTemperature();
+  endpointTemperatureTarget.setTemperatureTarget(temperature);
 }
 
 void loop()

@@ -1,10 +1,12 @@
 #include "HomeControlMagic.h"
+
+// in Config file define ethernet options
+#include "arduinoWrapper/ArduinoConfig.h"
+
+#include "arduinoWrapper/ArduinoWrapper.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "Endpoints/EndpointTemperature.h"
 #include "DHT.h"
-#define ESP_LOOP
-#define WIFI_SSID ""                        // Wifi network name
-#define WIFI_PASS ""                        // Wifi password
-#include "NetworkLoops.hpp"
 
 #define DEBUG
 
@@ -15,12 +17,14 @@
 
 #define DHTTYPE DHT22                       // DHT type
 
-#define RECONNECTION_TIME 5                 // network reconnection time in seconds
-
-static char* const GW_IP = "GW_IP";                      // gateway IP address
+IPAddress gw_ip = {192, 168, 1, 10};
 static char* const deviceName = "TEMPERATURE_SENSORS";   // name of device
+static const char* const wifi_ssid = "WIFI-SSID";
+static const char* const wifi_pass = "WIFI-PASS";
+static const char* const mqtt_username = "hc";
+static const char* const mqtt_password = "magic";
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(deviceName);
 
 EndpointTemperature endpointTemperature_1(&hcm);
 EndpointTemperature endpointTemperature_2(&hcm);
@@ -39,12 +43,25 @@ void setup()
   Serial.println("Started serial");
   #endif
 
+  networkSetSsid(wifi_ssid);
+  networkSetPass(wifi_pass);
+  networkSetSecure(false); // this must be called before setServer and networkSetup
+  networkSetup();
+  networkStart();
+
+  wrapperSetServer(gw_ip);
+  wrapperSetUsernamePassword(mqtt_username, mqtt_password);
+  wrapperSetup();
+
+  hcm.setup();
+
+  // DO NOT TOUCH ANYTHING BEFORE THIS LINE IN SETUP FUNCTION
+
   endpointTemperature_1.setEndpointName("NAME_1");
   endpointTemperature_2.setEndpointName("NAME_2");
   endpointTemperature_3.setEndpointName("NAME_3");
   endpointTemperature_4.setEndpointName("NAME_4");
 
-  network.setReconnectTime(RECONNECTION_TIME);
   hcm.addEndpoint(&endpointTemperature_1);
   hcm.addEndpoint(&endpointTemperature_2);
   hcm.addEndpoint(&endpointTemperature_3);

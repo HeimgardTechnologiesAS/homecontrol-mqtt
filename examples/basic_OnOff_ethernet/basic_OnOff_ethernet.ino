@@ -2,9 +2,9 @@
 
 // in Config file define ethernet options
 #include "arduinoWrapper/ArduinoConfig.h"
-
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
+
 #include "Endpoints/EndpointOnOff.h"
 
 
@@ -12,7 +12,7 @@
 
 #define DEVICE_PIN LED_BUILTIN                // GPIO pin to use, built in led as example
 
-IPAddress gw_ip = {192, 168, 5, 30};
+IPAddress gw_ip = {192, 168, 1, 10};
 static const char* const deviceName = "ON_OFF_DEVICE";           // name of device
 static const char* const mqtt_username = "hc";
 static const char* const mqtt_password = "magic";

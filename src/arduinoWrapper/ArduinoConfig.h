@@ -1,7 +1,7 @@
 #pragma once
 
 //#define ETHERNET // for WIZ5100
-#define ETHERNET2 // for WIZ5500
+//#define ETHERNET2 // for WIZ5500
 
 #if defined(ETHERNET) || defined(ETHERNET2)
 #define ETH_MAC {0x11, 0x11, 0x22, 0x33, 0x44, 0x55} // make sure that MAC is unique per device

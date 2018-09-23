@@ -1,35 +1,53 @@
 #include "HomeControlMagic.h"
+
+// in Config file define ethernet options
+#include "arduinoWrapper/ArduinoConfig.h"
+#include "arduinoWrapper/ArduinoWrapper.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
+
 #include "Endpoints/EndpointTemperature.h"
 #include "DHT.h"
-#define ESP_LOOP
-#define WIFI_SSID ""                        // Wifi network name
-#define WIFI_PASS ""                        // Wifi password
-#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
 #define DHT_PIN 4                           // GPIO pin to use (D2).
 #define DHTTYPE DHT22                       // DHT type
 
-#define RECONNECTION_TIME 5                 // network reconnection time in seconds
 #define READ_TIME 30                        // sensor reading time in seconds
 
-static char* const GW_IP = "GW_IP";                      // gateway IP address
+IPAddress gw_ip = {192, 168, 1, 10};
 static char* const deviceName = "TEMPERATURE_SENSOR";    // name of device
+static const char* const wifi_ssid = "WIFI-SSID";
+static const char* const wifi_pass = "WIFI-PASS";
+static const char* const mqtt_username = "hc";
+static const char* const mqtt_password = "magic";
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(deviceName);
 EndpointTemperature endpointTemperature(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
 
 void setup()
 {
-#ifdef DEBUG
+  #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
- #endif
+  #endif
 
-  network.setReconnectTime(RECONNECTION_TIME);
+  networkSetSsid(wifi_ssid);
+  networkSetPass(wifi_pass);
+  networkSetSecure(true); // this must be called before setServer and networkSetup
+  networkSetup();
+  networkStart();
+
+  wrapperSetServer(gw_ip);
+  wrapperSetUsernamePassword(mqtt_username, mqtt_password);
+  wrapperSetup();
+
+  hcm.setup();
+
+  // DO NOT TOUCH ANYTHING BEFORE THIS LINE IN SETUP FUNCTION
+
   hcm.addEndpoint(&endpointTemperature);
 
   dht.begin();

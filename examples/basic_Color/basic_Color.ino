@@ -1,9 +1,11 @@
 #include "HomeControlMagic.h"
+
+// in Config file define ethernet options
+#include "arduinoWrapper/ArduinoConfig.h"
+#include "arduinoWrapper/ArduinoWrapper.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
+
 #include "Endpoints/EndpointColor.h"
-#define ESP_LOOP
-#define WIFI_SSID ""                        // Wifi network name
-#define WIFI_PASS ""                        // Wifi password
-#include "NetworkLoops.hpp"
 
 //#define DEBUG
 
@@ -11,10 +13,12 @@
 #define G_PIN 4                             // GPIO pin, as example G color - (D2)
 #define B_PIN 0                             // GPIO pin, as example B color - (D3)
 
-#define RECONNECTION_TIME 5                 // network reconnection time in seconds
-
-static char* const GW_IP = "GW_IP";                      // gateway IP address
+IPAddress gw_ip = {192, 168, 1, 10};
 static char* const deviceName = "COLOR_DEVICE";          // name of device
+static const char* const wifi_ssid = "WIFI-SSID";
+static const char* const wifi_pass = "WIFI-PASS";
+static const char* const mqtt_username = "hc";
+static const char* const mqtt_password = "magic";
 
 bool active_pin_state = true;               // reverse pin state
 
@@ -24,7 +28,7 @@ uint16_t last_color_R = 0;
 uint16_t last_color_G = 0;
 uint16_t last_color_B = 0;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(deviceName);
 EndpointColor endpointColor(&hcm);
 
 uint16_t adjLevel(uint16_t color_X, uint16_t level)
@@ -80,16 +84,29 @@ void controlPin()
 
 void setup()
 {
-  pinMode(R_PIN, OUTPUT);
-  pinMode(G_PIN, OUTPUT);
-  pinMode(B_PIN, OUTPUT);
-
   #ifdef DEBUG
   Serial.begin(115200);
   Serial.println("Started serial");
   #endif
 
-  network.setReconnectTime(RECONNECTION_TIME);
+  networkSetSsid(wifi_ssid);
+  networkSetPass(wifi_pass);
+  networkSetSecure(true); // this must be called before setServer and networkSetup
+  networkSetup();
+  networkStart();
+
+  wrapperSetServer(gw_ip);
+  wrapperSetUsernamePassword(mqtt_username, mqtt_password);
+  wrapperSetup();
+
+  hcm.setup();
+
+  // DO NOT TOUCH ANYTHING BEFORE THIS LINE IN SETUP FUNCTION
+
+  pinMode(R_PIN, OUTPUT);
+  pinMode(G_PIN, OUTPUT);
+  pinMode(B_PIN, OUTPUT);
+
   hcm.addEndpoint(&endpointColor);
 }
 
