@@ -14,9 +14,5 @@
     ],
     "dependencies":
     [
-        {
-            "name": "NetworkLoops",
-            "version": "https://github.com/seky2205/NetworkLoops#0.1"
-        }
     ]
 }
