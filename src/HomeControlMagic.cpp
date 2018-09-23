@@ -12,7 +12,7 @@
 #include "STMWrapper.h"
 #endif
 
-#define HCM_DEBUG
+//#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 

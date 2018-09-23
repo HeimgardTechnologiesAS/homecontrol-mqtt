@@ -9,7 +9,7 @@
 #error "You need to define ETH_MAC with mac address. Make sure it is unique"
 #endif
 
-#define ETHERNET_WRAPPER_DEBUG
+//#define ETHERNET_WRAPPER_DEBUG
 
 static Client* m_client = nullptr;
 static char m_uid[20] = {'0'};

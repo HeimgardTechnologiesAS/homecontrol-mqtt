@@ -6,7 +6,7 @@
 #include "ArduinoNetworkInterface.h"
 #include "helperFunctions.h"
 
-#define ARDUINO_WRAPPER_DEBUG
+//#define ARDUINO_WRAPPER_DEBUG
 
 // private vars:
 #define TOPIC_BUFFER_LENGTH 30
