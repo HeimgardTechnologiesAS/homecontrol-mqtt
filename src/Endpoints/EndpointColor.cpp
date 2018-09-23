@@ -1,6 +1,9 @@
 #include "EndpointColor.h"
-#include "HomeControlMagic.h"
-#include "helperFunctions.h"
+#include "../HomeControlMagic.h"
+
+#ifdef LINUX
+#include <cstring>
+#endif
 
 //#define ENDPOINT_COLOR_DEBUG
 

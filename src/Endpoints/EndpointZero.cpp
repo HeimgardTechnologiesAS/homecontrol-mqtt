@@ -1,5 +1,5 @@
 #include "EndpointZero.h"
-#include "HomeControlMagic.h"
+#include "../HomeControlMagic.h"
 
 //#define ENDPOINT_ZERO_DEBUG
 

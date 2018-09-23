@@ -7,6 +7,11 @@
 #include "arduinoWrapper/ArduinoConfig.h"
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
+#elif LINUX
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include "linuxWrapper/src/LinuxWrapper.hpp"
 #elif defined STM
 #include "STMWrapper.h"
 #endif

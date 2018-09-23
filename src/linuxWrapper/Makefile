@@ -1,13 +1,18 @@
 CXX=g++
-CXXFLAGS=-g -std=c++14 -Wall -pedantic
+CXXFLAGS=-g -D LINUX -std=c++14 -Wall -pedantic
+LDFLAGS = -lm
 
-example: main.o
-	$(CXX) -o example main.o -O2
+SOURCES = $(wildcard *.cpp) \
+		  $(wildcard src/*.cpp) \
+		  $(wildcard ../*.cpp) \
+		  $(wildcard ../Endpoints/*.cpp)
 
-debug: main.o
-	$(CXX) -o example main.o -O0
+OBJECTS = $(SOURCES:.cpp=.o)
+
+example: ${OBJECTS}
+	$(CXX) -o $@ $^ ${CXXFLAGS} ${LDFLAGS} -O2
 
 .PHONY: clean
 
 clean:
-	rm -f *.o
+	rm -f *.o src/*.o ../*.o ../Endpoints/*.o

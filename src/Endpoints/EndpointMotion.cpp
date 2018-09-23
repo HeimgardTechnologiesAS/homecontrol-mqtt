@@ -1,6 +1,6 @@
 #include "EndpointMotion.h"
-#include "HomeControlMagic.h"
-#include "helperFunctions.h"
+#include "../HomeControlMagic.h"
+#include "../helperFunctions.h"
 
 //#define ENDPOINT_MOTION_DEBUG
 

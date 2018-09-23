@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Endpoint.h"
+#include "../Endpoint.h"
 
 class EndpointMotion : public Endpoint
 {

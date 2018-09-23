@@ -1,6 +1,6 @@
 #include "EndpointIdentify.h"
-#include "HomeControlMagic.h"
-#include "helperFunctions.h"
+#include "../HomeControlMagic.h"
+#include "../helperFunctions.h"
 
 //#define ENDPOINT_IDENTIFY_DEBUG
 
@@ -10,7 +10,6 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
   : Endpoint(hcm_ptr)
   , m_pin(pin)
 {
-  pinMode(m_pin, OUTPUT);
   m_config = CONFIG;
 }
 
@@ -29,7 +28,5 @@ void EndpointIdentify::incomingMessage(char* topic, uint8_t* payload, unsigned i
   if(lineContains(topic, "ci"))
   {
     bool state = extractBool(payload, length);
-    digitalWrite(m_pin, state);
-    digitalWrite(m_pin, !state);
   }
 }

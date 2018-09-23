@@ -24,6 +24,13 @@ int main(int argc, const char* argv[])
         std::cout << "Debug mode on" << std::endl;
     }
 
+
+    // USER VALUES:
+    const char* device_name = "LINUX_CLIENT";
+    //
+
+    HomeControlMagic hcm(device_name);
+
     std::cout << "Exiting" << std::endl;
 
     return 0;

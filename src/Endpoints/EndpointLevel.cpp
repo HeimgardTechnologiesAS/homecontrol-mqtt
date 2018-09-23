@@ -1,6 +1,6 @@
 #include "EndpointLevel.h"
-#include "HomeControlMagic.h"
-#include "helperFunctions.h"
+#include "../HomeControlMagic.h"
+#include "../helperFunctions.h"
 
 //#define ENDPOINT_LEVEL_DEBUG
 
