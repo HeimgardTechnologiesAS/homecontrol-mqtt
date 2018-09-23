@@ -5,8 +5,9 @@
 
 int main(int argc, const char* argv[])
 {
-    arrrgh::parser parser("hc_mqtt_client", "HomeControl MQTT client example");
+    logger::setupLogger();
 
+    arrrgh::parser parser("hc_mqtt_client", "HomeControl MQTT client example");
     const auto& debug_mode = parser.add<bool>("debug", "Turn on debug mode", 'd', arrrgh::Optional, false);
 
     try
@@ -21,6 +22,7 @@ int main(int argc, const char* argv[])
     if(debug_mode.value())
     {
         std::cout << "Debug mode on" << std::endl;
+        logger::enableDebugLogging();
     }
 
     // USER VALUES:
@@ -29,9 +31,9 @@ int main(int argc, const char* argv[])
 
     HomeControlMagic hcm(device_name);
 
-    logger::setupLogger();
-    logger::printInfo("info");
-    logger::printError("error");
+    infoMessage("info");
+    errorMessage("error");
+    debugMessage("debug");
 
     std::cout << "Exiting" << std::endl;
 
