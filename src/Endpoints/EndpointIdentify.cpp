@@ -14,7 +14,7 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
   m_config = CONFIG;
 }
 
-void EndpointIdentify::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointIdentify::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_IDENTIFY_DEBUG
   Serial.println(F("incoming message, EndpointIdentify"));

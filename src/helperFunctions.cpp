@@ -1,6 +1,6 @@
 #include "helperFunctions.h"
 
-void clearByte(byte* text, unsigned int length)
+void clearByte(uint8_t* text, unsigned int length)
 {
   for(int i = 0; i < length; i++)
   {
@@ -47,7 +47,7 @@ int lineContains(const char *str, const char *sfind)
   return 0;
 }
 
-float extractFloat(byte* text, unsigned int length)
+float extractFloat(uint8_t* text, unsigned int length)
 {
   float temp = 0;
   if(int n = lineContains((const char*)text, "."))
@@ -78,7 +78,7 @@ float extractFloat(byte* text, unsigned int length)
   return temp;
 }
 
-double extractDouble(byte* text, unsigned int length)
+double extractDouble(uint8_t* text, unsigned int length)
 {
   double temp = 0;
   if(int n = lineContains((const char*)text, "."))
@@ -109,7 +109,7 @@ double extractDouble(byte* text, unsigned int length)
   return temp;
 }
 
-int extractInteger(byte* text, unsigned int length)
+int extractInteger(uint8_t* text, unsigned int length)
 {
   int temp = 0;
 
@@ -126,7 +126,7 @@ int extractInteger(byte* text, unsigned int length)
   return temp;
 }
 
-bool extractState(byte* text, unsigned int length)
+bool extractState(uint8_t* text, unsigned int length)
 {
   bool temp = false;
   if (text[0] != '\0')
@@ -145,7 +145,7 @@ bool extractState(byte* text, unsigned int length)
 }
 
 
-bool extractBool(byte* text, unsigned int length)
+bool extractBool(uint8_t* text, unsigned int length)
 {
   bool temp = false;
   if (text[0] != '\0')
@@ -168,7 +168,7 @@ bool extractBool(byte* text, unsigned int length)
   return temp;
 }
 
-RGB extractRGB(byte* text, unsigned int length)
+RGB extractRGB(uint8_t* text, unsigned int length)
     {
         RGB rgb;
         if(text[length] != '\0')

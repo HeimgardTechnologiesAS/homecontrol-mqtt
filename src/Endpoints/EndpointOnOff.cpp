@@ -26,7 +26,7 @@ bool EndpointOnOff::getState()
   return m_state;
 }
 
-void EndpointOnOff::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_ON_OFF_DEBUG
   Serial.println(F("incoming message, EndpointOnOff"));

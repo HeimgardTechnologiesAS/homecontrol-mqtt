@@ -1,5 +1,4 @@
 #include "HomeControlMagic.h"
-#include "Arduino.h"
 #include "helperFunctions.h"
 
 #include "Endpoints/EndpointZero.h"

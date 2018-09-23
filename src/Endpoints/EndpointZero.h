@@ -11,6 +11,6 @@ class EndpointZero : public Endpoint
     void sendStatusMessage();
     void sendFeedbackMessage();
 
-    void incomingMessage(char* topic, byte* payload, unsigned int length);
+    void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
 };
 

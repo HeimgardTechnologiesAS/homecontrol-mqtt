@@ -69,7 +69,7 @@ void EndpointColor::getRGBcharPtr(char* buffer)
   strcat(buffer, buff);
 }
 
-void EndpointColor::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointColor::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_COLOR_DEBUG
   Serial.println(F("incoming message, EndpointColor"));

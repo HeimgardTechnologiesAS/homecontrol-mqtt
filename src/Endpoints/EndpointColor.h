@@ -11,7 +11,7 @@ class EndpointColor : public Endpoint
     virtual void sendStatusMessage();
     virtual void sendFeedbackMessage();
 
-    virtual void incomingMessage(char* topic, byte* payload, unsigned int length);
+    virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
 
     virtual void setState(bool state);
     virtual bool getState();

@@ -26,7 +26,7 @@ bool EndpointMotion::getState()
   return m_state;
 }
 
-void EndpointMotion::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointMotion::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_MOTION_DEBUG
   Serial.println(F("incoming message, EndpointMotion"));

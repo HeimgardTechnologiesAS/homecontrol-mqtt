@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef ARDUINO
+#include "Arduino.h"
+#endif
+
 #include "Endpoint.h"
 
 class HomeControlMagic

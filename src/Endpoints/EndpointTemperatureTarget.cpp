@@ -35,7 +35,7 @@ double EndpointTemperatureTarget::getTemperatureTarget()
   return m_temperature_target;
 }
 
-void EndpointTemperatureTarget::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointTemperatureTarget::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_TEMPERATURE_TARGET_DEBUG
   Serial.println(F("incoming message, EndpointTemperatureTarget"));

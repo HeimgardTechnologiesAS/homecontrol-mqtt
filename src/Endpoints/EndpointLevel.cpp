@@ -38,7 +38,7 @@ uint16_t EndpointLevel::getLevel()
   return m_level;
 }
 
-void EndpointLevel::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
   #ifdef ENDPOINT_LEVEL_DEBUG
   Serial.println(F("incoming message, EndpointLevel"));

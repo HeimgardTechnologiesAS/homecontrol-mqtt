@@ -1,6 +1,8 @@
 #pragma once
 
+#ifdef ARDUINO
 #include "Arduino.h"
+#endif
 
 #define MIN_STATUS_TIME 2
 class HomeControlMagic;
@@ -21,7 +23,7 @@ public:
   virtual void sendStatusMessage() = 0;
   virtual void sendFeedbackMessage() = 0;
 
-  virtual void incomingMessage(char* topic, byte* payload, unsigned int length) = 0;
+  virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length) = 0;
 
 protected:
   HomeControlMagic* m_owner;
