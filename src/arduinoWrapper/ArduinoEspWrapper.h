@@ -17,4 +17,4 @@ void networkSetSsid(const char* const ssid);
 void networkSetPass(const char* const pass);
 
 char* getUniqueId();
-#endif //ESP8266
+#endif // ESP8266

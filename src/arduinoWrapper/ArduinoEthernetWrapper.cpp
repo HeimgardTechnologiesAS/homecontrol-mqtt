@@ -2,8 +2,8 @@
 #if defined(ETHERNET) || defined(ETHERNET2)
 
 #include "Arduino.h"
-#include "ArduinoEthernetWrapper.h"
 #include "ArduinoDebugLed.h"
+#include "ArduinoEthernetWrapper.h"
 
 #ifndef ETH_MAC
 #error "You need to define ETH_MAC with mac address. Make sure it is unique"
@@ -24,50 +24,50 @@ void networkLoop()
         case 0:
         {
             m_connected = true;
-		    m_last_time_connected = millis();
+            m_last_time_connected = millis();
             break;
         }
         case 1:
         {
-            #ifdef ETHERNET_WRAPPER_DEBUG
+#ifdef ETHERNET_WRAPPER_DEBUG
             Serial.print(F("\n\rDHCP: Renew failed"));
-            #endif
+#endif
             m_connected = false;
             DebugLedFlash(500);
             break;
         }
         case 2:
         {
-            #ifdef ETHERNET_WRAPPER_DEBUG
+#ifdef ETHERNET_WRAPPER_DEBUG
             Serial.print(F("\n\rDHCP: Renew success"));
-            #endif
+#endif
             m_connected = true;
             DebugLedState(false);
             break;
         }
         case 3:
         {
-            #ifdef ETHERNET_WRAPPER_DEBUG
+#ifdef ETHERNET_WRAPPER_DEBUG
             Serial.print(F("\n\rDHCP: Rebind fail"));
-            #endif
+#endif
             m_connected = false;
             DebugLedFlash(500);
             break;
         }
         case 4:
         {
-            #ifdef ETHERNET_WRAPPER_DEBUG
+#ifdef ETHERNET_WRAPPER_DEBUG
             Serial.print(F("\n\rDHCP: Rebind success"));
-            #endif
+#endif
             m_connected = true;
             DebugLedState(false);
             break;
         }
         default:
-        {   
-            #ifdef ETHERNET_WRAPPER_DEBUG
+        {
+#ifdef ETHERNET_WRAPPER_DEBUG
             Serial.print(F("\n\rDHCP: Unexpected number"));
-            #endif
+#endif
             break;
         }
     }
@@ -78,14 +78,13 @@ void networkLoop()
 
 void networkSetup()
 {
-    #ifdef ETHERNET_WRAPPER_DEBUG
+#ifdef ETHERNET_WRAPPER_DEBUG
     Serial.println("In setup");
-    #endif
+#endif
     m_client = new EthernetClient();
 
     // TODO: remove sprintf
-    sprintf(m_uid, "%d%d%d%d%d%d", mac[0], mac[1], mac[2], 
-                                      mac[3], mac[4], mac[5]);
+    sprintf(m_uid, "%d%d%d%d%d%d", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 }
 
 void networkStart()
@@ -111,10 +110,10 @@ void networkStart()
 }
 void networkChipRestart()
 {
-    // TODO: add restart
-    #ifdef ETHERNET_WRAPPER_DEBUG
+// TODO: add restart
+#ifdef ETHERNET_WRAPPER_DEBUG
     Serial.println("In restart");
-    #endif
+#endif
 }
 
 Client& networkGetClient()
@@ -157,6 +156,5 @@ char* getUniqueId()
 {
     return m_uid;
 }
-
 
 #endif // defined(ETHERNET) || defined(ETHERNET2)

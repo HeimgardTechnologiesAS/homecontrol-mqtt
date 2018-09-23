@@ -1,0 +1,32 @@
+DisableFormat: false
+SpaceBeforeParens: Never
+AllowShortFunctionsOnASingleLine: None
+BasedOnStyle: LLVM
+BreakConstructorInitializersBeforeComma: true
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterControlStatement: true
+  AfterNamespace: true
+  AfterClass: true
+  AfterFunction: true
+  AfterStruct: true
+  BeforeElse: true
+  BeforeCatch: true
+  AfterEnum: true
+ColumnLimit: 120
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackParameters: false
+BinPackArguments: false
+TabWidth: 4
+IndentWidth: 4
+UseTab: Never
+PointerAlignment: Left
+IndentCaseLabels: true
+AccessModifierOffset: -4
+AlwaysBreakTemplateDeclarations: true
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+PenaltyReturnTypeOnItsOwnLine: 500
+PenaltyBreakBeforeFirstCallParameter: 10000
+PenaltyExcessCharacter: 10
+FixNamespaceComments: true

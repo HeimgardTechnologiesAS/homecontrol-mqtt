@@ -4,7 +4,7 @@
 
 class EndpointLevel : public Endpoint
 {
-  public:
+public:
     EndpointLevel(HomeControlMagic* hcm_ptr);
 
     virtual void sendStatusMessage();
@@ -18,7 +18,7 @@ class EndpointLevel : public Endpoint
     virtual void setLevel(uint16_t state);
     virtual uint16_t getLevel();
 
-  protected:
+protected:
     uint16_t m_level;
     bool m_state;
 };

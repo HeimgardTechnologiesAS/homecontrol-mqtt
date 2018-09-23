@@ -8,7 +8,7 @@
 
 class HomeControlMagic
 {
-  public:
+public:
     HomeControlMagic(const char* deviceName);
     void doMagic();
     void setup();
@@ -34,15 +34,14 @@ class HomeControlMagic
 
     char* getMessageBufferPtr();
 
-  private:
+private:
     void setTopic(char* topic, char* endpoint_id);
 
     const char* m_name;
     char* m_id;
 
     uint8_t m_number_of_endpoints;
-    Endpoint* m_endpoints_pointers[10];  
+    Endpoint* m_endpoints_pointers[10];
     char m_base_topic[20];
     bool m_broker_was_connected;
 };
-

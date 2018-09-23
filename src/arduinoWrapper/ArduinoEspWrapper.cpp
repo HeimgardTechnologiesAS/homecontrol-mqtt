@@ -1,6 +1,6 @@
 #ifdef ESP8266
-#include "Arduino.h"
 #include "ArduinoEspWrapper.h"
+#include "Arduino.h"
 #include "ArduinoDebugLed.h"
 
 #define ESP_WRAPPER_DEBUG
@@ -39,7 +39,7 @@ void networkLoop()
     unsigned long current_time = millis();
     if(WiFi.status() == WL_CONNECTED)
     {
-		m_last_time_connected = current_time;
+        m_last_time_connected = current_time;
     }
     else
     {
@@ -91,8 +91,7 @@ void networkSetup()
     // turn off access point
     WiFi.mode(WIFI_STA);
 
-    gotIpEventHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP& event)
-    {
+    gotIpEventHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP& event) {
 #ifdef ESP_WRAPPER_DEBUG
         Serial.print("Station connected, IP: ");
         Serial.println(WiFi.localIP());
@@ -100,8 +99,7 @@ void networkSetup()
         DebugLedState(false);
     });
 
-    disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event)
-    {
+    disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event) {
 #ifdef ESP_WRAPPER_DEBUG
         Serial.println("Station disconnected");
 #endif
@@ -115,7 +113,7 @@ bool networkReconnect()
 
 void networkChipRestart()
 {
-	ESP.restart();
+    ESP.restart();
 }
 
 void networkStart()

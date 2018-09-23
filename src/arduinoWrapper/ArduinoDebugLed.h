@@ -6,7 +6,9 @@ static unsigned long m_last_flash = 0;
 static bool m_led_is_on_when = false;
 static int8_t m_led_pin = -1;
 
-#define LED_PIN_CHECK() if(m_led_pin == -1) return;
+#define LED_PIN_CHECK()                                                                                                \
+    if(m_led_pin == -1)                                                                                                \
+        return;
 
 inline void DebugLedFlash(long half_period)
 {
