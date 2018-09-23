@@ -5,6 +5,7 @@
 #include "Endpoints/EndpointZero.h"
 
 #ifdef ARDUINO
+#include "arduinoWrapper/ArduinoConfig.h"
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
 #elif defined STM

@@ -2,6 +2,7 @@
 #include "ArduinoWrapper.h"
 #include "PubSubClient.h"
 #include "ArduinoDebugLed.h"
+#include "ArduinoConfig.h"
 #include "ArduinoNetworkInterface.h"
 #include "helperFunctions.h"
 
@@ -27,6 +28,7 @@ static void wrapperSubscribeNow();
 // function implementation:
 void wrapperLoop(bool reconnect)
 {
+  // wrapper loop will also call network loop
   networkLoop();
 
   if(!networkIsConnected())

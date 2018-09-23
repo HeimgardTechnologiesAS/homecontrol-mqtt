@@ -156,6 +156,4 @@ char* getUniqueId()
     return m_uid;
 }
 
-#else // ESP8266
-#error "You did not choose ESP board"
 #endif // ESP8266
