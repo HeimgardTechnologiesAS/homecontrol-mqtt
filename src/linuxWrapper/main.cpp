@@ -1,18 +1,17 @@
-#include "stdint.h"
-#include "../HomeControlMagic.h"
+#include "HomeControlMagic.h"
 #include "lib/arrrgh/arrrgh.hpp"
-#include "stdio.h"
-
+#include "logger.hpp"
+#include <stdint.h>
 
 int main(int argc, const char* argv[])
 {
-    arrrgh::parser parser( "hc_mqtt_client", "HomeControl MQTT client example" );
+    arrrgh::parser parser("hc_mqtt_client", "HomeControl MQTT client example");
 
     const auto& debug_mode = parser.add<bool>("debug", "Turn on debug mode", 'd', arrrgh::Optional, false);
 
     try
     {
-    parser.parse(argc, argv);
+        parser.parse(argc, argv);
     }
     catch(...)
     {
@@ -24,15 +23,17 @@ int main(int argc, const char* argv[])
         std::cout << "Debug mode on" << std::endl;
     }
 
-
     // USER VALUES:
     const char* device_name = "LINUX_CLIENT";
     //
 
     HomeControlMagic hcm(device_name);
 
+    logger::setupLogger();
+    logger::printInfo("info");
+    logger::printError("error");
+
     std::cout << "Exiting" << std::endl;
 
     return 0;
-
 }

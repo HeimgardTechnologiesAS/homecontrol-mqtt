@@ -1,5 +1,5 @@
 #include "EndpointColor.h"
-#include "../HomeControlMagic.h"
+#include "HomeControlMagic.h"
 
 #ifdef LINUX
 #include <cstring>

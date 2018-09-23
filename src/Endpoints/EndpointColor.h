@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Endpoint.h"
-#include "../helperFunctions.h"
+#include "Endpoint.h"
+#include "helperFunctions.h"
 
 class EndpointColor : public Endpoint
 {

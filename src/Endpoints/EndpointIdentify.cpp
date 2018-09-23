@@ -1,6 +1,6 @@
 #include "EndpointIdentify.h"
-#include "../HomeControlMagic.h"
-#include "../helperFunctions.h"
+#include "HomeControlMagic.h"
+#include "helperFunctions.h"
 
 //#define ENDPOINT_IDENTIFY_DEBUG
 
@@ -10,7 +10,7 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
     : Endpoint(hcm_ptr)
     , m_pin(pin)
 {
-  m_config = CONFIG;
+    m_config = CONFIG;
 }
 
 void EndpointIdentify::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
@@ -25,8 +25,8 @@ void EndpointIdentify::incomingMessage(char* topic, uint8_t* payload, unsigned i
     Serial.println();
 #endif
 
-  if(lineContains(topic, "ci"))
-  {
-    bool state = extractBool(payload, length);
-  }
+    if(lineContains(topic, "ci"))
+    {
+        bool state = extractBool(payload, length);
+    }
 }

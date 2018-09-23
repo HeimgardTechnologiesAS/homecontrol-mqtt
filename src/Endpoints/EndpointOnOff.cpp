@@ -1,6 +1,6 @@
 #include "EndpointOnOff.h"
-#include "../HomeControlMagic.h"
-#include "../helperFunctions.h"
+#include "HomeControlMagic.h"
+#include "helperFunctions.h"
 
 //#define ENDPOINT_ON_OFF_DEBUG
 

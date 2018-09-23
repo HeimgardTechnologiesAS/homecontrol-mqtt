@@ -1,6 +1,6 @@
 #include "EndpointTemperatureTarget.h"
-#include "../HomeControlMagic.h"
-#include "../helperFunctions.h"
+#include "HomeControlMagic.h"
+#include "helperFunctions.h"
 
 //#define ENDPOINT_TEMPERATURE_TARGET_DEBUG
 
