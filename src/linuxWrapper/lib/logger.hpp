@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include <string>
 
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -15,37 +16,38 @@
 
 namespace logger
 {
-static auto console = spdlog::stdout_color_mt("console");
+static std::shared_ptr<spdlog::logger> console;
 static bool debugEnabled = false;
 
-void setupLogger()
+inline void setupLogger()
 {
+    console = spdlog::stdout_color_mt("console");
     spdlog::set_pattern("[%T:%e][%^%L%$][t:%t][P:%P] %^%v%$");
 }
 
-void printError(std::string message)
+inline void printError(std::string message)
 {
     console->error(message);
 }
 
-void printDebug(std::string message)
+inline void printDebug(std::string message)
 {
     console->debug(message);
 }
 
-void enableDebugLogging()
+inline void enableDebugLogging()
 {
     debugEnabled = true;
     spdlog::set_level(spdlog::level::debug);
 }
 
-void disableDebugLogging()
+inline void disableDebugLogging()
 {
     debugEnabled = false;
     spdlog::set_level(spdlog::level::info);
 }
 
-bool isDebugLoggingEnabled()
+inline bool isDebugLoggingEnabled()
 {
     return debugEnabled;
 }
@@ -57,7 +59,7 @@ bool isDebugLoggingEnabled()
  * @param args: Arguments that will be added to the message (fmt)
  **/
 template <typename... Args>
-void printInfo(const char* fmt, const Args&... args)
+inline void printInfo(const char* fmt, const Args&... args)
 {
     std::stringstream ss;
     ss << fmt;
@@ -73,7 +75,7 @@ void printInfo(const char* fmt, const Args&... args)
  * @param args: Arguments that will be added to the message (fmt)
  **/
 template <typename... Args>
-void printDebugDetail(const char* current_file, int current_line, const char* fmt, const Args&... args)
+inline void printDebugDetail(const char* current_file, int current_line, const char* fmt, const Args&... args)
 {
     std::stringstream ss;
     if(strrchr(current_file, '/') != nullptr)
@@ -93,7 +95,7 @@ void printDebugDetail(const char* current_file, int current_line, const char* fm
  * @param args: Arguments that will be added to the message (fmt)
  **/
 template <typename... Args>
-void printErrorDetail(const char* current_file, int current_line, const char* fmt, const Args&... args)
+inline void printErrorDetail(const char* current_file, int current_line, const char* fmt, const Args&... args)
 {
     std::stringstream ss;
     if(strrchr(current_file, '/') != nullptr)

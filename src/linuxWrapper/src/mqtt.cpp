@@ -1,18 +1,14 @@
-/*#include "mqtt.hpp"
+#include "mqtt.hpp"
+#include "logger.hpp"
 
-namespace hc
-{
 namespace mqtt
 {
-Mqtt::Mqtt(const char* driver_id, asio::io_service& ios, DeviceManager* device_manager, std::string ip_string)
-    : mosquittopp(driver_id)
-    , id(driver_id)
+Mqtt::Mqtt(const char* client_id, std::string ip_string)
+    : mosquittopp(client_id)
+    , id(client_id)
     , host(ip_string.c_str())
-    , topic("d/#")
     , port(1883)
     , keepalive(120)
-    , m_ios(ios)
-    , m_device_manager_ptr(device_manager)
 {
     debugMessage("Constructor");
     mosqpp::lib_init(); // Initialize libmosquitto
@@ -47,7 +43,7 @@ void Mqtt::on_disconnect(int rc)
     debugMessage("Disconnected with status: {}.", mosqpp::connack_string(rc));
 }
 
-void Mqtt::on_subcribe(int mid, int qos_count, const int* granted_qos)
+void Mqtt::on_subscribe(int mid, int qos_count, const int* granted_qos)
 {
     debugMessage("Subscription succeeded. \n");
 }
@@ -56,11 +52,11 @@ void Mqtt::on_message(const struct mosquitto_message* message)
 {
     std::string topic = message->topic;
     uint8_t* data_ptr = (uint8_t*)message->payload;
-    MessageArray message_vector(data_ptr, data_ptr + message->payloadlen);
+    // MessageArray message_vector(data_ptr, data_ptr + message->payloadlen);
 
     // TODO: remove this
 
-    debugMessage("got message on topic: {}", topic);
+    /*debugMessage("got message on topic: {}", topic);
     if(hc::Logger::isDebugLogging())
     {
         for(uint8_t c : message_vector)
@@ -72,6 +68,7 @@ void Mqtt::on_message(const struct mosquitto_message* message)
 
     m_ios.post(
         std::bind(&DeviceManager::incomingMessage, m_device_manager_ptr, std::move(topic), std::move(message_vector)));
+*/
 }
 
 void Mqtt::on_publish(int mid)
@@ -87,4 +84,3 @@ void Mqtt::sendMessage(std::string topic, std::string message)
 }
 
 } // namespace mqtt
-} // namespace hc*/

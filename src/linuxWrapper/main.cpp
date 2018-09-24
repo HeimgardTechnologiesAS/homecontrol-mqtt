@@ -16,17 +16,18 @@ int main(int argc, const char* argv[])
     }
     catch(...)
     {
-        std::cerr << "Parsing failed" << std::endl;
+        errorMessage("Parsing failed");
     }
 
     if(debug_mode.value())
     {
-        std::cout << "Debug mode on" << std::endl;
+        infoMessage("Debug mode on");
         logger::enableDebugLogging();
     }
 
     // USER VALUES:
     const char* device_name = "LINUX_CLIENT";
+    const bool use_secure = false;
     //
 
     HomeControlMagic hcm(device_name);
@@ -35,7 +36,7 @@ int main(int argc, const char* argv[])
     errorMessage("error");
     debugMessage("debug");
 
-    std::cout << "Exiting" << std::endl;
+    infoMessage("Exiting");
 
     return 0;
 }
