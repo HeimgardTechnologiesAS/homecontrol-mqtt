@@ -4,11 +4,11 @@ EXE = example
 
 OBJ_DIR = obj
 
-INCLUDES = -Ilib/spdlog/include -Ilib -I../ -I../Endpoints
+INCLUDES = -Ilib/spdlog/include -Ilib -Isrc -I../ -I../Endpoints
 
 CXX = g++
-CXXFLAGS = -g -D LINUX -std=c++14 -Wall -pedantic $(INCLUDES)
-LDFLAGS = -lm -L/usr/local/lib -lmosquittopp
+CXXFLAGS = -g -ggdb -D LINUX -std=c++14 -Wall -pedantic $(INCLUDES)
+LDFLAGS = -g -ggdb -lm -L/usr/local/lib -lmosquittopp
 
 SOURCES = $(wildcard *.cpp) \
 		  $(wildcard src/*.cpp) \

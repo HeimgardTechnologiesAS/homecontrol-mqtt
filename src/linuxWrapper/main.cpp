@@ -1,4 +1,5 @@
 #include "HomeControlMagic.h"
+#include "LinuxWrapper.hpp"
 #include "lib/arrrgh/arrrgh.hpp"
 #include "logger.hpp"
 #include <stdint.h>
@@ -30,13 +31,18 @@ int main(int argc, const char* argv[])
     const bool use_secure = false;
     //
 
-    HomeControlMagic hcm(device_name);
+    // wrapperSetup();
+
+    // HomeControlMagic hcm(device_name);
 
     infoMessage("info");
     errorMessage("error");
     debugMessage("debug");
 
     infoMessage("Exiting");
+
+    while(true)
+        ;
 
     return 0;
 }

@@ -3,19 +3,20 @@
 
 namespace mqtt
 {
-Mqtt::Mqtt(const char* client_id, std::string ip_string)
+Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password)
     : mosquittopp(client_id)
     , id(client_id)
-    , host(ip_string.c_str())
+    , host(gw_ip.c_str())
     , port(1883)
     , keepalive(120)
+    , m_connected(false)
 {
     debugMessage("Constructor");
     mosqpp::lib_init(); // Initialize libmosquitto
 
-    username_pw_set("hc", "magic");
+    username_pw_set(username.c_str(), password.c_str());
 
-    debugMessage("Host for mqtt broker is: {}", host);
+    debugMessage("Host for mqtt broker is: {}", gw_ip);
     // non blocking connection to broker request
     connect_async(host, port, keepalive);
     loop_start(); // Start thread managing connection / publish / subscribe
@@ -33,13 +34,13 @@ void Mqtt::on_connect(int rc)
 
     if(rc == 0)
     {
-        subscribe(NULL, "d/#");
-        sendMessage("broadcast", "serverannounce");
+        m_connected = true;
     }
 }
 
 void Mqtt::on_disconnect(int rc)
 {
+    m_connected = false;
     debugMessage("Disconnected with status: {}.", mosqpp::connack_string(rc));
 }
 
@@ -71,16 +72,54 @@ void Mqtt::on_message(const struct mosquitto_message* message)
 */
 }
 
+bool Mqtt::isConnected()
+{
+    return m_connected;
+}
+
 void Mqtt::on_publish(int mid)
 {
     // TODO: use message id to confirm send messages
     // std::cout << ">> myMosq - Message (" << mid << ") succeed to be published " << std::endl;
 }
 
-void Mqtt::sendMessage(std::string topic, std::string message)
+void Mqtt::sendMessage()
 {
-    debugMessage("Sending message: {}; on topic: {}", message, topic);
-    int ret = publish(NULL, topic.c_str(), strlen(message.c_str()), message.c_str(), 1, false);
+    debugMessage("Sending message: {}; on topic: {}", m_message_buffer, m_topic_buffer);
+    int ret = publish(NULL, m_topic_buffer, strlen(m_message_buffer), m_message_buffer, 1, false);
+    clearMessageBuffer();
+    clearTopicBuffer();
+}
+
+void Mqtt::setCallback(void (*callback)(char*, uint8_t*, unsigned int))
+{
+    m_callback = callback;
+}
+
+char* Mqtt::getMessageBuffer()
+{
+    return m_message_buffer;
+}
+
+char* Mqtt::getTopicBuffer()
+{
+    return m_topic_buffer;
+}
+
+void Mqtt::clearMessageBuffer()
+{
+    for(int i; i < MESSAGE_BUFFER_SIZE; i++)
+    {
+        m_message_buffer[i] = 0;
+    }
+}
+
+void Mqtt::clearTopicBuffer()
+{
+    for(int i; i < TOPIC_BUFFER_SIZE; i++)
+    {
+        m_topic_buffer[i] = 0;
+    }
 }
 
 } // namespace mqtt
