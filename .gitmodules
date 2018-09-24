@@ -4,6 +4,3 @@
 [submodule "src/linuxWrapper/lib/spdlog"]
 	path = src/linuxWrapper/lib/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "src/linuxWrapper/lib/mosquitto"]
-	path = src/linuxWrapper/lib/mosquitto
-	url = https://github.com/eclipse/mosquitto
