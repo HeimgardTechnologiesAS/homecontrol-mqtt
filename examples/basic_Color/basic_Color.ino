@@ -16,6 +16,8 @@
 
 static char* const GW_IP = "GW_IP";                      // gateway IP address
 static char* const deviceName = "COLOR_DEVICE";          // name of device
+static char* const username = "hc";                      // copy username from app
+static char* const password = "";                        // copy password from app
 
 bool active_pin_state = true;               // reverse pin state
 
@@ -25,7 +27,7 @@ uint16_t last_color_R = 0;
 uint16_t last_color_G = 0;
 uint16_t last_color_B = 0;
 
-HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password);
 EndpointColor endpointColor(&hcm);
 
 uint16_t adjLevel(uint16_t color_X, uint16_t level)

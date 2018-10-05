@@ -15,11 +15,13 @@
 
 static char* const GW_IP = "GW_IP";                      // gateway IP address
 static char* const deviceName = "MOTION_SENSOR";         // name of device
+static char* const username = "hc";                      // copy username from app
+static char* const password = "";                        // copy password from app
 
 bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password);
 EndpointMotion endpointMotion(&hcm);
 
 void controlPin()

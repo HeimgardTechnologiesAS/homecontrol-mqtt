@@ -20,8 +20,10 @@
 
 static char* const GW_IP = "GW_IP";                      // gateway IP address
 static char* const deviceName = "TEMPERATURE_SENSORS";   // name of device
+static char* const username = "hc";                      // copy username from app
+static char* const password = "";                        // copy password from app
 
-HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password);
 
 EndpointTemperature endpointTemperature_1(&hcm);
 EndpointTemperature endpointTemperature_2(&hcm);
