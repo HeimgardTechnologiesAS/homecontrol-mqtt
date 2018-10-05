@@ -1,6 +1,7 @@
 #include "HomeControlMagic.h"
 #include "Endpoints/EndpointMotion.h"
 #define ESP_LOOP
+#define SECURE
 #define WIFI_SSID ""                        // Wifi network name
 #define WIFI_PASS ""                        // Wifi password
 #include "NetworkLoops.hpp"
@@ -14,11 +15,13 @@
 
 static char* const GW_IP = "GW_IP";                      // gateway IP address
 static char* const deviceName = "MOTION_SENSOR";         // name of device
+static char* const username = "hc";                      // copy username from app
+static char* const password = "";                        // copy password from app
 
 bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password);
 EndpointMotion endpointMotion(&hcm);
 
 void controlPin()
