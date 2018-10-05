@@ -23,7 +23,7 @@ static char* const deviceName = "TERMOSTAT";           // name of device
 bool active_pin_state = false;            // reverse pin state
 bool last_state = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
 
 EndpointTemperatureTarget endpointTemperatureTarget(&hcm);
 EndpointOnOff endpointOnOff(&hcm);

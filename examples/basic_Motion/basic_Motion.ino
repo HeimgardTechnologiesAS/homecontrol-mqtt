@@ -19,7 +19,7 @@ static char* const deviceName = "MOTION_SENSOR";         // name of device
 bool active_pin_state = false;              // reverse pin state
 bool last_motion = false;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
 EndpointMotion endpointMotion(&hcm);
 
 void controlPin()

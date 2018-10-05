@@ -20,7 +20,7 @@ bool active_pin_state = false;              // reverse pin state
 bool last_state = false;
 uint16_t last_level = 0;
 
-HomeControlMagic hcm(GW_IP, deviceName, network);
+HomeControlMagic hcm(GW_IP, deviceName, network, username, password); // replace username and password with ones from app
 EndpointLevel endpointLevel(&hcm);
 
 void controlPin()
