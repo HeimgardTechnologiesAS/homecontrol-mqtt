@@ -11,12 +11,12 @@
 
 #define DEVICE_PIN LED_BUILTIN // GPIO pin, built in led as example
 
-IPAddress gw_ip = {192, 168, 1, 10};
+IPAddress gw_ip = {192, 168, 1, 10};            // gateway IP address
 static char* const deviceName = "LEVEL_DEVICE"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";
-static const char* const mqtt_username = "hc";
-static const char* const mqtt_password = "magic";
+static char* const username = "hc"; // copy username from app
+static char* const password = "";   // copy password from app
 
 bool active_pin_state = false; // reverse pin state
 
@@ -24,6 +24,7 @@ bool last_state = false;
 uint16_t last_level = 0;
 
 HomeControlMagic hcm(deviceName);
+
 EndpointLevel endpointLevel(&hcm);
 
 void controlPin()

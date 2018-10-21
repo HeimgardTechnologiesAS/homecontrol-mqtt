@@ -15,12 +15,12 @@
 
 #define READ_TIME 30 // sensor reading time in seconds
 
-IPAddress gw_ip = {192, 168, 1, 10};
+IPAddress gw_ip = {192, 168, 1, 10};                  // gateway IP address
 static char* const deviceName = "TEMPERATURE_SENSOR"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";
-static const char* const mqtt_username = "hc";
-static const char* const mqtt_password = "magic";
+static char* const username = "hc"; // copy username from app
+static char* const password = "";   // copy password from app
 
 HomeControlMagic hcm(deviceName);
 EndpointTemperature endpointTemperature(&hcm);
