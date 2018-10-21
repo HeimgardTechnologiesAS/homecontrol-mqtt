@@ -50,7 +50,8 @@ void Mqtt::on_connect(int rc)
     {
         m_connected = true;
         std::string subscribe_topic = std::string(id) + "/#";
-        subscribe(0, subscribe_topic.c_str());
+        debugMessage("subscribe topic : {}", subscribe_topic);
+        subscribe(NULL, subscribe_topic.c_str());
     }
 }
 

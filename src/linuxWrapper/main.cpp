@@ -42,7 +42,7 @@ int main(int argc, const char* argv[])
 
     wrapperSetup();
 
-    mqtt::Mqtt mqtt(getUniqueId(), "127.0.0.1", "hc", "3522518", use_secure);
+    mqtt::Mqtt mqtt(getUniqueId(), "192.168.5.30", "hc", "3522518", use_secure);
     linuxSetMqttPtr(&mqtt);
 
     HomeControlMagic hcm(device_name);
