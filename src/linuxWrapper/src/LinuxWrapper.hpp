@@ -25,6 +25,6 @@ void linuxSetMqttPtr(mqtt::Mqtt* mqtt);
 
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer);
-char* getUniqueId();
+const char* getUniqueId();
 void itoa(int value, char* str, int base);
 uint32_t millis();

@@ -70,23 +70,6 @@ void Mqtt::on_message(const struct mosquitto_message* message)
     uint8_t* data_ptr = (uint8_t*)message->payload;
 
     m_callback(message->topic, data_ptr, message->payloadlen);
-    // MessageArray message_vector(data_ptr, data_ptr + message->payloadlen);
-
-    // TODO: remove this
-
-    /*debugMessage("got message on topic: {}", topic);
-    if(hc::Logger::isDebugLogging())
-    {
-        for(uint8_t c : message_vector)
-        {
-            printf("%c", (char)c);
-        }
-        printf("\n");
-    }
-
-    m_ios.post(
-        std::bind(&DeviceManager::incomingMessage, m_device_manager_ptr, std::move(topic), std::move(message_vector)));
-*/
 }
 
 bool Mqtt::isConnected()
@@ -125,7 +108,7 @@ char* Mqtt::getTopicBuffer()
 
 void Mqtt::clearMessageBuffer()
 {
-    for(int i; i < MESSAGE_BUFFER_SIZE; i++)
+    for(int i = 0; i < MESSAGE_BUFFER_SIZE; i++)
     {
         m_message_buffer[i] = 0;
     }
@@ -133,7 +116,7 @@ void Mqtt::clearMessageBuffer()
 
 void Mqtt::clearTopicBuffer()
 {
-    for(int i; i < TOPIC_BUFFER_SIZE; i++)
+    for(int i = 0; i < TOPIC_BUFFER_SIZE; i++)
     {
         m_topic_buffer[i] = 0;
     }

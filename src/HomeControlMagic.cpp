@@ -86,7 +86,7 @@ void HomeControlMagic::setup()
         port = 8883;
     }
 
-    strcat(m_base_topic, "d/");
+    strcpy(m_base_topic, "d/");
     strcat(m_base_topic, m_id);
     strcat(m_base_topic, "/");
 
@@ -241,11 +241,6 @@ Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
     return m_endpoints_pointers[number];
 }
 
-char* HomeControlMagic::getId()
-{
-    return m_id;
-}
-
 uint8_t HomeControlMagic::getNumberOfEndpoints()
 {
     return m_number_of_endpoints;
@@ -253,13 +248,14 @@ uint8_t HomeControlMagic::getNumberOfEndpoints()
 
 void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
+    char buffer[3] = {0};
     m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-    itoa(m_number_of_endpoints - 1, m_message_buffer_ptr, 10);
+    itoa(m_number_of_endpoints - 1, buffer, 10);
 #ifdef HCM_DEBUG
     Serial.print(F("Id to set: "));
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(buffer);
 #endif
-    endpoint_ptr->setId(m_message_buffer_ptr);
+    endpoint_ptr->setId(buffer);
     wrapperClearMessageBuffer();
 }
 

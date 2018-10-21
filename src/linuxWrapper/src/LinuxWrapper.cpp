@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sys/time.h>
 
-static std::string m_uid;
+static std::string m_uid = "";
 
 static mqtt::Mqtt* mqtt_ptr = nullptr;
 
@@ -25,7 +25,20 @@ void wrapperSetup()
     std::ifstream uid_file("/etc/machine-id");
     if(uid_file.is_open())
     {
-        std::getline(uid_file, m_uid);
+        // std::getline(uid_file, m_uid);
+        char c = 0;
+        while(uid_file.get(c))
+        {
+            if(c < 48)
+            {
+                c = 48;
+            }
+            else if(c > 122)
+            {
+                c = 122;
+            }
+            m_uid += c;
+        }
     }
     else
     {
@@ -88,15 +101,25 @@ bool networkIsSecure()
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer)
 {
+    // TODO: finish this
+    errorMessage("called dtostrf. This is not implemented yet");
 }
 
-char* getUniqueId()
+const char* getUniqueId()
 {
-    return (char*)m_uid.c_str();
+    return m_uid.c_str();
 }
 
 void itoa(int value, char* str, int base)
 {
+    if(base != 10)
+    {
+        errorMessage("Just use base 10");
+        return;
+    }
+
+    std::string s = std::to_string(value);
+    strcpy(str, s.c_str());
 }
 
 uint32_t millis()
