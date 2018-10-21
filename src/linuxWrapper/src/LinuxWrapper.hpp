@@ -2,6 +2,11 @@
 
 #include <string>
 
+namespace mqtt
+{
+class Mqtt;
+}
+
 void wrapperLoop(bool reconnect = true);
 void wrapperSetup();
 void wrapperSetServer(std::string ip);
@@ -15,6 +20,8 @@ char* wrapperGetMessageBuffer();
 void wrapperPublish();
 
 bool networkIsSecure();
+
+void linuxSetMqttPtr(mqtt::Mqtt* mqtt);
 
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer);

@@ -3,10 +3,16 @@
 #include "mqtt.hpp"
 
 #include <fstream>
+#include <sys/time.h>
 
 static std::string m_uid;
 
 static mqtt::Mqtt* mqtt_ptr = nullptr;
+
+void linuxSetMqttPtr(mqtt::Mqtt* mqtt)
+{
+    mqtt_ptr = mqtt;
+}
 
 void wrapperLoop(bool reconnect)
 {
@@ -25,6 +31,7 @@ void wrapperSetup()
     {
         // TODO: think of something else
     }
+
     infoMessage("ID of this device: {}", m_uid);
 }
 
@@ -91,6 +98,12 @@ char* getUniqueId()
 void itoa(int value, char* str, int base)
 {
 }
+
 uint32_t millis()
 {
+    struct timeval te;
+    gettimeofday(&te, NULL);                                        // get current time
+    uint32_t milliseconds = te.tv_sec * 1000LL + te.tv_usec / 1000; // calculate milliseconds
+    // printf("milliseconds: %lld\n", milliseconds);
+    return milliseconds;
 }

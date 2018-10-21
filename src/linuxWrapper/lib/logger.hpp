@@ -63,7 +63,7 @@ inline void printInfo(const char* fmt, const Args&... args)
 {
     std::stringstream ss;
     ss << fmt;
-    console->info(ss.str().c_str(), args...);
+    // console->info(ss.str().c_str(), args...);
 }
 
 /**
@@ -83,7 +83,7 @@ inline void printDebugDetail(const char* current_file, int current_line, const c
         current_file = strrchr(current_file, '/') + 1;
     }
     ss << current_file << " " << current_line << " " << fmt;
-    console->debug(ss.str().c_str(), args...);
+    // console->debug(ss.str().c_str(), args...);
 }
 
 /**
@@ -103,7 +103,7 @@ inline void printErrorDetail(const char* current_file, int current_line, const c
         current_file = strrchr(current_file, '/') + 1;
     }
     ss << current_file << " " << current_line << " " << fmt;
-    console->error(ss.str().c_str(), args...);
+    // console->error(ss.str().c_str(), args...);
 }
 
 } // namespace logger

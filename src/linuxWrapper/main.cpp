@@ -2,7 +2,10 @@
 #include "LinuxWrapper.hpp"
 #include "lib/arrrgh/arrrgh.hpp"
 #include "logger.hpp"
+#include "mqtt.hpp"
 #include <stdint.h>
+
+#include "EndpointOnOff.h"
 
 int main(int argc, const char* argv[])
 {
@@ -26,6 +29,12 @@ int main(int argc, const char* argv[])
         logger::enableDebugLogging();
     }
 
+    std::string test = "test";
+
+    infoMessage("info {}", test);
+    errorMessage("error {}", test);
+    debugMessage("debug {}", test);
+
     // USER VALUES:
     const char* device_name = "LINUX_CLIENT";
     const bool use_secure = false;
@@ -33,16 +42,23 @@ int main(int argc, const char* argv[])
 
     wrapperSetup();
 
-    // HomeControlMagic hcm(device_name);
+    mqtt::Mqtt mqtt(getUniqueId(), "127.0.0.1", "hc", "3522518", use_secure);
+    linuxSetMqttPtr(&mqtt);
 
-    infoMessage("info");
-    errorMessage("error");
-    debugMessage("debug");
+    HomeControlMagic hcm(device_name);
 
-    infoMessage("Exiting");
+    EndpointOnOff on_off(&hcm);
+
+    hcm.setup();
+
+    hcm.addEndpoint(&on_off);
 
     while(true)
-        ;
+    {
+        hcm.doMagic();
+    }
+
+    infoMessage("Exiting");
 
     return 0;
 }

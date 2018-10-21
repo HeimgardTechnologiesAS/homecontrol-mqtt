@@ -117,7 +117,7 @@ void HomeControlMagic::doMagic()
 
 void HomeControlMagic::setTopic(char* topic, char* endpoint_id)
 {
-    strcat(m_topic_buffer_ptr, m_base_topic);
+    strcpy(m_topic_buffer_ptr, m_base_topic);
     strcat(m_topic_buffer_ptr, endpoint_id);
     strcat(m_topic_buffer_ptr, "/");
     strcat(m_topic_buffer_ptr, topic);
@@ -225,7 +225,7 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
 
 void HomeControlMagic::announce()
 {
-    strcat(m_message_buffer_ptr, m_name);
+    strcpy(m_message_buffer_ptr, m_name);
     sendStringMessage("announce", "0");
 
     sendFeedback();
