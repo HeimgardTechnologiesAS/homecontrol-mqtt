@@ -23,7 +23,7 @@ bool active_pin_state = false; // reverse pin state
 bool last_state = false;
 uint16_t last_level = 0;
 
-HomeControlMagic hcm(deviceName);
+hrvojHomeControlMagic hcm(deviceName);
 
 EndpointLevel endpointLevel(&hcm);
 

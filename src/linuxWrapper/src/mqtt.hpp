@@ -11,11 +11,12 @@ namespace mqtt
 class Mqtt : public mosqpp::mosquittopp
 {
 public:
-    Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password);
+    Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password, bool is_secure);
     ~Mqtt();
 
     void sendMessage();
     bool isConnected();
+    bool isSecure();
 
     // this are overloaded functions
     void on_connect(int rc);
@@ -37,6 +38,7 @@ private:
     int port;
     int keepalive;
     bool m_connected;
+    bool m_is_secure;
 
     char m_message_buffer[MESSAGE_BUFFER_SIZE];
     char m_topic_buffer[TOPIC_BUFFER_SIZE];

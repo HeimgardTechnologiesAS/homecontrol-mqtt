@@ -73,6 +73,11 @@ void wrapperPublish()
     mqtt_ptr->sendMessage();
 }
 
+bool networkIsSecure()
+{
+    return mqtt_ptr->isSecure();
+}
+
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer)
 {

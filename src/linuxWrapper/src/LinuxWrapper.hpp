@@ -14,6 +14,8 @@ char* wrapperGetTopicBuffer();
 char* wrapperGetMessageBuffer();
 void wrapperPublish();
 
+bool networkIsSecure();
+
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer);
 char* getUniqueId();

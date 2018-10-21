@@ -81,13 +81,10 @@ void HomeControlMagic::setup()
 {
     m_id = getUniqueId();
     uint16_t port = 1883;
-    if(m_network_object.isSecure())
+    if(networkIsSecure())
     {
         port = 8883;
     }
-
-    m_mqtt_client.setServer(server_ip, port);
-    m_mqtt_client.setCallback(callback);
 
     strcat(m_base_topic, "d/");
     strcat(m_base_topic, m_id);
@@ -228,19 +225,8 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
 
 void HomeControlMagic::announce()
 {
-<<<<<<< HEAD
     strcat(m_message_buffer_ptr, m_name);
     sendStringMessage("announce", "0");
-=======
-    strcat(m_message_buffer, m_name);
-    sendStringMessage("announce", "0");
-
-    sendFeedback();
-}
-
-void HomeControlMagic::subscribeNow()
-{
->>>>>>> origin/develop
 
     sendFeedback();
 }

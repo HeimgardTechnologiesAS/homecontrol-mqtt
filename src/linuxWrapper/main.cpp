@@ -31,7 +31,7 @@ int main(int argc, const char* argv[])
     const bool use_secure = false;
     //
 
-    // wrapperSetup();
+    wrapperSetup();
 
     // HomeControlMagic hcm(device_name);
 

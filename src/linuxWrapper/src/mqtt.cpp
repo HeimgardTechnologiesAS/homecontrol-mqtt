@@ -3,13 +3,13 @@
 
 namespace mqtt
 {
-Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password)
+Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password, bool is_secure)
     : mosquittopp(client_id)
     , id(client_id)
     , host(gw_ip.c_str())
-    , port(1883)
     , keepalive(120)
     , m_connected(false)
+    , m_is_secure(is_secure)
 {
     debugMessage("Constructor");
     mosqpp::lib_init(); // Initialize libmosquitto
@@ -17,6 +17,17 @@ Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::
     username_pw_set(username.c_str(), password.c_str());
 
     debugMessage("Host for mqtt broker is: {}", gw_ip);
+
+    if(m_is_secure)
+    {
+        port = 8883;
+        debugMessage("Using secure port");
+    }
+    else
+    {
+        port = 1883;
+        debugMessage("Using unsecured port");
+    }
     // non blocking connection to broker request
     connect_async(host, port, keepalive);
     loop_start(); // Start thread managing connection / publish / subscribe
@@ -120,6 +131,11 @@ void Mqtt::clearTopicBuffer()
     {
         m_topic_buffer[i] = 0;
     }
+}
+
+bool Mqtt::isSecure()
+{
+    return m_is_secure;
 }
 
 } // namespace mqtt
