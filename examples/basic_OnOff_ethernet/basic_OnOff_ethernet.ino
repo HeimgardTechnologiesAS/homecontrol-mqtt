@@ -13,8 +13,8 @@
 
 IPAddress gw_ip = {192, 168, 1, 10};
 static const char* const deviceName = "ON_OFF_DEVICE"; // name of device
-static const char* const mqtt_username = "hc";
-static const char* const mqtt_password = "magic";
+static char* const mqtt_username = "hc";               // copy username from app
+static char* const mqtt_password = "";                 // copy password from app
 
 bool active_pin_state = false; // reverse pin state
 bool last_state = false;

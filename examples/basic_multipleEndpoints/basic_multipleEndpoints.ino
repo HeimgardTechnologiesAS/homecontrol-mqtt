@@ -21,8 +21,8 @@ IPAddress gw_ip = {192, 168, 1, 10};
 static char* const deviceName = "TEMPERATURE_SENSORS"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";
-static const char* const mqtt_username = "hc";
-static const char* const mqtt_password = "magic";
+static char* const mqtt_username = "hc"; // copy username from app
+static char* const mqtt_password = "";   // copy password from app
 
 HomeControlMagic hcm(deviceName);
 
@@ -45,7 +45,7 @@ void setup()
 
     networkSetSsid(wifi_ssid);
     networkSetPass(wifi_pass);
-    networkSetSecure(false); // this must be called before setServer and networkSetup
+    networkSetSecure(true); // this must be called before setServer and networkSetup
     networkSetup();
     networkStart();
 
