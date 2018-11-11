@@ -80,13 +80,8 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
 void HomeControlMagic::setup()
 {
     m_id = getUniqueId();
-    uint16_t port = 1883;
-    if(networkIsSecure())
-    {
-        port = 8883;
-    }
 
-    strcpy(m_base_topic, "d/");
+    strcat(m_base_topic, "d/");
     strcat(m_base_topic, m_id);
     strcat(m_base_topic, "/");
 
@@ -225,7 +220,11 @@ void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpo
 
 void HomeControlMagic::announce()
 {
+<<<<<<< HEAD
     strcpy(m_message_buffer_ptr, m_name);
+=======
+    strcat(m_message_buffer_ptr, m_name);
+>>>>>>> issue_platform_wrappers
     sendStringMessage("announce", "0");
 
     sendFeedback();

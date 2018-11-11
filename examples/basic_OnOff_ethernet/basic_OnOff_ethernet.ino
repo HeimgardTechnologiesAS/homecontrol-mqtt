@@ -1,6 +1,6 @@
 #include "HomeControlMagic.h"
 
-// in Config file define ethernet options
+// in Config file define ethernet options or this will not compile
 #include "arduinoWrapper/ArduinoConfig.h"
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
