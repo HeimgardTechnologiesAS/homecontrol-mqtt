@@ -75,6 +75,14 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
 void HomeControlMagic::setup()
 {
     m_id = getUniqueId();
+    uint16_t port = 1883;
+    if(m_network_object.isSecure())
+    {
+        port = 8883;
+    }
+
+    m_mqtt_client.setServer(server_ip, port);
+    m_mqtt_client.setCallback(callback);
 
     strcat(m_base_topic, "d/");
     strcat(m_base_topic, m_id);
