@@ -17,16 +17,12 @@
 
 #define DHTTYPE DHT22 // DHT type
 
-<<<<<<< HEAD
 IPAddress gw_ip = {192, 168, 1, 10};                   // gateway IP address
-=======
-IPAddress gw_ip = {192, 168, 1, 10};
->>>>>>> issue_platform_wrappers
 static char* const deviceName = "TEMPERATURE_SENSORS"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";
-static char* const username = "hc"; // copy username from app
-static char* const password = "";   // copy password from app
+static char* const mqtt_username = "hc"; // copy username from app
+static char* const mqtt_password = "";   // copy password from app
 
 HomeControlMagic hcm(deviceName);
 
@@ -49,7 +45,7 @@ void setup()
 
     networkSetSsid(wifi_ssid);
     networkSetPass(wifi_pass);
-    networkSetSecure(false); // this must be called before setServer and networkSetup
+    networkSetSecure(true); // this must be called before setServer and networkSetup
     networkSetup();
     networkStart();
 

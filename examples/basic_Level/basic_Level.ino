@@ -15,8 +15,8 @@ IPAddress gw_ip = {192, 168, 1, 10};            // gateway IP address
 static char* const deviceName = "LEVEL_DEVICE"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";
-static char* const username = "hc"; // copy username from app
-static char* const password = "";   // copy password from app
+static char* const mqtt_username = "hc"; // copy username from app
+static char* const mqtt_password = "";   // copy password from app
 
 bool active_pin_state = false; // reverse pin state
 
