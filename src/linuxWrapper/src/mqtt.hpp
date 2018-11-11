@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <mosquittopp.h>
 #include <thread>
 
@@ -37,7 +38,7 @@ private:
     const char* topic;
     int port;
     int keepalive;
-    bool m_connected;
+    std::atomic<bool> m_connected;
     bool m_is_secure;
 
     char m_message_buffer[MESSAGE_BUFFER_SIZE];

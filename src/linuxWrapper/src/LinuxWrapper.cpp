@@ -60,7 +60,7 @@ void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int))
 
 bool wrapperIsMqttConnected()
 {
-    mqtt_ptr->isConnected();
+    return mqtt_ptr->isConnected();
 }
 
 void wrapperSetUsernamePassword(const char* const username, const char* const password)

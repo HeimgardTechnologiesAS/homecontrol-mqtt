@@ -6,3 +6,4 @@
 # 2. LD_LIBRARY_PATH=/usr/local/lib
 # 3. export LD_LIBRARY_PATH
 # 4. delete mosquitto
+apt-get install libmosquittopp-dev
