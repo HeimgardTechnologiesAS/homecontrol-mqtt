@@ -4,13 +4,12 @@
 
 class EndpointZero : public Endpoint
 {
-  public:
+public:
     EndpointZero(HomeControlMagic* hcm_ptr);
 
     void sendConfig();
     void sendStatusMessage();
     void sendFeedbackMessage();
 
-    void incomingMessage(char* topic, byte* payload, unsigned int length);
+    void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
 };
-

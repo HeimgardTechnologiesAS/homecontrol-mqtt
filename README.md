@@ -11,13 +11,10 @@ HomeControl provides an open source Arduino library for integration with Your sm
 MQTT is a machine-to-machine (M2M)/"Internet of Things" open source connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport. It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium.
 
 # Getting started:
+## Arduino
 The Arduino Software (IDE) allows you to write examples and upload them to your board. IDE can be downloaded [here](https://www.arduino.cc/en/Main/Software). If you have a reliable internet connection, you can use the [online IDE](https://create.arduino.cc/). It will allow you to save your sketches in the cloud, having them available from any device and backed up.
 
 To download HomeControl open source Arduino library, click the DOWNLOAD button in the top right corner and uncompress the folder. Place the homecontrol library folder to your /libraries/folder. You may need to create the libraries subfolder if this is your first library. Restart the IDE.
-
-Repeat the procedure with following Arduino libraries to use this class:
-- [Loops](https://github.com/seky2205/NetworkLoops)
-- [PubSubClient](https://github.com/knolleary/pubsubclient)
 
 You can open one of the HomeControl example sketch: File > Examples > homecontrol-mqtt
 
@@ -27,8 +24,12 @@ On Windows, port this should be something like COM2 (or some other number), on t
 
 Push the reset button on the board then click the Upload button in the IDE. Wait a few seconds. If successful, the message "Done uploading." will appear in the status bar.
 
+## Other platforms
+This will be updated as we add platform
+
 # Examples:
-HomeControl is providing You six examples composed of specific endpoints for each application:
+## Arduino
+HomeControl is providing You examples composed of specific endpoints for each application:
 - basic_OnOff - with this example, it is possible to control and have a feedback with any existing device which use a digital control signal (on/off).
 - basic_Level - example Level allows you to manage and feedback any existing device which use analog control signal. This example also uses the functionality of the basic_OnOff example.
 - basic_Color - allows you to turn ON or OFF, set color and brightness of RGB LED strip.
@@ -37,4 +38,7 @@ HomeControl is providing You six examples composed of specific endpoints for eac
 - basic_Motion - when motion is detected, user will get notification from the application, e-mail and/or SMS depending on what is selected in the configuration of the device. In this example, PIR motion sensor treggers alarm if armed in the application. In the same way it is possible to connect any digital sensor. For example: rain sensor, gas, smoke, presence, magnetic sensor...
 
 Your smart devices can be a combination of multiple endpoints from this library. On that way can be implemented devices for virtually every user need.
+
+## Other platforms
+This platforms will have examples in their own subfolders
 

@@ -1,22 +1,20 @@
 #include "HomeControlMagic.h"
 
-// in Config file define ethernet options
+// in Config file define ethernet options or this will not compile
 #include "arduinoWrapper/ArduinoConfig.h"
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
 
 #include "Endpoints/EndpointOnOff.h"
 
-//#define DEBUG
+#define DEBUG
 
 #define DEVICE_PIN LED_BUILTIN // GPIO pin to use, built in led as example
 
 IPAddress gw_ip = {192, 168, 1, 10};
 static const char* const deviceName = "ON_OFF_DEVICE"; // name of device
-static const char* const wifi_ssid = "WIFI-SSID";
-static const char* const wifi_pass = "WIFI-PASS";
-static char* const mqtt_username = "hc"; // copy username from app
-static char* const mqtt_password = "";   // copy password from app
+static char* const mqtt_username = "hc";               // copy username from app
+static char* const mqtt_password = "";                 // copy password from app
 
 bool active_pin_state = false; // reverse pin state
 bool last_state = false;
@@ -49,9 +47,7 @@ void setup()
     Serial.println("Started serial");
 #endif
 
-    networkSetSsid(wifi_ssid);
-    networkSetPass(wifi_pass);
-    networkSetSecure(true); // this must be called before setServer and networkSetup
+    networkSetSecure(false); // this must be called before setServer and networkSetup
     networkSetup();
     networkStart();
 

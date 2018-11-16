@@ -4,40 +4,40 @@
 //#define ENDPOINT_ZERO_DEBUG
 
 EndpointZero::EndpointZero(HomeControlMagic* hcm_ptr)
-  : Endpoint(hcm_ptr)
+    : Endpoint(hcm_ptr)
 {
 }
 
 void EndpointZero::sendConfig()
 {
-  // nothing
+// nothing
 #ifdef ENDPOINT_ZERO_DEBUG
-  Serial.println("handling endpoint zero config");
+    Serial.println("handling endpoint zero config");
 #endif
 }
 void EndpointZero::sendStatusMessage()
 {
-  // nothing
+    // nothing
 }
 void EndpointZero::sendFeedbackMessage()
 {
-  // nothing
+    // nothing
 }
 
-void EndpointZero::incomingMessage(char* topic, byte* payload, unsigned int length)
+void EndpointZero::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_ZERO_DEBUG
-  Serial.println(F("incoming message, EndpointZero"));
+    Serial.println(F("incoming message, EndpointZero"));
 
-  for(int i=0; i< length; i++)
-  {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
+    for(int i = 0; i < length; i++)
+    {
+        Serial.print((char)payload[i]);
+    }
+    Serial.println();
 #endif
 
-  uint16_t ep_num = (m_owner->getNumberOfEndpoints() - 1);
+    uint16_t ep_num = (m_owner->getNumberOfEndpoints() - 1);
 
-  m_owner->sendMessage("conf", ep_num, m_id);
-  m_owner->sendConfigs();
+    m_owner->sendMessage("conf", ep_num, m_id);
+    m_owner->sendConfigs();
 }

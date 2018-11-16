@@ -1,389 +1,283 @@
 #include "HomeControlMagic.h"
-#include "Arduino.h"
 #include "helperFunctions.h"
 
 #include "Endpoints/EndpointZero.h"
+
+#ifdef ARDUINO
+#include "arduinoWrapper/ArduinoConfig.h"
+#include "arduinoWrapper/ArduinoNetworkInterface.h"
+#include "arduinoWrapper/ArduinoWrapper.h"
+#elif defined STM
+#include "STMWrapper.h"
+#endif
 
 //#define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 
-#define TOPIC_BUFFER_LENGTH 30
-#define MESSAGE_BUFFER_LENGTH 50
-static char m_topic_buffer[TOPIC_BUFFER_LENGTH];
-static char m_message_buffer[MESSAGE_BUFFER_LENGTH];
+static char* m_topic_buffer_ptr;
+static char* m_message_buffer_ptr;
 
-void callback(char* topic, byte* payload, unsigned int length)
+void callback(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef HCM_DEBUG
-  Serial.println(F("got in callback"));
-  Serial.println(topic);
-  for(uint8_t i = 0; i < length; i++)
-  {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-#endif
-  // check for server announce
-  if(lineContains(topic, "broadcast"))
-  {
-    if(lineContains((char*)payload, "serverannounce"))
+    Serial.println(F("got in callback"));
+    Serial.println(topic);
+    for(uint8_t i = 0; i < length; i++)
     {
-      hcm_ptr->announce();
-      return;
+        Serial.print((char)payload[i]);
     }
-  }
+    Serial.println();
+#endif
+    // check for server announce
+    if(lineContains(topic, "broadcast"))
+    {
+        if(lineContains((char*)payload, "serverannounce"))
+        {
+            hcm_ptr->announce();
+            return;
+        }
+    }
 
-  // it is not server announce
-  uint8_t start_position = lineContains(topic, "/");
-  uint8_t end_position = lineContains(topic + start_position, "/") + start_position - 1;
-  uint8_t diff = end_position - start_position;
+    // it is not server announce
+    uint8_t start_position = lineContains(topic, "/");
+    uint8_t end_position = lineContains(topic + start_position, "/") + start_position - 1;
+    uint8_t diff = end_position - start_position;
 
-  uint8_t endpoint_id = 0;
-  for(int i = 0; i < diff; i++)
-  {
-    endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
-  }
+    uint8_t endpoint_id = 0;
+    for(int i = 0; i < diff; i++)
+    {
+        endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
+    }
 
-  Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
-  if(end_ptr != NULL)
-  {
-    end_ptr->incomingMessage(topic, payload, length);
-  }
+    Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
+    if(end_ptr != NULL)
+    {
+        end_ptr->incomingMessage(topic, payload, length);
+    }
 }
 
-HomeControlMagic::HomeControlMagic(char* server_ip, char* deviceName, NetworkObject& network_object, char* username, char* password)
-  : m_number_of_endpoints(0)
-  , m_name(deviceName)
-  , m_network_object(network_object)
-  , m_mqtt_client(*(new PubSubClient(*network_object.getClientPtr())))
-  , m_led_time(0)
-  , m_last_loop_time(0)
-  , m_username(username)
-  , m_password(password)
-  , m_start_done(false)
+HomeControlMagic::HomeControlMagic(const char* deviceName)
+    : m_number_of_endpoints(0)
+    , m_name(deviceName)
+    , m_broker_was_connected(false)
 {
-  // pointer that is used from callback to set messages
-  hcm_ptr = this;
+    // pointer that is used from callback to set messages
+    hcm_ptr = this;
+    m_topic_buffer_ptr = wrapperGetTopicBuffer();
+    m_message_buffer_ptr = wrapperGetMessageBuffer();
 
-  EndpointZero* epZ = new EndpointZero(hcm_ptr);
-  epZ->setId("0");
-  m_endpoints_pointers[m_number_of_endpoints++] = epZ;
+    EndpointZero* epZ = new EndpointZero(hcm_ptr);
+    epZ->setId("0");
+    m_endpoints_pointers[m_number_of_endpoints++] = epZ;
+}
 
-  uint16_t port = 1883;
-  if(m_network_object.isSecure())
-  {
-    port = 8883;
-  }
+void HomeControlMagic::setup()
+{
+    m_id = getUniqueId();
 
-  m_mqtt_client.setServer(server_ip, port);
-  m_mqtt_client.setCallback(callback);
+    strcat(m_base_topic, "d/");
+    strcat(m_base_topic, m_id);
+    strcat(m_base_topic, "/");
 
-  m_id = m_network_object.getUniqueId();
-
-  strcat(m_base_topic, "d/");
-  strcat(m_base_topic, m_id);
-  strcat(m_base_topic, "/");
+    wrapperSetCallback(callback);
 }
 
 void HomeControlMagic::doMagic()
 {
-  // this will run only once to setup the controller
-  if(!m_start_done)
-  {
-    m_network_object.start();
-    m_start_done = true;
-    return;
-  }
+    /*
+    On arduino this is calling loop for pubsubclient and network. Network is calling debugLed loop
+    */
+    wrapperLoop();
 
-  m_network_object.loop(true);
-
-  if(m_network_object.isConnected())
-  {
-    mqttLoop(true);
-
-    if(m_broker_connected)
+    if(wrapperIsMqttConnected())
     {
-      sendStatus();
+        if(!m_broker_was_connected)
+        {
+            m_broker_was_connected = true;
+            announce();
+        }
+        sendStatus();
     }
-  }
+    else
+    {
+        m_broker_was_connected = false;
+    }
 }
 
 void HomeControlMagic::setTopic(char* topic, char* endpoint_id)
 {
-  strcat(m_topic_buffer, m_base_topic);
-  strcat(m_topic_buffer, endpoint_id);
-  strcat(m_topic_buffer, "/");
-  strcat(m_topic_buffer, topic);
+    strcat(m_topic_buffer_ptr, m_base_topic);
+    strcat(m_topic_buffer_ptr, endpoint_id);
+    strcat(m_topic_buffer_ptr, "/");
+    strcat(m_topic_buffer_ptr, topic);
 }
 
 /*
-* Use with m_message_buffer. Get it by calling getMessageBufferPtr()
-*/
+ * Use with m_message_buffer_ptr. Get it by calling getMessageBufferPtr()
+ */
 void HomeControlMagic::sendStringMessage(char* topic, char* endpoint_id)
 {
-  setTopic(topic, endpoint_id);
+    setTopic(topic, endpoint_id);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
-  Serial.println(m_message_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_topic_buffer_ptr);
+    Serial.println(m_message_buffer_ptr);
+#endif
 
-  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
+    wrapperPublish();
 }
 
 void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
 {
-  setTopic(topic, endpoint_id);
+    setTopic(topic, endpoint_id);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_topic_buffer_ptr);
+#endif
 
-  if(message)
-  {
-    m_message_buffer[0] = '1';
-  }
-  else
-  {
-    m_message_buffer[0] = '0';
-  }
+    if(message)
+    {
+        m_message_buffer_ptr[0] = '1';
+    }
+    else
+    {
+        m_message_buffer_ptr[0] = '0';
+    }
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_message_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_message_buffer_ptr);
+#endif
 
-  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
+    wrapperPublish();
 }
 
 void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint_id)
 {
-  setTopic(topic, endpoint_id);
+    setTopic(topic, endpoint_id);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_topic_buffer_ptr);
+#endif
 
-  itoa(message, m_message_buffer, 10);
+    itoa(message, m_message_buffer_ptr, 10);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_message_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_message_buffer_ptr);
+#endif
 
-  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
+    wrapperPublish();
 }
 
 void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_id)
 {
-  setTopic(topic, endpoint_id);
+    setTopic(topic, endpoint_id);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_topic_buffer_ptr);
+#endif
 
-  dtostrf(message, 4, 2, m_message_buffer);
+    dtostrf(message, 4, 2, m_message_buffer_ptr);
 
-  #ifdef HCM_DEBUG
-  Serial.println(m_message_buffer);
-  #endif
+#ifdef HCM_DEBUG
+    Serial.println(m_message_buffer_ptr);
+#endif
 
-  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
+    wrapperPublish();
 }
 
 void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpoint_name, char* endpoint_id)
 {
-  setTopic("conf", endpoint_id);
+    setTopic("conf", endpoint_id);
 
-  strcat(m_message_buffer, "e:");
-  strcat(m_message_buffer, config);
-  strcat(m_message_buffer, ";r=");
-  char buff[5];
-  itoa(resend_time, buff, 10);
-  strcat(m_message_buffer, buff);
+    strcat(m_message_buffer_ptr, "e:");
+    strcat(m_message_buffer_ptr, config);
+    strcat(m_message_buffer_ptr, ";r=");
+    char buff[5];
+    itoa(resend_time, buff, 10);
+    strcat(m_message_buffer_ptr, buff);
 
-  if(endpoint_name != nullptr)
-  {
-    // TODO: replace name with just n
-    strcat(m_message_buffer, ";name=");
-    strcat(m_message_buffer, endpoint_name);
-  }
+    if(endpoint_name != nullptr)
+    {
+        // TODO: replace name with just n
+        strcat(m_message_buffer_ptr, ";name=");
+        strcat(m_message_buffer_ptr, endpoint_name);
+    }
 
-  strcat(m_message_buffer, ";");
+    strcat(m_message_buffer_ptr, ";");
 
 #ifdef HCM_DEBUG
-Serial.println(m_topic_buffer);
-Serial.println(m_message_buffer);
+    Serial.println(m_topic_buffer_ptr);
+    Serial.println(m_message_buffer_ptr);
 #endif
-  m_mqtt_client.publish(m_topic_buffer, m_message_buffer);
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
-}
-
-/*
- *
- */
-void HomeControlMagic::mqttLoop(bool reconnect)
-{
-  long current_time = millis();
-  if(!m_mqtt_client.connected() && (current_time - m_last_loop_time > 100))
-  {
-    m_last_loop_time = current_time;
-    // flash led for visual feedback
-    if(current_time - m_led_time > 2000)
-    {
-      m_led_time = current_time;
-      m_network_object.toggleLed();
-    }
-    if(current_time - m_last_reconnect_attempt > m_reconnect_time && reconnect)
-    {
-      // Attempt to reconnect
-      if(reconnectMqtt())
-      {
-        m_last_reconnect_attempt = 0;
-        m_network_object.controlLed(false);
-      }
-      else
-      {
-        // reconnectMqtt takes few seconds if it is failing so just read new time
-        m_last_reconnect_attempt = millis();
-        if(current_time - m_last_time_connected > 300000) //5 mins
-        {
-          //restart
-          m_network_object.restart();
-        }
-      }
-    }
-  }
-  else
-  {
-    m_last_time_connected = current_time;
-    m_mqtt_client.loop();
-  }
-}
-
-bool HomeControlMagic::reconnectMqtt()
-{
-  #ifdef HCM_DEBUG
-  Serial.println(F("Trying to reconnect to mqtt broker"));
-  #endif
-  // Attempt to connect
-  if(m_mqtt_client.connect(m_id, m_username, m_password))
-  {
-    #ifdef HCM_DEBUG
-    Serial.println(F("Success"));
-    #endif
-    // ... and resubscribe
-    m_mqtt_client.setCallback(callback);
-    subscribeNow();
-    announce();
-    m_broker_connected = true;
-    return true;
-  }
-  else
-  {
-    #ifdef HCM_DEBUG
-    Serial.print(F("failed, rc="));
-    Serial.println(m_mqtt_client.state());
-    #endif
-    m_broker_connected = false;
-    return false;
-  }
+    wrapperPublish();
 }
 
 void HomeControlMagic::announce()
 {
-  strcat(m_message_buffer, m_name);
-  sendStringMessage("announce", "0");
+    strcat(m_message_buffer_ptr, m_name);
+    sendStringMessage("announce", "0");
 
-  sendFeedback();
-}
-
-void HomeControlMagic::subscribeNow()
-{
-
-  strcat(m_topic_buffer, m_id);
-  strcat(m_topic_buffer, "/#");
-  #ifdef HCM_DEBUG
-  Serial.println(m_topic_buffer);
-  #endif
-
-  m_mqtt_client.subscribe(m_topic_buffer);
-  m_mqtt_client.subscribe("broadcast");
-  clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
+    sendFeedback();
 }
 
 Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
 {
-  if(number >= m_number_of_endpoints)
-  {
-    return NULL;
-  }
+    if(number >= m_number_of_endpoints)
+    {
+        return NULL;
+    }
 
-  return m_endpoints_pointers[number];
+    return m_endpoints_pointers[number];
 }
 
 char* HomeControlMagic::getId()
 {
-  return m_id;
+    return m_id;
 }
 
 uint8_t HomeControlMagic::getNumberOfEndpoints()
 {
-  return m_number_of_endpoints;
+    return m_number_of_endpoints;
 }
 
 void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
-  m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-  itoa(m_number_of_endpoints - 1, m_message_buffer, 10);
+    m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
+    itoa(m_number_of_endpoints - 1, m_message_buffer_ptr, 10);
 #ifdef HCM_DEBUG
-  Serial.print(F("Id to set: "));
-  Serial.println(m_message_buffer);
+    Serial.print(F("Id to set: "));
+    Serial.println(m_message_buffer_ptr);
 #endif
-  endpoint_ptr->setId(m_message_buffer);
-  clearBuffer(m_message_buffer, MESSAGE_BUFFER_LENGTH);
+    endpoint_ptr->setId(m_message_buffer_ptr);
+    wrapperClearMessageBuffer();
 }
 
 void HomeControlMagic::sendConfigs()
 {
-  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
-  {
-      m_endpoints_pointers[i]->sendConfig();
-  }
+    for(uint8_t i = 0; i < m_number_of_endpoints; i++)
+    {
+        m_endpoints_pointers[i]->sendConfig();
+    }
 }
 
 void HomeControlMagic::sendStatus()
 {
-  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
-  {
-      m_endpoints_pointers[i]->sendStatusMessage();
-  }
+    for(uint8_t i = 0; i < m_number_of_endpoints; i++)
+    {
+        m_endpoints_pointers[i]->sendStatusMessage();
+    }
 }
 
 void HomeControlMagic::sendFeedback()
 {
-  for(uint8_t i = 0; i<m_number_of_endpoints; i++)
-  {
-      m_endpoints_pointers[i]->sendFeedbackMessage();
-  }
-}
-
-void HomeControlMagic::setReconnectTime(uint16_t seconds)
-{
-  m_reconnect_time = seconds * 1000;
+    for(uint8_t i = 0; i < m_number_of_endpoints; i++)
+    {
+        m_endpoints_pointers[i]->sendFeedbackMessage();
+    }
 }
 
 char* HomeControlMagic::getMessageBufferPtr()
 {
-  return m_message_buffer;
+    return m_message_buffer_ptr;
 }
-
-
