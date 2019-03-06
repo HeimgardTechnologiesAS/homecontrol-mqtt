@@ -25,7 +25,7 @@ public:
 
 protected:
     HomeControlMagic* m_owner;
-    char m_id[4] = {0};
+    char* m_id;
     char* m_endpoint_name = nullptr;
     char* m_config = nullptr;
 };

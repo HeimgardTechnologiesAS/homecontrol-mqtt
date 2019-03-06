@@ -15,6 +15,7 @@ public:
 
     Endpoint* getEndpoint(uint8_t number);
     void addEndpoint(Endpoint* endpoint_ptr);
+    void addEndpoint(Endpoint* endpoint_ptr, char* endpoint_id);
 
     char* getId();
     uint8_t getNumberOfEndpoints();

@@ -2,7 +2,7 @@
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
 
-//#define ENDPOINT_TEMPERATURE_DEBUG
+#define ENDPOINT_TEMPERATURE_DEBUG
 
 static char* const CONFIG = "tmp";
 
