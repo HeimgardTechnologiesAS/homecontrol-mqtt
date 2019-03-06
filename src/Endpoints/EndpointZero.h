@@ -8,7 +8,6 @@ public:
     EndpointZero(HomeControlMagic* hcm_ptr);
 
     void sendConfig();
-    void sendStatusMessage();
     void sendFeedbackMessage();
 
     void incomingMessage(char* topic, uint8_t* payload, unsigned int length);

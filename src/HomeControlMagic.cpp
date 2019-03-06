@@ -97,7 +97,6 @@ void HomeControlMagic::doMagic()
             m_broker_was_connected = true;
             announce();
         }
-        sendStatus();
     }
     else
     {
@@ -186,16 +185,12 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
     wrapperPublish();
 }
 
-void HomeControlMagic::sendConfig(char* config, uint8_t resend_time, char* endpoint_name, char* endpoint_id)
+void HomeControlMagic::sendConfig(char* config, char* endpoint_name, char* endpoint_id)
 {
     setTopic("conf", endpoint_id);
 
     strcat(m_message_buffer_ptr, "e:");
     strcat(m_message_buffer_ptr, config);
-    strcat(m_message_buffer_ptr, ";r=");
-    char buff[5];
-    itoa(resend_time, buff, 10);
-    strcat(m_message_buffer_ptr, buff);
 
     if(endpoint_name != nullptr)
     {
@@ -217,6 +212,8 @@ void HomeControlMagic::announce()
 {
     strcat(m_message_buffer_ptr, m_name);
     sendStringMessage("announce", "0");
+    strcat(m_message_buffer_ptr, "online");
+    sendStringMessage("online", "0");
 
     sendFeedback();
 }
@@ -258,14 +255,6 @@ void HomeControlMagic::sendConfigs()
     for(uint8_t i = 0; i < m_number_of_endpoints; i++)
     {
         m_endpoints_pointers[i]->sendConfig();
-    }
-}
-
-void HomeControlMagic::sendStatus()
-{
-    for(uint8_t i = 0; i < m_number_of_endpoints; i++)
-    {
-        m_endpoints_pointers[i]->sendStatusMessage();
     }
 }
 

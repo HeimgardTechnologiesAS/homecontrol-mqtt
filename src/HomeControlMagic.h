@@ -20,7 +20,6 @@ public:
     uint8_t getNumberOfEndpoints();
 
     void sendConfigs();
-    void sendStatus();
     void sendFeedback();
 
     void announce();
@@ -30,7 +29,7 @@ public:
     void sendMessage(char* topic, uint16_t message, char* endpoint_id);
     void sendMessage(char* topic, double message, char* endpoint_id);
 
-    void sendConfig(char* config, uint8_t, char* endpoint_name, char* endpoint_id);
+    void sendConfig(char* config, char* endpoint_name, char* endpoint_id);
 
     char* getMessageBufferPtr();
 

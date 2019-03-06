@@ -15,10 +15,7 @@ void EndpointZero::sendConfig()
     Serial.println("handling endpoint zero config");
 #endif
 }
-void EndpointZero::sendStatusMessage()
-{
-    // nothing
-}
+
 void EndpointZero::sendFeedbackMessage()
 {
     // nothing

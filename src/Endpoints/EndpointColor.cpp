@@ -11,8 +11,6 @@ EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
     , m_level(0)
     , m_state(false)
 {
-    m_last_send_time = millis();
-    m_resend_status_time = 30;
     m_config = CONFIG;
 }
 
@@ -108,22 +106,6 @@ void EndpointColor::incomingMessage(char* topic, uint8_t* payload, unsigned int 
 
     else if(lineContains(topic, "sc"))
     {
-        getRGBcharPtr(m_owner->getMessageBufferPtr());
-        m_owner->sendStringMessage("sc", m_id);
-    }
-}
-
-void EndpointColor::sendStatusMessage()
-{
-    if(millis() - m_last_send_time > m_resend_status_time * 1000)
-    {
-        m_last_send_time = millis();
-#ifdef ENDPOINT_COLOR_DEBUG
-        Serial.println(F("sending status message, EndpointColor"));
-#endif
-
-        m_owner->sendMessage("sp", m_state, m_id);
-        m_owner->sendMessage("sl", m_level, m_id);
         getRGBcharPtr(m_owner->getMessageBufferPtr());
         m_owner->sendStringMessage("sc", m_id);
     }

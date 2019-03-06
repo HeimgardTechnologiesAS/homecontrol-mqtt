@@ -18,19 +18,6 @@ void Endpoint::setId(char* id)
     }
 }
 
-void Endpoint::setStatusTime(int status_time)
-{
-    // not allowed to set report status time under 2 seconds
-    if(status_time < MIN_STATUS_TIME)
-    {
-        m_resend_status_time = MIN_STATUS_TIME;
-    }
-    else
-    {
-        m_resend_status_time = status_time;
-    }
-}
-
 void Endpoint::setEndpointName(char* name_endpoint)
 {
     m_endpoint_name = name_endpoint;
@@ -47,5 +34,5 @@ void Endpoint::sendConfig()
     Serial.print("sending config for endpoint: ");
     Serial.println(m_id);
 #endif
-    m_owner->sendConfig(m_config, m_resend_status_time, m_endpoint_name, m_id);
+    m_owner->sendConfig(m_config, m_endpoint_name, m_id);
 }

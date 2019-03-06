@@ -13,6 +13,7 @@
 #define MESSAGE_BUFFER_LENGTH 50
 static char m_topic_buffer[TOPIC_BUFFER_LENGTH];
 static char m_message_buffer[MESSAGE_BUFFER_LENGTH];
+static char m_will_topic[TOPIC_BUFFER_LENGTH];
 uint32_t m_last_reconnect_attempt = 0;
 uint32_t m_reconnect_time = 5000; // 5 seconds
 uint32_t m_last_time_connected = 0;
@@ -72,6 +73,13 @@ void wrapperLoop(bool reconnect)
 void wrapperSetup()
 {
     m_mqtt_client.setClient(networkGetClient());
+    strcat(m_will_topic, "d/");
+    strcat(m_will_topic, getUniqueId());
+    strcat(m_will_topic, "/0/online");
+#ifdef ARDUINO_WRAPPER_DEBUG
+    Serial.print(F("Will topic: "));
+    Serial.println(m_will_topic);
+#endif
 }
 
 char* wrapperGetTopicBuffer()
@@ -87,7 +95,7 @@ char* wrapperGetMessageBuffer()
 void wrapperPublish()
 {
 #ifdef ARDUINO_WRAPPER_DEBUG
-    Serial.print("Publishing on topic: ");
+    Serial.print(F("Publishing on topic: "));
     Serial.println(m_topic_buffer);
     Serial.println(m_message_buffer);
 #endif
@@ -171,7 +179,7 @@ bool wrapperReconnectMqtt()
     Serial.println(F("Trying to reconnect to mqtt broker"));
 #endif
     // Attempt to connect
-    if(m_mqtt_client.connect(getUniqueId(), m_username, m_password))
+    if(m_mqtt_client.connect(getUniqueId(), m_username, m_password, m_will_topic, MQTTQOS1, true, "offline"))
     {
 #ifdef ARDUINO_WRAPPER_DEBUG
         Serial.println(F("Success"));
@@ -200,7 +208,7 @@ void wrapperSubscribeNow()
     Serial.println(m_topic_buffer);
 #endif
 
-    m_mqtt_client.subscribe(m_topic_buffer);
-    m_mqtt_client.subscribe("broadcast");
+    m_mqtt_client.subscribe(m_topic_buffer, MQTTQOS1);
+    m_mqtt_client.subscribe("broadcast", MQTTQOS1);
     clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
 }

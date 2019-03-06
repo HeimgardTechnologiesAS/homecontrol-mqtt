@@ -10,8 +10,6 @@ EndpointMotion::EndpointMotion(HomeControlMagic* hcm_ptr)
     : Endpoint(hcm_ptr)
     , m_state(false)
 {
-    m_last_send_time = millis();
-    m_resend_status_time = 60;
     m_config = CONFIG;
 }
 
@@ -39,19 +37,6 @@ void EndpointMotion::incomingMessage(char* topic, uint8_t* payload, unsigned int
 
     if(lineContains(topic, "sm"))
     {
-        m_owner->sendMessage("sm", m_state, m_id);
-    }
-}
-
-void EndpointMotion::sendStatusMessage()
-{
-    if(millis() - m_last_send_time > m_resend_status_time * 1000)
-    {
-        m_last_send_time = millis();
-#ifdef ENDPOINT_MOTION_DEBUG
-        Serial.println(F("sending status message, EndpointMotion"));
-#endif
-
         m_owner->sendMessage("sm", m_state, m_id);
     }
 }
