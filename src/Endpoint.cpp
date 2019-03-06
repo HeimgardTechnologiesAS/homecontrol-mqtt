@@ -41,5 +41,5 @@ void Endpoint::sendConfig()
     Serial.print("sending config for endpoint: ");
     Serial.println(m_id);
 #endif
-    m_owner->sendConfig(m_config, m_resend_status_time, m_endpoint_name, m_id);
+    m_owner->sendConfig(m_config, m_endpoint_name, m_id);
 }

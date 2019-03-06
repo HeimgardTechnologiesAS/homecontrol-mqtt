@@ -212,7 +212,7 @@ void HomeControlMagic::announce()
 {
     strcat(s_common_buffer_ptr, m_name);
     sendStringMessage("announce", "0");
-    strcat(m_message_buffer_ptr, "online");
+    strcat(s_common_buffer_ptr, "online");
     sendStringMessage("online", "0");
 
     sendFeedback();
