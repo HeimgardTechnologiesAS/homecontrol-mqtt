@@ -11,8 +11,6 @@ EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
     , m_level(0)
     , m_state(false)
 {
-    m_last_send_time = millis();
-    m_resend_status_time = 30;
     m_config = CONFIG;
 }
 
@@ -68,20 +66,6 @@ void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int 
     else if(lineContains(topic, "sp"))
     {
         m_owner->sendMessage("sp", m_state, m_id);
-    }
-}
-
-void EndpointLevel::sendStatusMessage()
-{
-    if(millis() - m_last_send_time > m_resend_status_time * 1000)
-    {
-        m_last_send_time = millis();
-#ifdef ENDPOINT_LEVEL_DEBUG
-        Serial.println(F("sending status message, EndpointLevel"));
-#endif
-
-        m_owner->sendMessage("sp", m_state, m_id);
-        m_owner->sendMessage("sl", m_level, m_id);
     }
 }
 
