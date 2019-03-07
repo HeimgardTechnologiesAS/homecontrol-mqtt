@@ -22,7 +22,9 @@ void Endpoint::setEndpointName(char* name_endpoint)
     m_endpoint_name = new char[strlen(name_endpoint)];
     strcpy(m_endpoint_name, name_endpoint);
 #ifdef ENDPOINT_DEBUG
-    Serial.print("Setting endpoint name: ");
+    Serial.print("Setting endpoint ");
+    Serial.print(m_id);
+    Serial.print(" name: ");
     Serial.print(name_endpoint);
     Serial.print(" ");
     Serial.print(m_endpoint_name);
