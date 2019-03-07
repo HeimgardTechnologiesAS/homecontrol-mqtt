@@ -41,7 +41,7 @@ private:
     char* m_id;
 
     uint8_t m_number_of_endpoints;
-    Endpoint* m_endpoints_pointers[10];
-    char m_base_topic[20];
+    Endpoint* m_endpoints_pointers[50];
+    char m_base_topic[30];
     bool m_broker_was_connected;
 };
