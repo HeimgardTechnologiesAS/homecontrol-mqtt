@@ -208,7 +208,7 @@ void wrapperSubscribeNow()
     Serial.println(m_topic_buffer);
 #endif
 
-    m_mqtt_client.subscribe(m_topic_buffer, MQTTQOS1);
-    m_mqtt_client.subscribe("broadcast", MQTTQOS1);
+    m_mqtt_client.subscribe(m_topic_buffer, 1);
+    m_mqtt_client.subscribe("broadcast", 1);
     clearBuffer(m_topic_buffer, TOPIC_BUFFER_LENGTH);
 }
