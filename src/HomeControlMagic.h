@@ -13,7 +13,7 @@ public:
     void doMagic();
     void setup();
 
-    Endpoint* getEndpoint(uint8_t number);
+    Endpoint* getEndpoint(char* endpoint_id);
     void addEndpoint(Endpoint* endpoint_ptr);
     void addEndpoint(Endpoint* endpoint_ptr, char* endpoint_id);
 

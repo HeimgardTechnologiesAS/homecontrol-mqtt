@@ -17,6 +17,11 @@ void Endpoint::setId(char* id)
     strcpy(m_id, id);
 }
 
+const char* Endpoint::getId()
+{
+    return m_id;
+}
+
 void Endpoint::setEndpointName(char* name_endpoint)
 {
     m_endpoint_name = new char[strlen(name_endpoint)];

@@ -13,6 +13,7 @@ public:
 
     void setStatusTime(int status_time);
     void setId(char* id);
+    const char* getId();
 
     void setEndpointName(char* name_endpoint);
     char* getEndpointName();

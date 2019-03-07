@@ -41,14 +41,11 @@ void callback(char* topic, uint8_t* payload, unsigned int length)
 
     // it is not server announce
     uint8_t start_position = lineContains(topic, "/");
-    uint8_t end_position = lineContains(topic + start_position, "/") + start_position - 1;
-    uint8_t diff = end_position - start_position;
+    uint8_t diff = lineContains(topic + start_position, "/") - 1;
 
-    uint8_t endpoint_id = 0;
-    for(int i = 0; i < diff; i++)
-    {
-        endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
-    }
+    char endpoint_id[diff + 1];
+    memcpy(endpoint_id, topic + start_position, diff);
+    endpoint_id[diff] = '\0';
 
     Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
     if(end_ptr != NULL)
@@ -218,14 +215,16 @@ void HomeControlMagic::announce()
     sendFeedback();
 }
 
-Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
+Endpoint* HomeControlMagic::getEndpoint(char* endpoint_id)
 {
-    if(number >= m_number_of_endpoints)
+    for(int i = 0; i < m_number_of_endpoints; ++i)
     {
-        return NULL;
+        if(strcmp(m_endpoints_pointers[i]->getId(), endpoint_id) == 0)
+        {
+            return m_endpoints_pointers[i];
+        }
     }
-
-    return m_endpoints_pointers[number];
+    return NULL;
 }
 
 char* HomeControlMagic::getId()
