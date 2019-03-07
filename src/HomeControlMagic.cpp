@@ -258,7 +258,6 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr, char* endpoint_id)
     Serial.println(endpoint_id);
 #endif
     endpoint_ptr->setId(endpoint_id);
-    wrapperClearMessageBuffer();
 }
 
 void HomeControlMagic::sendConfigs()
