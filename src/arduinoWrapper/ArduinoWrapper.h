@@ -2,6 +2,10 @@
 
 #include "IPAddress.h"
 
+/**
+ * This wrapper is for wrapping the Arduino IDE so that we also can run this using Linux in the future
+ **/
+
 void wrapperLoop(bool reconnect = true);
 void wrapperSetup();
 void wrapperSetServer(IPAddress ip);

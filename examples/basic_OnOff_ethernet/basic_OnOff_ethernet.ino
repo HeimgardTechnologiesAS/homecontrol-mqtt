@@ -7,7 +7,7 @@
 
 #include "Endpoints/EndpointOnOff.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DEVICE_PIN LED_BUILTIN // GPIO pin to use, built in led as example
 

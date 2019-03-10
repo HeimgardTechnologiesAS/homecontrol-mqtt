@@ -84,7 +84,7 @@ void networkSetup()
     m_client = new EthernetClient();
 
     // TODO: remove sprintf
-    sprintf(m_uid, "%d%d%d%d%d%d", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    sprintf(m_uid, "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 }
 
 void networkStart()

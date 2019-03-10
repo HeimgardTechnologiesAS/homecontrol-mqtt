@@ -13,6 +13,7 @@ public:
 
     void setStatusTime(int status_time);
     void setId(char* id);
+    const char* getId();
 
     void setEndpointName(char* name_endpoint);
     char* getEndpointName();
@@ -25,7 +26,7 @@ public:
 
 protected:
     HomeControlMagic* m_owner;
-    char m_id[4] = {0};
+    char* m_id;
     char* m_endpoint_name = nullptr;
     char* m_config = nullptr;
 };

@@ -15,8 +15,8 @@
 
 static HomeControlMagic* hcm_ptr;
 
-static char* m_topic_buffer_ptr;
-static char* m_message_buffer_ptr;
+static char* s_topic_buffer_ptr;
+static char* s_common_buffer_ptr;
 
 void callback(char* topic, uint8_t* payload, unsigned int length)
 {
@@ -41,14 +41,11 @@ void callback(char* topic, uint8_t* payload, unsigned int length)
 
     // it is not server announce
     uint8_t start_position = lineContains(topic, "/");
-    uint8_t end_position = lineContains(topic + start_position, "/") + start_position - 1;
-    uint8_t diff = end_position - start_position;
+    uint8_t diff = lineContains(topic + start_position, "/") - 1;
 
-    uint8_t endpoint_id = 0;
-    for(int i = 0; i < diff; i++)
-    {
-        endpoint_id += (topic[start_position + i] - 48) * pow(10, diff - 1 - i);
-    }
+    char endpoint_id[diff + 1];
+    memcpy(endpoint_id, topic + start_position, diff);
+    endpoint_id[diff] = '\0';
 
     Endpoint* end_ptr = hcm_ptr->getEndpoint(endpoint_id);
     if(end_ptr != NULL)
@@ -64,8 +61,8 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
 {
     // pointer that is used from callback to set messages
     hcm_ptr = this;
-    m_topic_buffer_ptr = wrapperGetTopicBuffer();
-    m_message_buffer_ptr = wrapperGetMessageBuffer();
+    s_topic_buffer_ptr = wrapperGetTopicBuffer();
+    s_common_buffer_ptr = wrapperGetMessageBuffer();
 
     EndpointZero* epZ = new EndpointZero(hcm_ptr);
     epZ->setId("0");
@@ -106,22 +103,22 @@ void HomeControlMagic::doMagic()
 
 void HomeControlMagic::setTopic(char* topic, char* endpoint_id)
 {
-    strcat(m_topic_buffer_ptr, m_base_topic);
-    strcat(m_topic_buffer_ptr, endpoint_id);
-    strcat(m_topic_buffer_ptr, "/");
-    strcat(m_topic_buffer_ptr, topic);
+    strcat(s_topic_buffer_ptr, m_base_topic);
+    strcat(s_topic_buffer_ptr, endpoint_id);
+    strcat(s_topic_buffer_ptr, "/");
+    strcat(s_topic_buffer_ptr, topic);
 }
 
 /*
- * Use with m_message_buffer_ptr. Get it by calling getMessageBufferPtr()
+ * Use with s_common_buffer_ptr. Get it by calling getMessageBufferPtr()
  */
 void HomeControlMagic::sendStringMessage(char* topic, char* endpoint_id)
 {
     setTopic(topic, endpoint_id);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_topic_buffer_ptr);
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_topic_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
 
     wrapperPublish();
@@ -132,20 +129,20 @@ void HomeControlMagic::sendMessage(char* topic, bool message, char* endpoint_id)
     setTopic(topic, endpoint_id);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_topic_buffer_ptr);
+    Serial.println(s_topic_buffer_ptr);
 #endif
 
     if(message)
     {
-        m_message_buffer_ptr[0] = '1';
+        s_common_buffer_ptr[0] = '1';
     }
     else
     {
-        m_message_buffer_ptr[0] = '0';
+        s_common_buffer_ptr[0] = '0';
     }
 
 #ifdef HCM_DEBUG
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
 
     wrapperPublish();
@@ -156,13 +153,13 @@ void HomeControlMagic::sendMessage(char* topic, uint16_t message, char* endpoint
     setTopic(topic, endpoint_id);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_topic_buffer_ptr);
+    Serial.println(s_topic_buffer_ptr);
 #endif
 
-    itoa(message, m_message_buffer_ptr, 10);
+    itoa(message, s_common_buffer_ptr, 10);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
 
     wrapperPublish();
@@ -173,13 +170,13 @@ void HomeControlMagic::sendMessage(char* topic, double message, char* endpoint_i
     setTopic(topic, endpoint_id);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_topic_buffer_ptr);
+    Serial.println(s_topic_buffer_ptr);
 #endif
 
-    dtostrf(message, 4, 2, m_message_buffer_ptr);
+    dtostrf(message, 4, 2, s_common_buffer_ptr);
 
 #ifdef HCM_DEBUG
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
 
     wrapperPublish();
@@ -189,43 +186,45 @@ void HomeControlMagic::sendConfig(char* config, char* endpoint_name, char* endpo
 {
     setTopic("conf", endpoint_id);
 
-    strcat(m_message_buffer_ptr, "e:");
-    strcat(m_message_buffer_ptr, config);
+    strcat(s_common_buffer_ptr, "e=");
+    strcat(s_common_buffer_ptr, config);
 
     if(endpoint_name != nullptr)
     {
         // TODO: replace name with just n
-        strcat(m_message_buffer_ptr, ";name=");
-        strcat(m_message_buffer_ptr, endpoint_name);
+        strcat(s_common_buffer_ptr, ";name=");
+        strcat(s_common_buffer_ptr, endpoint_name);
     }
 
-    strcat(m_message_buffer_ptr, ";");
+    strcat(s_common_buffer_ptr, ";");
 
 #ifdef HCM_DEBUG
-    Serial.println(m_topic_buffer_ptr);
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_topic_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
     wrapperPublish();
 }
 
 void HomeControlMagic::announce()
 {
-    strcat(m_message_buffer_ptr, m_name);
+    strcat(s_common_buffer_ptr, m_name);
     sendStringMessage("announce", "0");
-    strcat(m_message_buffer_ptr, "online");
+    strcat(s_common_buffer_ptr, "online");
     sendStringMessage("online", "0");
 
     sendFeedback();
 }
 
-Endpoint* HomeControlMagic::getEndpoint(uint8_t number)
+Endpoint* HomeControlMagic::getEndpoint(char* endpoint_id)
 {
-    if(number >= m_number_of_endpoints)
+    for(int i = 0; i < m_number_of_endpoints; ++i)
     {
-        return NULL;
+        if(strcmp(m_endpoints_pointers[i]->getId(), endpoint_id) == 0)
+        {
+            return m_endpoints_pointers[i];
+        }
     }
-
-    return m_endpoints_pointers[number];
+    return NULL;
 }
 
 char* HomeControlMagic::getId()
@@ -241,13 +240,23 @@ uint8_t HomeControlMagic::getNumberOfEndpoints()
 void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
     m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-    itoa(m_number_of_endpoints - 1, m_message_buffer_ptr, 10);
+    itoa(m_number_of_endpoints - 1, s_common_buffer_ptr, 10);
 #ifdef HCM_DEBUG
     Serial.print(F("Id to set: "));
-    Serial.println(m_message_buffer_ptr);
+    Serial.println(s_common_buffer_ptr);
 #endif
-    endpoint_ptr->setId(m_message_buffer_ptr);
+    endpoint_ptr->setId(s_common_buffer_ptr);
     wrapperClearMessageBuffer();
+}
+
+void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr, char* endpoint_id)
+{
+    m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
+#ifdef HCM_DEBUG
+    Serial.print(F("Id to set: "));
+    Serial.println(endpoint_id);
+#endif
+    endpoint_ptr->setId(endpoint_id);
 }
 
 void HomeControlMagic::sendConfigs()
@@ -268,5 +277,5 @@ void HomeControlMagic::sendFeedback()
 
 char* HomeControlMagic::getMessageBufferPtr()
 {
-    return m_message_buffer_ptr;
+    return s_common_buffer_ptr;
 }
