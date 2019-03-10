@@ -3,7 +3,7 @@
 #include "Arduino.h"
 #include "ArduinoDebugLed.h"
 
-#define ESP_WRAPPER_DEBUG
+//#define ESP_WRAPPER_DEBUG
 
 #define RESTART_TIME 1800000L // 30 minutes
 

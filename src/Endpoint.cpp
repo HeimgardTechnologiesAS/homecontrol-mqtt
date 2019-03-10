@@ -1,7 +1,7 @@
 #include "Endpoint.h"
 #include "HomeControlMagic.h"
 
-#define ENDPOINT_DEBUG
+//#define ENDPOINT_DEBUG
 
 Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
     : m_owner(hcm_ptr)
