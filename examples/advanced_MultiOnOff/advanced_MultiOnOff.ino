@@ -1,3 +1,14 @@
+/**
+ * This code has been tested on NodeMCU. It might run on Arduino, but
+ * your milage may vary.
+ *
+ * This code allows you to control one or more relays, typically the
+ * relay boards that can be bought everywhere. It has been tested with
+ * a 8 channel relay board, but there is nothing stopping you from using
+ * a different number. Set the number_of_relays variable to your number,
+ * and connect the control pin from D0 and upwards.
+ **/
+
 #include "HomeControlMagic.h"
 
 // in Config file define ethernet options

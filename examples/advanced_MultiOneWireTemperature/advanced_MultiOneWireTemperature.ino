@@ -1,4 +1,8 @@
 /**
+ * This example has been tested on a NodeMCU. It has been run on Arduino
+ * before, then with max 5 sensors due to RAM restrictions, so you might
+ * be lucky that it still works. No guarantees.
+ *
  * This code will scan the onewire network on boot, register all 
  * devices and use the MAC address for indexing. This way you can
  * add and remove devices without the config getting disrupted, the
