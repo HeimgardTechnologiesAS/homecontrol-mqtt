@@ -154,14 +154,9 @@ bool Mqtt::isSecure()
     return m_is_secure;
 }
 
-#include <arpa/inet.h>
-#include <openssl/ssl.h>
-#include <openssl/x509.h>
-#include <sys/socket.h>
-#include <unistd.h>
-
 void Mqtt::fetchCertificate()
 {
+    // TODO: do this properly
     std::string command = fmt::format("echo | openssl s_client -connect {}:{} 2>&1 | sed -ne '/-BEGIN "
                                       "CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/mqtt.crt",
                                       host,
