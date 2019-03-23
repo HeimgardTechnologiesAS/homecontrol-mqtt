@@ -40,7 +40,7 @@ int main(int argc, const char* argv[])
 
     // USER VALUES:
     const char* device_name = "LINUX_CLIENT";
-    const bool use_secure = false;
+    const bool use_secure = true;
     //
 
     wrapperSetup();

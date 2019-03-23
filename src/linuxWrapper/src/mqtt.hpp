@@ -33,6 +33,8 @@ public:
     void clearTopicBuffer();
 
 private:
+    void fetchCertificate();
+
     const char* host;
     const char* id;
     const char* topic;

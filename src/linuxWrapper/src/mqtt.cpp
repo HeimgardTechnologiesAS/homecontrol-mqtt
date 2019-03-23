@@ -20,8 +20,14 @@ Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::
 
     if(m_is_secure)
     {
-        port = 8883;
         debugMessage("Using secure port");
+        port = 8883;
+
+        fetchCertificate();
+
+        tls_set("/tmp/mqtt.crt");
+        tls_opts_set(0, "tlsv1.2");
+        tls_insecure_set(true);
     }
     else
     {
@@ -146,6 +152,21 @@ void Mqtt::clearTopicBuffer()
 bool Mqtt::isSecure()
 {
     return m_is_secure;
+}
+
+#include <arpa/inet.h>
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
+void Mqtt::fetchCertificate()
+{
+    std::string command = fmt::format("echo | openssl s_client -connect {}:{} 2>&1 | sed -ne '/-BEGIN "
+                                      "CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/mqtt.crt",
+                                      host,
+                                      port);
+    system(command.c_str());
 }
 
 } // namespace mqtt
