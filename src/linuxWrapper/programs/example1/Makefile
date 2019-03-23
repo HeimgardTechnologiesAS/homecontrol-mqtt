@@ -4,16 +4,16 @@ EXE = example
 
 OBJ_DIR = obj
 
-INCLUDES = -Ilib/spdlog/include -Ilib -Isrc -I../ -I../Endpoints
+INCLUDES = -I../../lib/spdlog/include -I../../lib/arrrgh -I../../lib -I../../src -I../../../ -I../../../Endpoints
 
 CXX = g++
 CXXFLAGS = -g -O0 -ggdb3 -D LINUX -std=c++14 -Wall -pedantic $(INCLUDES)
 LDFLAGS = -g -O0 -ggdb3 -lm -L/usr/local/lib -lmosquittopp
 
 SOURCES = $(wildcard *.cpp) \
-		  $(wildcard src/*.cpp) \
-		  $(wildcard ../*.cpp) \
-		  $(wildcard ../Endpoints/*.cpp)
+		  $(wildcard ../../src/*.cpp) \
+		  $(wildcard ../../../*.cpp) \
+		  $(wildcard ../../../Endpoints/*.cpp)
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
@@ -28,4 +28,4 @@ $(OBJ_DIR)/%.o: $(SOURCES)
 .PHONY: all clean
 
 clean:
-	rm -f *.o lib/*.o src/*.o ../*.o ../Endpoints/*.o
+	rm -f *.o ../../lib/*.o ../../src/*.o ../../../*.o ../../../Endpoints/*.o

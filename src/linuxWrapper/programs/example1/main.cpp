@@ -1,6 +1,6 @@
 #include "HomeControlMagic.h"
 #include "LinuxWrapper.hpp"
-#include "lib/arrrgh/arrrgh.hpp"
+#include "arrrgh.hpp"
 #include "logger.hpp"
 #include "mqtt.hpp"
 

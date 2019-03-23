@@ -100,7 +100,7 @@ void Mqtt::on_publish(int mid)
 
 void Mqtt::sendMessage()
 {
-    debugMessage("Sending message: {}; on topic: {}", m_message_buffer, m_topic_buffer);
+    debugMessage("Sending message: \"{}\", on topic: \"{}\"", m_message_buffer, m_topic_buffer);
     int ret = publish(NULL, m_topic_buffer, strlen(m_message_buffer), m_message_buffer, 1, false);
     clearMessageBuffer();
     clearTopicBuffer();
