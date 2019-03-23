@@ -14,8 +14,8 @@
  * Demands adding libraries OneWire and DallasTemperature
  **/
 
-#include "Endpoints/EndpointTemperature.h"
 #include "HomeControlMagic.h"
+#include "Endpoints/EndpointTemperature.h"
 
 // in Config file define ethernet options
 #include "arduinoWrapper/ArduinoConfig.h"
@@ -26,6 +26,7 @@
 #include <OneWire.h>
 
 //#define DEBUG
+#define READ_TIME 30        // sensor reading time in seconds
 #define MAX_DEVICES 30 // Just a random number to avoid crazyness
 
 IPAddress gw_ip = {192, 168, 0, 55};
