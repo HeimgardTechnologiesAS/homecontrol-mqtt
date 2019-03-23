@@ -3,6 +3,9 @@
 
 namespace mqtt
 {
+
+const std::string CERT_PATH = "/tmp/mqtt.crt";
+
 Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password, bool is_secure)
     : mosquittopp(client_id)
     , id(client_id)
@@ -25,9 +28,8 @@ Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::
 
         fetchCertificate();
 
-        tls_set("/tmp/mqtt.crt");
+        tls_set(CERT_PATH.c_str());
         tls_opts_set(0, "tlsv1.2");
-        tls_insecure_set(true);
     }
     else
     {
@@ -36,6 +38,9 @@ Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::
     }
     clearTopicBuffer();
     clearMessageBuffer();
+
+    // make sure we have a will
+    will_set(("d/" + std::string(id) + "/0/online").c_str(), 8, "offline", 1, true);
 
     // non blocking connection to broker request
     connect_async(host, port, keepalive);
@@ -55,7 +60,7 @@ void Mqtt::on_connect(int rc)
     if(rc == 0)
     {
         m_connected = true;
-        // subsribe to device specific
+        // subscribe to device specific
         std::string subscribe_topic = std::string(id) + "/#";
         debugMessage("subscribe topic : {}", subscribe_topic);
         subscribe(NULL, subscribe_topic.c_str());
@@ -158,9 +163,10 @@ void Mqtt::fetchCertificate()
 {
     // TODO: do this properly
     std::string command = fmt::format("echo | openssl s_client -connect {}:{} 2>&1 | sed -ne '/-BEGIN "
-                                      "CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/mqtt.crt",
+                                      "CERTIFICATE-/,/-END CERTIFICATE-/p' > {}",
                                       host,
-                                      port);
+                                      port,
+                                      CERT_PATH);
     system(command.c_str());
 }
 
