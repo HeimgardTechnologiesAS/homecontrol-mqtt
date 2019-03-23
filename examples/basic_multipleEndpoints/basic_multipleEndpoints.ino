@@ -8,7 +8,7 @@
 #include "arduinoWrapper/ArduinoNetworkInterface.h"
 #include "arduinoWrapper/ArduinoWrapper.h"
 
-#define DEBUG
+//#define DEBUG
 
 #define DHT_1_PIN 4  // GPIO pin
 #define DHT_2_PIN 5  // GPIO pin

@@ -1,39 +1,42 @@
 #include "Endpoint.h"
 #include "HomeControlMagic.h"
 
+#ifdef LINUX
+using namespace std;
+#include <cstring>
+#endif
+
 //#define ENDPOINT_DEBUG
 
 Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
     : m_owner(hcm_ptr)
 {
+    m_id = new char[2];
+    strcpy(m_id, "0");
 }
 
 void Endpoint::setId(char* id)
 {
-    uint8_t i = 0;
-    while(*(id + i) != '\0')
-    {
-        *(m_id + i) = *(id + i);
-        i++;
-    }
+    delete m_id;
+    m_id = new char[(strlen(id) + 1)];
+    strcpy(m_id, id);
 }
 
-void Endpoint::setStatusTime(int status_time)
+const char* Endpoint::getId()
 {
-    // not allowed to set report status time under 2 seconds
-    if(status_time < MIN_STATUS_TIME)
-    {
-        m_resend_status_time = MIN_STATUS_TIME;
-    }
-    else
-    {
-        m_resend_status_time = status_time;
-    }
+    return m_id;
 }
 
 void Endpoint::setEndpointName(char* name_endpoint)
 {
-    m_endpoint_name = name_endpoint;
+    m_endpoint_name = new char[strlen(name_endpoint)];
+    strcpy(m_endpoint_name, name_endpoint);
+#ifdef ENDPOINT_DEBUG
+    Serial.print("Setting endpoint ");
+    Serial.print(m_id);
+    Serial.print(" name: ");
+    Serial.println(name_endpoint);
+#endif
 }
 
 char* Endpoint::getEndpointName()
@@ -47,5 +50,5 @@ void Endpoint::sendConfig()
     Serial.print("sending config for endpoint: ");
     Serial.println(m_id);
 #endif
-    m_owner->sendConfig(m_config, m_resend_status_time, m_endpoint_name, m_id);
+    m_owner->sendConfig(m_config, m_endpoint_name, m_id);
 }

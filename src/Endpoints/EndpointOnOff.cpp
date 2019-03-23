@@ -10,8 +10,6 @@ EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
     : Endpoint(hcm_ptr)
     , m_state(false)
 {
-    m_last_send_time = millis();
-    m_resend_status_time = 30;
     m_config = CONFIG;
 }
 
@@ -43,19 +41,6 @@ void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int 
     }
     else if(lineContains(topic, "sp"))
     {
-        m_owner->sendMessage("sp", m_state, m_id);
-    }
-}
-
-void EndpointOnOff::sendStatusMessage()
-{
-    if(millis() - m_last_send_time > m_resend_status_time * 1000)
-    {
-        m_last_send_time = millis();
-#ifdef ENDPOINT_ON_OFF_DEBUG
-        Serial.println(F("sending status message, EndpointOnOff"));
-#endif
-
         m_owner->sendMessage("sp", m_state, m_id);
     }
 }
