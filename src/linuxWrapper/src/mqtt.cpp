@@ -81,7 +81,13 @@ void Mqtt::on_message(const struct mosquitto_message* message)
         {
             ss << (char*)message->payload + i;
         }
-        debugMessage("Received message: {}, on topic: {}", ss.str(), message->topic);
+        debugMessage("Received message: \"{}\", on topic: \"{}\"", ss.str(), message->topic);
+    }
+
+    if(message->payloadlen == 0)
+    {
+        errorMessage("Got message with size 0 on topic: \"{}\"", message->topic);
+        return;
     }
 
     m_callback(message->topic, data_ptr, message->payloadlen);
@@ -101,7 +107,7 @@ void Mqtt::on_publish(int mid)
 void Mqtt::sendMessage()
 {
     debugMessage("Sending message: \"{}\", on topic: \"{}\"", m_message_buffer, m_topic_buffer);
-    int ret = publish(NULL, m_topic_buffer, strlen(m_message_buffer), m_message_buffer, 1, false);
+    publish(NULL, m_topic_buffer, strlen(m_message_buffer), m_message_buffer, 1, false);
     clearMessageBuffer();
     clearTopicBuffer();
 }
