@@ -4,7 +4,7 @@ EXE = example
 
 OBJ_DIR = obj
 
-INCLUDES = -I../../lib/spdlog/include -I../../lib/arrrgh -I../../lib -I../../src -I../../../ -I../../../Endpoints
+INCLUDES = -I../../lib/spdlog/include -I../../lib/arrrgh -I../../lib -I../../src -I../../../../src -I../../../ -I../../../../src/Endpoints
 
 CXX = g++
 CXXFLAGS = -g -O0 -ggdb3 -D LINUX -std=c++14 -Wall -pedantic $(INCLUDES)

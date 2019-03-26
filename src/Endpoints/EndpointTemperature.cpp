@@ -1,6 +1,7 @@
 #include "EndpointTemperature.h"
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
+#include "printWrapper.h"
 
 //#define ENDPOINT_TEMPERATURE_DEBUG
 
@@ -27,13 +28,7 @@ double EndpointTemperature::getTemperature()
 void EndpointTemperature::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_TEMPERATURE_DEBUG
-    Serial.println(F("incoming message, EndpointTemperature"));
-
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("Incoming message, EndpointTemperature"));
 #endif
 
     if(lineContains(topic, "st"))
@@ -45,7 +40,7 @@ void EndpointTemperature::incomingMessage(char* topic, uint8_t* payload, unsigne
 void EndpointTemperature::sendFeedbackMessage()
 {
 #ifdef ENDPOINT_TEMPERATURE_DEBUG
-    Serial.println(F("sending feedback message, EndpointTemperature"));
+    print(F("Sending feedback message, EndpointTemperature"));
 #endif
 
     m_owner->sendMessage("st", m_temperature, m_id);

@@ -1,5 +1,6 @@
 #include "EndpointZero.h"
 #include "HomeControlMagic.h"
+#include "printWrapper.h"
 
 //#define ENDPOINT_ZERO_DEBUG
 
@@ -12,7 +13,7 @@ void EndpointZero::sendConfig()
 {
 // nothing
 #ifdef ENDPOINT_ZERO_DEBUG
-    Serial.println("handling endpoint zero config");
+    print("Handling endpoint zero config");
 #endif
 }
 
@@ -24,13 +25,7 @@ void EndpointZero::sendFeedbackMessage()
 void EndpointZero::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_ZERO_DEBUG
-    Serial.println(F("incoming message, EndpointZero"));
-
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("incoming message, EndpointZero"));
 #endif
 
     uint16_t ep_num = (m_owner->getNumberOfEndpoints() - 1);

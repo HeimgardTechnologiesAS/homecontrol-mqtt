@@ -1,6 +1,7 @@
 #include "EndpointMotion.h"
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
+#include "printWrapper.h"
 
 //#define ENDPOINT_MOTION_DEBUG
 
@@ -27,12 +28,7 @@ bool EndpointMotion::getState()
 void EndpointMotion::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_MOTION_DEBUG
-    Serial.println(F("incoming message, EndpointMotion"));
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("Incoming message, EndpointMotion"));
 #endif
 
     if(lineContains(topic, "sm"))
@@ -44,7 +40,7 @@ void EndpointMotion::incomingMessage(char* topic, uint8_t* payload, unsigned int
 void EndpointMotion::sendFeedbackMessage()
 {
 #ifdef ENDPOINT_MOTION_DEBUG
-    Serial.println(F("sending feedback message, EndpointMotion"));
+    print(F("Sending feedback message, EndpointMotion"));
 #endif
 
     m_owner->sendMessage("sm", m_state, m_id);

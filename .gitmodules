@@ -1,6 +1,1 @@
-[submodule "src/linuxWrapper/lib/arrrgh"]
-	path = src/linuxWrapper/lib/arrrgh
-	url = https://github.com/ElectricToy/arrrgh
-[submodule "src/linuxWrapper/lib/spdlog"]
-	path = src/linuxWrapper/lib/spdlog
-	url = https://github.com/gabime/spdlog
+

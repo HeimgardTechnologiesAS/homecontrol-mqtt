@@ -1,5 +1,6 @@
 #include "EndpointColor.h"
 #include "HomeControlMagic.h"
+#include "printWrapper.h"
 
 #ifdef LINUX
 #include <cstring>
@@ -73,13 +74,7 @@ void EndpointColor::getRGBcharPtr(char* buffer)
 void EndpointColor::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_COLOR_DEBUG
-    Serial.println(F("incoming message, EndpointColor"));
-
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("incoming message, EndpointColor"));
 #endif
 
     if(lineContains(topic, "cl"))
@@ -117,7 +112,7 @@ void EndpointColor::incomingMessage(char* topic, uint8_t* payload, unsigned int 
 void EndpointColor::sendFeedbackMessage()
 {
 #ifdef ENDPOINT_COLOR_DEBUG
-    Serial.println(F("sending feedback message, EndpointColor"));
+    print(F("sending feedback message, EndpointColor"));
 #endif
 
     m_owner->sendMessage("sp", m_state, m_id);

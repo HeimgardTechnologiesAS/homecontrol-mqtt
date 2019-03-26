@@ -1,8 +1,9 @@
 #include "EndpointOnOff.h"
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
+#include "printWrapper.h"
 
-//#define ENDPOINT_ON_OFF_DEBUG
+#define ENDPOINT_ON_OFF_DEBUG
 
 static char* const CONFIG = "pwr";
 
@@ -27,12 +28,7 @@ bool EndpointOnOff::getState()
 void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_ON_OFF_DEBUG
-    Serial.println(F("incoming message, EndpointOnOff"));
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("Incoming message, EndpointOnOff"));
 #endif
 
     if(lineContains(topic, "cp"))
@@ -48,7 +44,7 @@ void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int 
 void EndpointOnOff::sendFeedbackMessage()
 {
 #ifdef ENDPOINT_ON_OFF_DEBUG
-    Serial.println(F("sending feedback message, EndpointOnOff"));
+    print(F("Sending feedback message, EndpointOnOff"));
 #endif
 
     m_owner->sendMessage("sp", m_state, m_id);

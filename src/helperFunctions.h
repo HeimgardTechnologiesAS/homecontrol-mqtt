@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef ARDUINO
-#include "Ardiuno.h"
+#include "Arduino.h"
 #elif LINUX
 #include <stdint.h>
 #endif

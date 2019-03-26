@@ -1,6 +1,7 @@
 #include "EndpointLevel.h"
 #include "HomeControlMagic.h"
 #include "helperFunctions.h"
+#include "printWrapper.h"
 
 //#define ENDPOINT_LEVEL_DEBUG
 
@@ -39,13 +40,7 @@ uint16_t EndpointLevel::getLevel()
 void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
 #ifdef ENDPOINT_LEVEL_DEBUG
-    Serial.println(F("incoming message, EndpointLevel"));
-
-    for(int i = 0; i < length; i++)
-    {
-        Serial.print((char)payload[i]);
-    }
-    Serial.println();
+    print(F("incoming message, EndpointLevel"));
 #endif
 
     if(lineContains(topic, "cl"))
@@ -72,7 +67,7 @@ void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int 
 void EndpointLevel::sendFeedbackMessage()
 {
 #ifdef ENDPOINT_LEVEL_DEBUG
-    Serial.println(F("sending feedback message, EndpointLevel"));
+    print(F("Sending feedback message, EndpointLevel"));
 #endif
 
     m_owner->sendMessage("sp", m_state, m_id);
