@@ -46,7 +46,8 @@
         "type_traits": "cpp",
         "tuple": "cpp",
         "typeinfo": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "string": "cpp"
     },
     "clang-format.executable": "clang-format",
     "editor.formatOnSave": true,
