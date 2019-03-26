@@ -18,7 +18,7 @@
 #define RECONNECTION_TIME 5 // network reconnection time in seconds
 #define READ_TIME 30        // sensor reading time in seconds
 
-IPAddress gw_ip = {192, 168, 1, 10};
+IPAddress gw_ip = {192, 168, 1, 10};         // gateway IP address
 static char* const deviceName = "TERMOSTAT"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";

@@ -11,7 +11,7 @@
 
 #define DEVICE_PIN LED_BUILTIN // GPIO pin, built in led as example
 
-IPAddress gw_ip = {192, 168, 1, 10};
+IPAddress gw_ip = {192, 168, 1, 10};            // gateway IP address
 static char* const deviceName = "LEVEL_DEVICE"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";

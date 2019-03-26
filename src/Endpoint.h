@@ -2,6 +2,9 @@
 
 #ifdef ARDUINO
 #include "Arduino.h"
+#elif LINUX
+#include <stdint.h>
+#include "linuxWrapper/src/LinuxWrapper.hpp"
 #endif
 
 class HomeControlMagic;

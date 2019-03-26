@@ -13,7 +13,7 @@
 #define G_PIN 4 // GPIO pin, as example G color - (D2)
 #define B_PIN 0 // GPIO pin, as example B color - (D3)
 
-IPAddress gw_ip = {192, 168, 1, 10};
+IPAddress gw_ip = {192, 168, 1, 10};            // gateway IP address
 static char* const deviceName = "COLOR_DEVICE"; // name of device
 static const char* const wifi_ssid = "WIFI-SSID";
 static const char* const wifi_pass = "WIFI-PASS";

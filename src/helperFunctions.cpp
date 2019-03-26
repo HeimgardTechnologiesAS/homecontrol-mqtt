@@ -1,5 +1,12 @@
 #include "helperFunctions.h"
 
+#ifdef LINUX
+using namespace std;
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#endif
+
 void clearByte(uint8_t* text, unsigned int length)
 {
     for(int i = 0; i < length; i++)
@@ -177,8 +184,8 @@ RGB extractRGB(uint8_t* text, unsigned int length)
     int values[3] = {0};
     for(int i = 2; i >= 0; i--)
     {
-        char* k1 = strrchr((const char*)text, ';');
-        int k = k1 - (const char*)text + 1;
+        char* k1 = strrchr((char*)text, ';');
+        int k = k1 - (char*)text + 1;
         if(k < 0)
             k = 0;
         char temp[3];
