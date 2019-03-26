@@ -3,7 +3,7 @@
 #include "helperFunctions.h"
 #include "printWrapper.h"
 
-#define ENDPOINT_ON_OFF_DEBUG
+// #define ENDPOINT_ON_OFF_DEBUG
 
 static char* const CONFIG = "pwr";
 

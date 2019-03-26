@@ -13,7 +13,8 @@ LDFLAGS = -g -O0 -ggdb3 -lm -L/usr/local/lib -lmosquittopp
 SOURCES = $(wildcard *.cpp) \
 		  $(wildcard ../../src/*.cpp) \
 		  $(wildcard ../../../*.cpp) \
-		  $(wildcard ../../../Endpoints/*.cpp)
+		  $(wildcard ../../../../src/*.cpp) \
+		  $(wildcard ../../../../src/Endpoints/*.cpp)
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
@@ -28,4 +29,4 @@ $(OBJ_DIR)/%.o: $(SOURCES)
 .PHONY: all clean
 
 clean:
-	rm -f *.o ../../lib/*.o ../../src/*.o ../../../*.o ../../../Endpoints/*.o
+	rm -f *.o ../../lib/*.o ../../src/*.o ../../../*.o ../../../../src/*.o ../../../../src/Endpoints/*.o
