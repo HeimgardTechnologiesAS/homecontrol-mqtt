@@ -1,9 +1,8 @@
 #include "EndpointMotion.h"
 #include "HomeControlMagic.h"
+#include "debugDefines.h"
 #include "helperFunctions.h"
 #include "printWrapper.h"
-
-//#define ENDPOINT_MOTION_DEBUG
 
 static char* const CONFIG = "mot";
 

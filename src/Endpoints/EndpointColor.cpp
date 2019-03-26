@@ -1,12 +1,11 @@
 #include "EndpointColor.h"
 #include "HomeControlMagic.h"
+#include "debugDefines.h"
 #include "printWrapper.h"
 
 #ifdef LINUX
 #include <cstring>
 #endif
-
-//#define ENDPOINT_COLOR_DEBUG
 
 static char* const CONFIG = "col";
 

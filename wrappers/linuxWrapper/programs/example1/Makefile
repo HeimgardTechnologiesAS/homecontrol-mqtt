@@ -7,7 +7,7 @@ OBJ_DIR = obj
 INCLUDES = -I../../lib/spdlog/include -I../../lib/arrrgh -I../../lib -I../../src -I../../../../src -I../../../ -I../../../../src/Endpoints
 
 CXX = g++
-CXXFLAGS = -g -O0 -ggdb3 -D LINUX -std=c++14 -Wall -pedantic $(INCLUDES)
+CXXFLAGS = -g -O0 -ggdb3 -D LINUX  -D DEBUG_ALL -std=c++14 -Wall -pedantic $(INCLUDES)
 LDFLAGS = -g -O0 -ggdb3 -lm -L/usr/local/lib -lmosquittopp
 
 SOURCES = $(wildcard *.cpp) \

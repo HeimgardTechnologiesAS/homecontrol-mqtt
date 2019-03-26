@@ -1,9 +1,8 @@
 #include "EndpointIdentify.h"
 #include "HomeControlMagic.h"
+#include "debugDefines.h"
 #include "helperFunctions.h"
 #include "printWrapper.h"
-
-//#define ENDPOINT_IDENTIFY_DEBUG
 
 static char* const CONFIG = "id";
 

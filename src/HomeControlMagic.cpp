@@ -3,6 +3,7 @@
 
 #include "Endpoints/EndpointZero.h"
 
+#include "debugDefines.h"
 #include "printWrapper.h"
 
 #ifdef ARDUINO
@@ -17,8 +18,6 @@
 #elif defined STM
 #include "STMWrapper.h"
 #endif
-
-// #define HCM_DEBUG
 
 static HomeControlMagic* hcm_ptr;
 

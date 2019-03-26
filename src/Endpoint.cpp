@@ -1,14 +1,13 @@
 #include "Endpoint.h"
 #include "HomeControlMagic.h"
 
+#include "debugDefines.h"
 #include "printWrapper.h"
 
 #ifdef LINUX
 using namespace std;
 #include <cstring>
 #endif
-
-// #define ENDPOINT_DEBUG
 
 Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
     : m_owner(hcm_ptr)

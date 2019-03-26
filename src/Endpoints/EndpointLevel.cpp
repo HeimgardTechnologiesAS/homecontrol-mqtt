@@ -1,9 +1,8 @@
 #include "EndpointLevel.h"
 #include "HomeControlMagic.h"
+#include "debugDefines.h"
 #include "helperFunctions.h"
 #include "printWrapper.h"
-
-//#define ENDPOINT_LEVEL_DEBUG
 
 static char* const CONFIG = "lev";
 

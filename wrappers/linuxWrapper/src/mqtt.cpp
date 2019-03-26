@@ -74,12 +74,12 @@ void Mqtt::on_connect(int rc)
 void Mqtt::on_disconnect(int rc)
 {
     m_connected = false;
-    debugMessage("Disconnected with status: {}.", mosqpp::connack_string(rc));
+    debugMessage("Disconnected with status: {}", mosqpp::connack_string(rc));
 }
 
 void Mqtt::on_subscribe(int mid, int qos_count, const int* granted_qos)
 {
-    debugMessage("Subscription succeeded. \n");
+    debugMessage("Subscription succeeded");
 }
 
 void Mqtt::on_message(const struct mosquitto_message* message)
