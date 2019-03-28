@@ -6,7 +6,11 @@ namespace mqtt
 
 const std::string CERT_PATH = "/tmp/mqtt.crt";
 
-Mqtt::Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password, bool is_secure)
+Mqtt::Mqtt(const char* client_id,
+           const std::string& gw_ip,
+           const std::string& username,
+           const std::string& password,
+           const bool is_secure)
     : mosquittopp(client_id)
     , id(client_id)
     , host(gw_ip.c_str())

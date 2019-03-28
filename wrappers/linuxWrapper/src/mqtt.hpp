@@ -12,7 +12,11 @@ namespace mqtt
 class Mqtt : public mosqpp::mosquittopp
 {
 public:
-    Mqtt(const char* client_id, std::string gw_ip, std::string username, std::string password, bool is_secure);
+    Mqtt(const char* client_id,
+         const std::string& gw_ip,
+         const std::string& username,
+         const std::string& password,
+         const bool is_secure);
     ~Mqtt();
 
     void sendMessage();

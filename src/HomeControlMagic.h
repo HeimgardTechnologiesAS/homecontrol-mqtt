@@ -10,6 +10,8 @@ class HomeControlMagic
 {
 public:
     HomeControlMagic(const char* deviceName);
+    ~HomeControlMagic();
+
     void doMagic();
     void setup();
 

@@ -39,16 +39,20 @@ int main(int argc, const char* argv[])
     debugMessage("debug {}", test);
 
     // USER VALUES:
-    const char* device_name = "LINUX_CLIENT";
-    const bool use_secure = true;
+    const std::string device_name = "LINUX_CLIENT";
+    const std::string gateway_ip = "192.168.5.30";
+    // read username and password from the app
+    const std::string username = "hc";
+    const std::string password = "6287911";
+    const bool use_secure = true; // use mqtt with encryption
     //
 
     wrapperSetup();
 
-    mqtt::Mqtt mqtt(getUniqueId(), "192.168.5.30", "hc", "6287911", use_secure);
+    mqtt::Mqtt mqtt(getUniqueId(), gateway_ip, username, password, use_secure);
     linuxSetMqttPtr(&mqtt);
 
-    HomeControlMagic hcm(device_name);
+    HomeControlMagic hcm(device_name.c_str());
 
     EndpointOnOff on_off(&hcm);
 

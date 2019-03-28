@@ -65,6 +65,7 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
     : m_number_of_endpoints(0)
     , m_name(deviceName)
     , m_broker_was_connected(false)
+    , m_id(nullptr)
 {
     // pointer that is used from callback to set messages
     hcm_ptr = this;
@@ -74,6 +75,12 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
     EndpointZero* epZ = new EndpointZero(hcm_ptr);
     epZ->setId("0");
     m_endpoints_pointers[m_number_of_endpoints++] = epZ;
+}
+
+HomeControlMagic::~HomeControlMagic()
+{
+    delete m_id;
+    delete m_name;
 }
 
 void HomeControlMagic::setup()

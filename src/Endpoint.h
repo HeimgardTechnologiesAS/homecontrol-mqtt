@@ -3,8 +3,8 @@
 #ifdef ARDUINO
 #include "Arduino.h"
 #elif LINUX
-#include <stdint.h>
 #include "linuxWrapper/src/LinuxWrapper.hpp"
+#include <stdint.h>
 #endif
 
 class HomeControlMagic;
@@ -13,12 +13,13 @@ class Endpoint
 {
 public:
     Endpoint(HomeControlMagic* hcm_ptr);
+    ~Endpoint();
 
     void setStatusTime(int status_time);
-    void setId(char* id);
+    void setId(const char* id);
     const char* getId();
 
-    void setEndpointName(char* name_endpoint);
+    void setEndpointName(const char* name_endpoint);
     char* getEndpointName();
 
     virtual void sendConfig();

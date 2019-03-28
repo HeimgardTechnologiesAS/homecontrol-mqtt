@@ -14,9 +14,17 @@ Endpoint::Endpoint(HomeControlMagic* hcm_ptr)
 {
     m_id = new char[2];
     strcpy(m_id, "0");
+    m_endpoint_name = new char[1];
+    strcpy(m_endpoint_name, "\0");
 }
 
-void Endpoint::setId(char* id)
+Endpoint::~Endpoint()
+{
+    delete m_id;
+    delete m_endpoint_name;
+}
+
+void Endpoint::setId(const char* id)
 {
     delete m_id;
     m_id = new char[(strlen(id) + 1)];
@@ -28,9 +36,10 @@ const char* Endpoint::getId()
     return m_id;
 }
 
-void Endpoint::setEndpointName(char* name_endpoint)
+void Endpoint::setEndpointName(const char* name_endpoint)
 {
-    m_endpoint_name = new char[strlen(name_endpoint)];
+    delete m_endpoint_name;
+    m_endpoint_name = new char[strlen(name_endpoint) + 1];
     strcpy(m_endpoint_name, name_endpoint);
 #ifdef ENDPOINT_DEBUG
     print(F("Setting endpoint id, name: "), m_id, name_endpoint);
