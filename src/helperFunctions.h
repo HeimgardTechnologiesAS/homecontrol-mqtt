@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef ARDUINO
 #include "Arduino.h"
+#elif LINUX
+#include <stdint.h>
+#endif
 
 struct RGB
 {
