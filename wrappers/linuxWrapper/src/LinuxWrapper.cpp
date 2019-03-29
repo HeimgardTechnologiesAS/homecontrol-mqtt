@@ -101,8 +101,9 @@ bool networkIsSecure()
 // additional functions:
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer)
 {
-    // TODO: finish this
-    errorMessage("called dtostrf. This is not implemented yet");
+    std::string string;
+    string = fmt::format("{:.{}f}", number, decimal_places);
+    strcpy(buffer, string.c_str());
 }
 
 const char* getUniqueId()
