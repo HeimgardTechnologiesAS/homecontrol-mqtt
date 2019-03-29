@@ -185,6 +185,14 @@ RGB extractRGB(uint8_t* text, unsigned int length)
     for(int i = 2; i >= 0; i--)
     {
         char* k1 = strrchr((char*)text, ';');
+        // check if it not found
+        if(k1 == nullptr)
+        {
+            rgb.r = 0;
+            rgb.g = 0;
+            rgb.b = 0;
+            return rgb;
+        }
         int k = k1 - (char*)text + 1;
         if(k < 0)
             k = 0;
