@@ -28,6 +28,8 @@ public:
 
     virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length) = 0;
 
+    char* getType();
+
 protected:
     HomeControlMagic* m_owner;
     char* m_id;

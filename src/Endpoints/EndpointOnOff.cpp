@@ -2,6 +2,7 @@
 #include "HomeControlMagic.h"
 #include "debugDefines.h"
 #include "helperFunctions.h"
+#include "logger.hpp"
 #include "printWrapper.h"
 
 static char* const CONFIG = "pwr";
@@ -33,6 +34,14 @@ void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int 
     if(lineContains(topic, "cp"))
     {
         m_state = extractBool(payload, length);
+        try
+        {
+            m_incoming_callback_function(m_endpoint_name, m_state);
+        }
+        catch(const std::exception& e)
+        {
+            errorMessage("Cant call callback: {}", e.what());
+        }
     }
     else if(lineContains(topic, "sp"))
     {
@@ -47,4 +56,14 @@ void EndpointOnOff::sendFeedbackMessage()
 #endif
 
     m_owner->sendMessage("sp", m_state, m_id);
+}
+
+void EndpointOnOff::setIncomingCallbackFunction(std::function<void(char*, bool)> func)
+{
+    m_incoming_callback_function = func;
+}
+
+void EndpointOnOff::setId(int id)
+{
+    m_endp_id = id;
 }

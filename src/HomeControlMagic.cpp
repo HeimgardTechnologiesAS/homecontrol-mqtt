@@ -12,6 +12,7 @@
 #include "arduinoWrapper/ArduinoWrapper.h"
 #elif LINUX
 #include "linuxWrapper/src/LinuxWrapper.hpp"
+#include <iostream>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,8 +80,12 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
 
 HomeControlMagic::~HomeControlMagic()
 {
+#ifdef LINUX
+    std::cout << "Killing HcMagic\n";
+#endif
     delete m_id;
-    delete m_name;
+    delete[] m_name;
+    // delete[] m_endpoints_pointers;
 }
 
 void HomeControlMagic::setup()

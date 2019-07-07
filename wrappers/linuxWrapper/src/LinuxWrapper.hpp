@@ -8,7 +8,7 @@ class Mqtt;
 }
 
 void wrapperLoop(bool reconnect = true);
-void wrapperSetup();
+void wrapperSetup(const std::string& custom_uid = "");
 void wrapperSetServer(std::string ip);
 void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int));
 bool wrapperIsMqttConnected();

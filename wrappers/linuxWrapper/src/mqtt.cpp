@@ -53,8 +53,12 @@ Mqtt::Mqtt(const char* client_id,
 
 Mqtt::~Mqtt()
 {
-    loop_stop();           // Kill the thread
+    loop_stop(true);       // Kill the thread
     mosqpp::lib_cleanup(); // Mosquitto library cleanup
+    unsubscribe(NULL, "broadcast");
+    std::string subscribe_topic = std::string(id) + "/#";
+    unsubscribe(NULL, subscribe_topic.c_str());
+    disconnect();
 }
 
 void Mqtt::on_connect(int rc)

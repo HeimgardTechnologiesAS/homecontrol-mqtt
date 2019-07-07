@@ -2,6 +2,7 @@
 #include "HomeControlMagic.h"
 #include "debugDefines.h"
 #include "helperFunctions.h"
+#include "logger.hpp"
 #include "printWrapper.h"
 
 static char* const CONFIG = "lev";
@@ -45,6 +46,14 @@ void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int 
     if(lineContains(topic, "cl"))
     {
         m_level = extractInteger(payload, length);
+        try
+        {
+            m_incoming_callback_function_level(m_endpoint_name, static_cast<int>(m_level));
+        }
+        catch(const std::exception& e)
+        {
+            errorMessage("Cant call callback level endpoint: {}", e.what());
+        }
     }
 
     else if(lineContains(topic, "sl"))
@@ -71,4 +80,9 @@ void EndpointLevel::sendFeedbackMessage()
 
     m_owner->sendMessage("sp", m_state, m_id);
     m_owner->sendMessage("sl", m_level, m_id);
+}
+
+void EndpointLevel::setIncomingCallbackFunctionLevel(const std::function<void(char*, int)>& func)
+{
+    m_incoming_callback_function_level = func;
 }
