@@ -20,7 +20,9 @@ You can open one of the HomeControl example sketch: File > Examples > homecontro
 
 Select the board You are using (Tools > Board) and correct serial port of the board (Tools > Port).
 If You are using one of the verified ESP controllers, start IDE and open Preferences window. Enter http://arduino.esp8266.com/stable/package_esp8266com_index.json into Additional Board Manager URLs field. You can add multiple URLs, separating them with commas. Open Boards Manager from Tools > Board menu and install esp8266 platform (don't forget to select your ESP8266 board from Tools > Board menu after installation).
+
 Make sure you select 2.4.1/2.4.2 version when installing esp8266 platform. While 2.5.2 version is available, it has a bug that, once fixed, will allow You to compile and upload sketches on the board, but the app will not recognize it.
+
 On Windows, port this should be something like COM2 (or some other number), on the Mac, this should be something like /dev/cu.usbserial-1B1.
 
 Push the reset button on the board then click the Upload button in the IDE. Wait a few seconds. If successful, the message "Done uploading." will appear in the status bar.
