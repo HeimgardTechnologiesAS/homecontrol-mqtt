@@ -44,6 +44,8 @@ HomeControl is providing You examples composed of specific endpoints for each ap
 
 Your smart devices can be a combination of multiple endpoints from this library. On that way can be implemented devices for virtually every user need.
 
+Make sure you delete the device in the app (can be done in Settings > Manage devices) before you upload the sketch of another device or the current one that underwent significant changes. The app is set to keep the last known configuration, and it may cause trouble during the testing period.
+
 ## Other platforms
 This platforms will have examples in their own subfolders
 
