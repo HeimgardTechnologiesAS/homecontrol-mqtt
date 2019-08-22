@@ -13,9 +13,9 @@
  * Vcc (4-5V)
  * Demands adding libraries OneWire and DallasTemperature
  **/
-
-#include "Endpoints/EndpointTemperature.h"
 #include "HomeControlMagic.h"
+#include "Endpoints/EndpointTemperature.h"
+
 
 // in Config file define ethernet options
 #include "arduinoWrapper/ArduinoConfig.h"
@@ -119,6 +119,7 @@ void setup()
 }
 
 unsigned long next_send = 0;
+unsigned long READ_TIME = 6;
 void loop()
 {
     hcm.doMagic();
