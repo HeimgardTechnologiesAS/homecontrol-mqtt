@@ -37,13 +37,14 @@ HomeControl is providing You examples composed of specific endpoints for each ap
 - basic_OnOff_ethernet - this example allows you to control any device that uses digital control signal (on/off) through Ethernet connection.
 - basic_Level - example Level allows you to manage and feedback any existing device which use analog control signal. This example also uses the functionality of the basic_OnOff example.
 - basic_Color - allows you to turn ON or OFF, and set color and brightness of RGB LED strip.
-- basic_Temperature - periodically sends information about the current temperature and/or the relative humidity of the area, every 60 seconds or any other time period if so defined. DHT22 temperature sensor is used as an example.
+- basic_Temperature - periodically collects information about the current temperature and/or the relative humidity of the area, every 60 seconds or any other time period if so defined. DHT22 temperature sensor is used as an example.
 - basic_TemperatureTarget_OnOff - the thermostat is a device for controlling and regulating indoor temperature. If the current measured room temperature is less than the set temperature in the application, the relay activation burns the heater and warms up the area. Room temperature is measured periodically, and as a result of the desired value, the relay is switched off.
 - basic_Motion - when motion is detected, user will get notification from the application, e-mail and/or SMS depending on what is selected in the configuration of the device. In this example, PIR motion sensor triggers alarm if armed in the application. In the same way it is possible to connect any digital sensor. For example: rain sensor, gas, smoke, presence, magnetic sensor...
-- basic_MultipleEndpoints - periodically sends information about current temperature and/or humidity from several sensors simultaneously in different areas, every 60 seconds or any other time period if so defined. Four DHT22 sensors are used as an example.
-- advanced_MultiOnOff - this example allows you to control relay boards and multiple endpoints with digital control signal(on/off), both via Ethernet (Arduino only) and WiFI (ESP8266 only).
+- basic_multipleEndpoints - periodically collects information about current temperature and/or humidity from several sensors simultaneously in different areas, every 60 seconds or any other time period if so defined. Four DHT22 sensors are used as an example.
+- advanced_MultiOnOff - this example allows you to control relay boards and multiple endpoints with digital control signal(on/off), both via Ethernet(Arduino boards) and WiFI.
+- advanced_MultiOneWireTemperature - periodically collects information from multiple 1-Wire temperature sensors and displays them every 60 seconds or any other time poeriod if so defined.
 
-Your smart devices can be a combination of multiple endpoints from this library. On that way can be implemented devices for virtually every user need.
+Your smart devices can be a combination of multiple endpoints from this library. That way devices can be implemented for virtually every user need.
 
 Make sure you delete the device in the app (can be done in Settings > Manage devices) before you upload the sketch of another device or the current one that underwent significant changes. The app is set to keep the last known configuration, and it may cause trouble during the testing period.
 
