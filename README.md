@@ -42,7 +42,7 @@ HomeControl is providing You examples composed of specific endpoints for each ap
 - basic_Motion - when motion is detected, user will get notification from the application, e-mail and/or SMS depending on what is selected in the configuration of the device. In this example, PIR motion sensor triggers alarm if armed in the application. In the same way it is possible to connect any digital sensor. For example: rain sensor, gas, smoke, presence, magnetic sensor...
 - basic_multipleEndpoints - periodically collects information about current temperature and/or humidity from several sensors simultaneously in different areas, every 60 seconds or any other time period if so defined. Four DHT22 sensors are used as an example.
 - advanced_MultiOnOff - this example allows you to control relay boards and multiple endpoints with digital control signal(on/off), both via Ethernet(Arduino boards) and WiFI.
-- advanced_MultiOneWireTemperature - periodically collects information from multiple 1-Wire temperature sensors and displays them every 60 seconds or any other time poeriod if so defined.
+- advanced_MultiOneWireTemperature - periodically collects information from multiple 1-Wire temperature sensors and displays them every 60 seconds or any other time period if so defined.
 
 Your smart devices can be a combination of multiple endpoints from this library. That way devices can be implemented for virtually every user need.
 
