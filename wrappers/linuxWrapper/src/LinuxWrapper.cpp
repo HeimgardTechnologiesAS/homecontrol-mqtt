@@ -19,32 +19,38 @@ void wrapperLoop(bool reconnect)
     // not used here
 }
 
-void wrapperSetup()
+void wrapperSetup(const std::string& custom_uid)
 {
-    // get uid
-    std::ifstream uid_file("/etc/machine-id");
-    if(uid_file.is_open())
+    if(custom_uid != "")
     {
-        // std::getline(uid_file, m_uid);
-        char c = 0;
-        while(uid_file.get(c))
-        {
-            if(c < 48)
-            {
-                c = 48;
-            }
-            else if(c > 122)
-            {
-                c = 122;
-            }
-            m_uid += c;
-        }
+        infoMessage("Setting custom uid {}", custom_uid);
+        m_uid = custom_uid;
     }
     else
     {
-        // TODO: think of something else
+        std::ifstream uid_file("/etc/machine-id");
+        if(uid_file.is_open())
+        {
+            // std::getline(uid_file, m_uid);
+            char c = 0;
+            while(uid_file.get(c))
+            {
+                if(c < 48)
+                {
+                    c = 48;
+                }
+                else if(c > 122)
+                {
+                    c = 122;
+                }
+                m_uid += c;
+            }
+        }
+        else
+        {
+            // TODO: think of something else
+        }
     }
-
     infoMessage("ID of this device: {}", m_uid);
 }
 
