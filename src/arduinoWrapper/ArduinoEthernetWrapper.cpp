@@ -4,12 +4,11 @@
 #include "Arduino.h"
 #include "ArduinoDebugLed.h"
 #include "ArduinoEthernetWrapper.h"
+#include "debugDefines.h"
 
 #ifndef ETH_MAC
 #error "You need to define ETH_MAC with mac address. Make sure it is unique"
 #endif
-
-//#define ETHERNET_WRAPPER_DEBUG
 
 static Client* m_client = nullptr;
 static char m_uid[20] = {'0'};

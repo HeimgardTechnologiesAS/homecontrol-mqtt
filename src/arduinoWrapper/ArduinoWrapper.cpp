@@ -6,7 +6,7 @@
 #include "PubSubClient.h"
 #include "helperFunctions.h"
 
-//#define ARDUINO_WRAPPER_DEBUG
+#include "debugDefines.h"
 
 // private vars:
 #define TOPIC_BUFFER_LENGTH 30
@@ -79,6 +79,7 @@ void wrapperSetup()
 #ifdef ARDUINO_WRAPPER_DEBUG
     Serial.print(F("Will topic: "));
     Serial.println(m_will_topic);
+    Serial.flush();
 #endif
 }
 
@@ -170,6 +171,8 @@ void wrapperSetUsernamePassword(const char* const username, const char* const pa
 // private functions:
 bool wrapperReconnectMqtt()
 {
+    Serial.println("Reconnect");
+    Serial.flush();
 #ifdef ARDUINO_WRAPPER_DEBUG
     if(m_username == nullptr)
         Serial.println(F("mqtt username is null"));
@@ -178,6 +181,9 @@ bool wrapperReconnectMqtt()
 
     Serial.println(F("Trying to reconnect to mqtt broker"));
 #endif
+
+    Serial.println("Trying to reconnect");
+    Serial.flush();
     // Attempt to connect
     if(m_mqtt_client.connect(getUniqueId(), m_username, m_password, m_will_topic, MQTTQOS1, true, "offline"))
     {
