@@ -11,9 +11,11 @@
 
 // ESP8266 is automatically defined when you select board with that chip
 #ifdef ESP8266
-#include "ArduinoEspWrapper.h"
+#include "ArduinoEsp8266Wrapper.h"
+#elif defined(ESP32)
+#include "ArduinoEsp32Wrapper.h"
 #elif defined(ETHERNET) || defined(ETHERNET2)
 #include "ArduinoEthernetWrapper.h"
 #else
-#error "You need to choose ESP, ETHERNET or ETHERNET2"
+#error "You need to choose ESP8266, ESP32, ETHERNET or ETHERNET2"
 #endif
