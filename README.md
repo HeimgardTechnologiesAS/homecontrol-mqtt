@@ -23,12 +23,14 @@ If You are using one of the verified ESP controllers, start IDE and open Prefere
 
 Make sure you select 2.4.1/2.4.2 version when installing esp8266 platform. While 2.5.2 version is available, it has a bug that, once fixed, will allow you to compile and upload sketches on the board, but the app will not recognize it.
 
+We also support ESP32. Tested using version 1.0.4.
+
 On Windows, port this should be something like COM2 (or some other number), on the Mac, this should be something like /dev/cu.usbserial-1B1.
 
 Push the reset button on the board then click the Upload button in the IDE. Wait a few seconds. If successful, the message "Done uploading." will appear in the status bar.
 
 ## Other platforms
-This will be updated as we add platform
+This will be updated as we add platform. Linux is now working on rPi, but documentation is still missing.
 
 # Examples:
 ## Arduino
