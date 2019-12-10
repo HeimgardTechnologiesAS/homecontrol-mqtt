@@ -2,6 +2,7 @@
 
 #ifdef ESP32
 #include "WiFi.h"
+#include "WiFiClientSecure.h"
 
 void networkLoop();
 void networkSetup();

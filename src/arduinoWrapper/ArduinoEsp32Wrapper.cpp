@@ -69,7 +69,14 @@ void networkSetup()
     DebugLedPinSet(2);
     // if we are using that small module for ESP make sure we killoff debug led
 
-    m_client = new WiFiClient();
+    if(m_is_secure)
+    {
+        m_client = new WiFiClientSecure();
+    }
+    else
+    {
+        m_client = new WiFiClient();
+    }
     // TODO: remove sprintf
     sprintf(m_uid, "%lx", ESP.getEfuseMac());
 #ifdef ESP_WRAPPER_DEBUG
