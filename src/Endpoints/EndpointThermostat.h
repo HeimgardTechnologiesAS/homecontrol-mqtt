@@ -2,22 +2,22 @@
 
 #include "Endpoint.h"
 
-class EndpointTemperatureTarget : public Endpoint
+class EndpointThermostat : public Endpoint
 {
 public:
-    EndpointTemperatureTarget(HomeControlMagic* hcm_ptr);
+    EndpointThermostat(HomeControlMagic* hcm_ptr);
 
     virtual void sendFeedbackMessage();
 
     virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
 
     virtual void setTemperature(double temperature);
-    virtual void setTemperatureTarget(double temperature);
+    virtual void setHeatingSetpoint(double temperature);
 
     virtual double getTemperature();
-    virtual double getTemperatureTarget();
+    virtual double getHeatingSetpoint();
 
 protected:
     double m_temperature;
-    double m_temperature_target;
+    double m_heating_setpoint;
 };
