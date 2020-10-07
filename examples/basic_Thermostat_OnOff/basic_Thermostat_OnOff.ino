@@ -7,7 +7,7 @@
 
 #include "DHT.h"
 #include "Endpoints/EndpointOnOff.h"
-#include "Endpoints/EndpointTemperatureTarget.h"
+#include "Endpoints/EndpointThermostat.h"
 
 //#define DEBUG
 
@@ -30,7 +30,7 @@ bool last_state = false;
 
 HomeControlMagic hcm(deviceName);
 
-EndpointTemperatureTarget endpointTemperatureTarget(&hcm);
+EndpointThermostat endpointThermostat(&hcm);
 EndpointOnOff endpointOnOff(&hcm);
 
 DHT dht(DHT_PIN, DHTTYPE);
@@ -76,13 +76,13 @@ void setup()
 
     pinMode(DEVICE_PIN, OUTPUT);
 
-    hcm.addEndpoint(&endpointTemperatureTarget);
+    hcm.addEndpoint(&endpointThermostat);
     hcm.addEndpoint(&endpointOnOff);
 
     dht.begin();
 
     double temperature = dht.readTemperature();
-    endpointTemperatureTarget.setTemperatureTarget(temperature);
+    endpointThermostat.setTemperatureTarget(temperature);
 }
 
 void loop()
@@ -105,17 +105,17 @@ void loop()
         }
         else
         {
-            endpointTemperatureTarget.setTemperature(temperature);
+            endpointThermostat.setTemperature(temperature);
         }
 
 #ifdef DEBUG
         Serial.print("Temperature from sensor: ");
-        Serial.print(endpointTemperatureTarget.getTemperature());
+        Serial.print(endpointThermostat.getTemperature());
         Serial.print(" *C ");
         Serial.println();
 
         Serial.print("Temperature target: ");
-        Serial.print(endpointTemperatureTarget.getTemperatureTarget());
+        Serial.print(endpointThermostat.getTemperatureTarget());
         Serial.print(" *C ");
         Serial.println();
 #endif
