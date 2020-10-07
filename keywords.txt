@@ -1,0 +1,38 @@
+# Syntax Coloring Map For HomeControl-mqtt library
+
+# Datatypes (KEYWORD1)
+HomeControlMagic	KEYWORD1
+EndpointOnOff	KEYWORD1
+EndpointColor KEYWORD1
+EndpointIdentify	KEYWORD1
+EndpointLevel	KEYWORD1
+EndpointMotion	KEYWORD1
+EndpointTemperature	KEYWORD1
+EndpointThermostat	KEYWORD1
+
+# Methods and Functions (KEYWORD2)
+doMagic	KEYWORD2
+addEndpoint	KEYWORD2
+getState	KEYWORD2
+setState	KEYWORD2
+setLevel	KEYWORD2
+getLevel	KEYWORD2
+getColorR	KEYWORD2
+getColorG	KEYWORD2
+getColorB	KEYWORD2
+setTemperature	KEYWORD2
+getTemperature	KEYWORD2
+setHeatingSetpoint	KEYWORD2
+getHeatingSetpoint	KEYWORD2
+networkSetSsid	KEYWORD2
+networkSetPass	KEYWORD2
+networkSetSecure	KEYWORD2
+networkSetup	KEYWORD2
+networkStart	KEYWORD2
+wrapperSetServer	KEYWORD2
+wrapperSetUsernamePassword	KEYWORD2
+wrapperSetup	KEYWORD2
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
