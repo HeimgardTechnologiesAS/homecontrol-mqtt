@@ -35,7 +35,7 @@ double EndpointThermostat::getHeatingSetpoint()
 
 void EndpointThermostat::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
 {
-#ifdef ENDPOINT_TEMPERATURE_TARGET_DEBUG
+#ifdef ENDPOINT_THERMOSTAT_DEBUG
     print(F("Incoming message, EndpointThermostat"));
 #endif
 
@@ -57,7 +57,7 @@ void EndpointThermostat::incomingMessage(char* topic, uint8_t* payload, unsigned
 
 void EndpointThermostat::sendFeedbackMessage()
 {
-#ifdef ENDPOINT_TEMPERATURE_TARGET_DEBUG
+#ifdef ENDPOINT_THERMOSTAT_DEBUG
     print(F("Sending feedback message, EndpointThermostat"));
 #endif
 
