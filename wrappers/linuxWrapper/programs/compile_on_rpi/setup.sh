@@ -1,5 +1,7 @@
 #!/bin/bash
-sudo apt-get install git libmosquittopp1
+if [ -f "/etc/debian_version" ]; then
+    sudo apt-get install git libmosquittopp1 libmosquittopp-dev
+fi
 git clone https://github.com/HomeControlAS/homecontrol-mqtt.git --depth=1 homecontrol-mqtt
 cd homecontrol-mqtt
 git submodule update --init
