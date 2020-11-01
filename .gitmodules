@@ -1,6 +1,8 @@
 [submodule "wrappers/linuxWrapper/lib/spdlog"]
 	path = wrappers/linuxWrapper/lib/spdlog
 	url = https://github.com/gabime/spdlog.git
+	shallow = true
 [submodule "wrappers/linuxWrapper/lib/arrrgh"]
 	path = wrappers/linuxWrapper/lib/arrrgh
 	url = https://github.com/ElectricToy/arrrgh.git
+	shallow = true
