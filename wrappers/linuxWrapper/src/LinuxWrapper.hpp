@@ -27,4 +27,3 @@ void linuxSetMqttPtr(mqtt::Mqtt* mqtt);
 void dtostrf(double number, int left_of_decimal, int decimal_places, char* buffer);
 const char* getUniqueId();
 void itoa(int value, char* str, int base);
-uint32_t millis();
