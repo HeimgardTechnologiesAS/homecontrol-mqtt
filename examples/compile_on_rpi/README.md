@@ -1,10 +1,10 @@
 # Running on rPi
-Go the the folder on your rPi that you want to use to build and run this command:
-source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/examples/compile_on_rpi/setup.sh)
-This will install the necessary packages, clone the git repositories needed, and copy a Makefile and a main.cpp file that you can work from.
-Now you only need to run 'make' to build the example.
-
-Alternately use this command to also setup the software to start on boot and make the initial build for all libaries and the executable
+Go the the folder on your rPi that you want to use to build and run this command:  
+source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/examples/compile_on_rpi/setup.sh)  
+This will install the necessary packages, clone the git repositories needed, and copy a Makefile and a main.cpp file that you can work from.  
+Now you only need to run 'make' to build the example.  
+  
+Alternately use this command to also setup the software to start on boot and make the initial build for all libaries and the executable  
 source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/examples/compile_on_rpi/full_setup.sh)
 
 # Docker
