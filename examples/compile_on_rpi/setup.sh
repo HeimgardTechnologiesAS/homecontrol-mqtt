@@ -3,7 +3,7 @@
 # Install necessary software
 if [ -f "/etc/debian_version" ]; then
     sudo apt-get install git libmosquittopp1 libmosquittopp-dev
-sudo apt-get install git libmosquittopp1
+fi
 
 # Create a folder in home (assuming user is pi)
 cd ~
