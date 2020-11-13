@@ -6,18 +6,17 @@ if [ -f "/etc/debian_version" ]; then
 fi
 
 # Create a folder in home (assuming user is pi)
+echo " -- Creating folder --"
 cd ~
 mkdir hc-mqtt
 cd hc-mqtt
 
 # Clone the git repo
+echo " -- Cloning the git repository --"
 git clone https://github.com/HomeControlAS/homecontrol-mqtt.git --depth=1 --recurse-submodules -j4 homecontrol-mqtt
 
-# Install systemd script
-sudo cp homecontrol-mqtt/examples/compile_on_rpi/hc-mqtt.service /lib/systemd/system/
-sudo chmod 644 /lib/systemd/system/hc-mqtt.service
-sudo chown root /lib/systemd/system/hc-mqtt.service
-
 # Copy necessary files
+echo " -- Copying files for building --"
 cp homecontrol-mqtt/examples/compile_on_rpi/Makefile .
 cp homecontrol-mqtt/examples/compile_on_rpi/main.cpp .
+echo " -- Now run 'make' to build the libraries and the test software --"
