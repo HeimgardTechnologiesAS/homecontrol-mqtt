@@ -2,6 +2,7 @@
 
 # Install necessary software
 if [ -f "/etc/debian_version" ]; then
+    echo " -- Installing necessary libraries and tools --"
     sudo apt-get install git libmosquittopp1 libmosquittopp-dev
 fi
 
