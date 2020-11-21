@@ -13,4 +13,4 @@ source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqt
 # Docker
 You can read more about docker on docker.com. It is not necessary that you know the details, but you need to set up docker to run on your system. This is different from distribution to distribution, so please follow the help pages for your distribution.
 
-There are several cross compile docker containers, but most does not really do what we want it to do. The simplest approach is to run a container that trough qemu runs the native raspberry pi os, and mount the folder from above
+There are several cross compile docker containers, but most does not really do what we want it to do. The simplest approach is to run a container that trough qemu runs the native raspberry pi os, and mount the checked out github folder. We might make a docker container to do this automatically later.
