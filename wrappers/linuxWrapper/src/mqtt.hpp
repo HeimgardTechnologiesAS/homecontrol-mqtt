@@ -1,8 +1,11 @@
 #pragma once
 
 #include <atomic>
+#include <deque>
 #include <mosquittopp.h>
+#include <mutex>
 #include <thread>
+#include <vector>
 
 #define MESSAGE_BUFFER_SIZE 250
 #define TOPIC_BUFFER_SIZE 250
@@ -30,11 +33,14 @@ public:
     void on_subscribe(int mid, int qos_count, const int* granted_qos);
     void on_publish(int mid);
 
-    void setCallback(void (*callback)(char*, uint8_t*, unsigned int));
+    void setCallback(void (*callback)(const char*, const uint8_t*, const unsigned int));
     char* getMessageBuffer();
     char* getTopicBuffer();
     void clearMessageBuffer();
     void clearTopicBuffer();
+
+    // This is called from a different thread, to trigger calling the callback
+    void triggerReadBuffer();
 
 private:
     void fetchCertificate();
@@ -51,7 +57,9 @@ private:
     char m_topic_buffer[TOPIC_BUFFER_SIZE];
 
     // function pointer to function in HomeControlMagic object
-    void (*m_callback)(char*, uint8_t*, unsigned int);
+    void (*m_callback)(const char*, const uint8_t*, const unsigned int);
+    std::deque<std::pair<std::string, std::vector<uint8_t>>> m_incoming_deque;
+    std::mutex m_incoming_mutex;
 };
 
 } // namespace mqtt
