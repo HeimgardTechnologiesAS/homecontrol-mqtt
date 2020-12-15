@@ -24,17 +24,17 @@ bool EndpointOnOff::getState()
     return m_state;
 }
 
-void EndpointOnOff::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointOnOff::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_ON_OFF_DEBUG
     print(F("Incoming message, EndpointOnOff"));
 #endif
 
-    if(lineContains(topic, "cp"))
+    if(lineContains(topic, "cp", length))
     {
         m_state = extractBool(payload, length);
     }
-    else if(lineContains(topic, "sp"))
+    else if(lineContains(topic, "sp", length))
     {
         m_owner->sendMessage("sp", m_state, m_id);
     }

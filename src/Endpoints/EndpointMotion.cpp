@@ -24,13 +24,13 @@ bool EndpointMotion::getState()
     return m_state;
 }
 
-void EndpointMotion::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointMotion::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_MOTION_DEBUG
     print(F("Incoming message, EndpointMotion"));
 #endif
 
-    if(lineContains(topic, "sm"))
+    if(lineContains(topic, "sm", length))
     {
         m_owner->sendMessage("sm", m_state, m_id);
     }

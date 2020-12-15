@@ -33,23 +33,23 @@ double EndpointThermostat::getHeatingSetpoint()
     return m_heating_setpoint;
 }
 
-void EndpointThermostat::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointThermostat::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_THERMOSTAT_DEBUG
     print(F("Incoming message, EndpointThermostat"));
 #endif
 
-    if(lineContains(topic, "chs"))
+    if(lineContains(topic, "chs", length))
     {
         m_heating_setpoint = extractDouble(payload, length);
     }
 
-    else if(lineContains(topic, "shs"))
+    else if(lineContains(topic, "shs", length))
     {
         m_owner->sendMessage("shs", m_heating_setpoint, m_id);
     }
 
-    else if(lineContains(topic, "st"))
+    else if(lineContains(topic, "st", length))
     {
         m_owner->sendMessage("st", m_temperature, m_id);
     }

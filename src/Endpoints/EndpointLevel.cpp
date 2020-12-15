@@ -36,28 +36,28 @@ uint16_t EndpointLevel::getLevel()
     return m_level;
 }
 
-void EndpointLevel::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointLevel::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_LEVEL_DEBUG
     print(F("incoming message, EndpointLevel"));
 #endif
 
-    if(lineContains(topic, "cl"))
+    if(lineContains(topic, "cl", length))
     {
         m_level = extractInteger(payload, length);
     }
 
-    else if(lineContains(topic, "sl"))
+    else if(lineContains(topic, "sl", length))
     {
         m_owner->sendMessage("sl", m_level, m_id);
     }
 
-    else if(lineContains(topic, "cp"))
+    else if(lineContains(topic, "cp", length))
     {
         m_state = extractBool(payload, length);
     }
 
-    else if(lineContains(topic, "sp"))
+    else if(lineContains(topic, "sp", length))
     {
         m_owner->sendMessage("sp", m_state, m_id);
     }

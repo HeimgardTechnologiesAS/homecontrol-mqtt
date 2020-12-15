@@ -21,7 +21,7 @@ void EndpointZero::sendFeedbackMessage()
     // nothing
 }
 
-void EndpointZero::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointZero::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_ZERO_DEBUG
     print(F("incoming message, EndpointZero"));

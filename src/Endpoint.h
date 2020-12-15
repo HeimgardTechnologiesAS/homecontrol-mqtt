@@ -26,7 +26,7 @@ public:
 
     virtual void sendFeedbackMessage() = 0;
 
-    virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length) = 0;
+    virtual void incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length) = 0;
 
 protected:
     HomeControlMagic* m_owner;

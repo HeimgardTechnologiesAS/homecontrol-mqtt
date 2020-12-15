@@ -9,7 +9,7 @@ public:
 
     virtual void sendFeedbackMessage();
 
-    virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
+    virtual void incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length);
 
     virtual void setTemperature(double temperature);
     virtual void setHeatingSetpoint(double temperature);

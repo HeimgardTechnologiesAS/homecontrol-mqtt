@@ -13,13 +13,13 @@ EndpointIdentify::EndpointIdentify(HomeControlMagic* hcm_ptr, int8_t pin)
     m_config = CONFIG;
 }
 
-void EndpointIdentify::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointIdentify::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_IDENTIFY_DEBUG
     print(F("incoming message, EndpointIdentify"));
 #endif
 
-    if(lineContains(topic, "ci"))
+    if(lineContains(topic, "ci", length))
     {
         bool state = extractBool(payload, length);
     }
