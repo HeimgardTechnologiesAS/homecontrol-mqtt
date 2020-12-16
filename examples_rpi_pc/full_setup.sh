@@ -2,9 +2,9 @@
 
 # Run the basic setup
 echo " -- Running the setup.sh file for base setup --"
-source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/develop/examples/compile_on_rpi/setup.sh)
+source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/develop/examples_rpi_pc/setup.sh)
 echo " -- Running the system_setup.sh file for setting up the service to autostart on boot --"
-source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/develop/examples/compile_on_rpi/system_setup.sh)
+source <(curl -s https://raw.githubusercontent.com/HomeControlAS/homecontrol-mqtt/develop/examples_rpi_pc/system_setup.sh)
 
 # Enter the folder
 cd ~/hc-mqtt
