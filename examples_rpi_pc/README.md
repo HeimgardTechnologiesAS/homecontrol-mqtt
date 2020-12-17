@@ -1,9 +1,6 @@
 # Examples
 This folder holds several examples, feel free to use these as you please.
 
-## Arduino subfolder
-Holds examples that can be compiled and run using the Arduino IDE, thus these run on NodeMCU, ESP32 and others in addition to Arduino. Others have not been tested by us. Note that Arduino does not have the capacity to do encryption.
-
 ## rPi subfolder
 Holds examples for how to run the software on a Raspberry Pi OS (replaces Raspian OS). As this is based on Debian the examples will also compile and run on a Ubuntu PC, although the wiringPi library that controls the GPIO pins might cause issues.
 Generally the pc examples also work on the rPi.
