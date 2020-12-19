@@ -6,10 +6,10 @@
 
 static char* const CONFIG = "lev";
 
-EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr)
+EndpointLevel::EndpointLevel(HomeControlMagic* hcm_ptr, bool start_state, double start_level)
     : Endpoint(hcm_ptr)
-    , m_level(0)
-    , m_state(false)
+    , m_level(start_level)
+    , m_state(start_state)
 {
     m_config = CONFIG;
 }

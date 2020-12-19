@@ -1,15 +1,17 @@
+#include "EndpointLevel.h"
 #include "HomeControlMagic.h"
 #include "LinuxWrapper.hpp"
 #include "arrrgh.hpp"
 #include "logger.hpp"
 #include "mqtt.hpp"
-#include <wiringPi.h>
 
 #include <chrono>
+#include <filesystem>
+#include <fstream>
+
 #include <stdint.h>
 #include <unistd.h>
-
-#include "EndpointLevel.h"
+#include <wiringPi.h>
 
 const int CH1 = 21;
 const int CH2 = 22;
@@ -28,9 +30,10 @@ uint8_t outputs[max_number_of_relays] = {CH1, CH2, CH3, CH4, CH5, CH6, CH7, CH8}
 bool outputs_state[max_number_of_relays] = {false, false, false, false, false, false, false, false};
 EndpointLevel* endpoints[max_number_of_relays];
 bool outputs_state_mem[max_number_of_relays] = {true, true, true, true, true, true, true, true};
-uint16_t outputs_level_mem[max_number_of_relays] = {50000, 50000, 50000, 50000, 50000, 50000, 50000, 50000};
+uint16_t outputs_level_mem[max_number_of_relays] = {0, 0, 0, 0, 0, 0, 0, 0}; // milli-percent
 unsigned long cycle_count = 1;
 const unsigned long interval_time = 1000 * 10; // 900; // 900 seconds cycle time
+bool has_changed;
 
 // CHANGE THIS IF NEEDED. EXPOSES ONLY THIS NUMBER OF OUTPUTS. MAX VALUE IS 11 FOR NODEMCU
 const int number_of_relays = 8;
@@ -77,14 +80,24 @@ int main(int argc, const char* argv[])
 
     hcm.setup();
 
+    std::ifstream infile("config.cfg");
+
     for(int i = 0; i < number_of_relays; ++i)
     {
-        infoMessage("Adding {}", i);
+        double start_level = outputs_level_mem[i];
+        bool start_state = outputs_state[i];
+        if(infile.good())
+        {
+            infile >> start_state;
+            infile >> start_level;
+        }
+        infoMessage("Adding {} with default {} {}", i, start_state, start_level);
         digitalWrite(outputs[i], !active_pin_state);
         pinMode(outputs[i], OUTPUT);
-        endpoints[i] = new EndpointLevel(&hcm);
+        endpoints[i] = new EndpointLevel(&hcm, start_state, start_level);
         hcm.addEndpoint(endpoints[i]);
     }
+    infile.close();
 
     while(true)
     {
@@ -96,6 +109,30 @@ int main(int argc, const char* argv[])
     infoMessage("Exiting");
 
     return 0;
+}
+
+void writeConfigFile()
+{
+    debugMessage("Writing config file");
+    std::ofstream outfile("config.cfg.tmp");
+    for(int i = 0; i < number_of_relays; ++i)
+    {
+        if(i != 0)
+        {
+            outfile << " ";
+        }
+        outfile << outputs_state_mem[i] << " " << outputs_level_mem[i];
+    }
+    outfile.flush();
+    outfile.close();
+    try
+    {
+        std::filesystem::rename("config.cfg.tmp", "config.cfg");
+    }
+    catch(std::filesystem::filesystem_error& e)
+    {
+        errorMessage("Failed to move file. {}", e.what());
+    }
 }
 
 void handlePin()
@@ -126,6 +163,7 @@ void handlePin()
             outputs_state_mem[i] = state;
             outputs_level_mem[i] = level;
             send_status = true;
+            has_changed = true;
         }
 
         // No need to calculate if it is supposed to be off
@@ -172,12 +210,12 @@ void handlePin()
             if(state)
             {
                 debugMessage("Turning on relay");
-                // digitalWrite(outputs[i], active_pin_state);
+                digitalWrite(outputs[i], active_pin_state);
             }
             else
             {
                 debugMessage("Turning off relay");
-                // digitalWrite(outputs[i], !active_pin_state);
+                digitalWrite(outputs[i], !active_pin_state);
             }
         }
 
@@ -185,5 +223,10 @@ void handlePin()
         {
             endpoints[i]->sendFeedbackMessage();
         }
+    }
+    if(send_status == true || has_changed == true)
+    {
+        has_changed = false;
+        writeConfigFile();
     }
 }

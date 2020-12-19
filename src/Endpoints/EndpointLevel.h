@@ -5,7 +5,7 @@
 class EndpointLevel : public Endpoint
 {
 public:
-    EndpointLevel(HomeControlMagic* hcm_ptr);
+    EndpointLevel(HomeControlMagic* hcm_ptr, bool start_state = false, double start_level = 0);
 
     virtual void sendFeedbackMessage();
 

@@ -6,9 +6,9 @@
 
 static char* const CONFIG = "tmp";
 
-EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
+EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr, double start_temperature)
     : Endpoint(hcm_ptr)
-    , m_temperature(0)
+    , m_temperature(start_temperature)
 {
     m_config = CONFIG;
 }
