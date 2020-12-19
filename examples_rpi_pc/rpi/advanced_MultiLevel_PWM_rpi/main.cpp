@@ -32,7 +32,7 @@ EndpointLevel* endpoints[max_number_of_relays];
 bool outputs_state_mem[max_number_of_relays] = {true, true, true, true, true, true, true, true};
 uint16_t outputs_level_mem[max_number_of_relays] = {0, 0, 0, 0, 0, 0, 0, 0}; // milli-percent
 unsigned long cycle_count = 1;
-const unsigned long interval_time = 1000 * 10; // 900; // 900 seconds cycle time
+const unsigned long interval_time = 1000 * 900; // 900 seconds cycle time
 bool has_changed;
 
 // CHANGE THIS IF NEEDED. EXPOSES ONLY THIS NUMBER OF OUTPUTS. MAX VALUE IS 11 FOR NODEMCU
