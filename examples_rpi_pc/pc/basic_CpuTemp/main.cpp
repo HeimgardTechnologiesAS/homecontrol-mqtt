@@ -13,6 +13,7 @@
 
 // it is called handle pin just to have some references to examples for arduino
 void handlePin(EndpointTemperature&);
+double readTemperature();
 
 int main(int argc, const char* argv[])
 {
@@ -68,24 +69,35 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
-void handlePin(EndpointTemperature& temperature)
+double readTemperature()
 {
-    static double old_temperature = -300;
     double current_temperature = 0;
 
     std::ifstream infile("/sys/class/thermal/thermal_zone0/temp");
     if(infile.good())
     {
-        std::cin >> current_temperature;
+        infile >> current_temperature;
     }
     else
     {
         errorMessage("Could not read the temperature from /sys/class/thermal/thermal_zone0/temp");
         exit(-1);
     }
-    current_temperature /= 1000; // is read in millidegrees
+    return current_temperature / 1000; // is read in millidegrees
+}
 
-    if(current_temperature != old_temperature)
+void handlePin(EndpointTemperature& temperature)
+{
+    static int loop_counter = 0;
+    static double old_temperature = -300;
+    if(++loop_counter % 10 != 0)
+    {
+        return;
+    }
+    double current_temperature = readTemperature();
+
+    if(abs(current_temperature - old_temperature) > 0.5 ||
+       loop_counter % 3000 == 0) // Send every 300s or >0.5 degree change
     {
         infoMessage("Received new temperature: {}", current_temperature);
         old_temperature = current_temperature;
