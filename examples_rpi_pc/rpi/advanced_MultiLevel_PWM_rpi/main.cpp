@@ -224,7 +224,7 @@ void handlePin()
             endpoints[i]->sendFeedbackMessage();
         }
     }
-    if(has_changed == true)
+    if(has_changed == true && send_cycle_status == true) // avoid writing too often
     {
         has_changed = false;
         writeConfigFile();

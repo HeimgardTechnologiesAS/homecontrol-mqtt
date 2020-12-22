@@ -5,6 +5,8 @@
 #include "mqtt.hpp"
 #include <wiringPi.h>
 
+#include <filesystem>
+#include <fstream>
 #include <stdint.h>
 #include <unistd.h>
 
@@ -72,14 +74,22 @@ int main(int argc, const char* argv[])
 
     hcm.setup();
 
+    std::ifstream infile("config.cfg");
+
     for(int i = 0; i < number_of_relays; ++i)
     {
-        infoMessage("Adding {}", i);
-        digitalWrite(outputs[i], !active_pin_state);
+        bool start_state = outputs_state[i];
+        if(infile.good())
+        {
+            infile >> start_state;
+        }
+        infoMessage("Adding {} with default {}", i, start_state);
+        digitalWrite(outputs[i], (start_state == true ? active_pin_state : !active_pin_state));
         pinMode(outputs[i], OUTPUT);
-        endpoints[i] = new EndpointOnOff(&hcm);
+        endpoints[i] = new EndpointOnOff(&hcm, start_state);
         hcm.addEndpoint(endpoints[i]);
     }
+    infile.close();
 
     while(true)
     {
@@ -93,8 +103,35 @@ int main(int argc, const char* argv[])
     return 0;
 }
 
+void writeConfigFile()
+{
+    debugMessage("Writing config file");
+    // We always write to a temporary file and move it, to avoid half-written files
+    std::ofstream outfile("config.cfg.tmp");
+    for(int i = 0; i < number_of_relays; ++i)
+    {
+        if(i != 0)
+        {
+            outfile << " ";
+        }
+        outfile << outputs_state[i];
+    }
+    outfile.flush();
+    outfile.close();
+    try
+    {
+        std::filesystem::rename("config.cfg.tmp", "config.cfg");
+    }
+    catch(std::filesystem::filesystem_error& e)
+    {
+        errorMessage("Failed to move file. {}", e.what());
+    }
+}
+
 void handlePin()
 {
+    static int loop_counter = 0;
+    static bool has_changed = false;
     for(int i = 0; i < number_of_relays; ++i)
     {
         bool state = endpoints[i]->getState();
@@ -111,6 +148,12 @@ void handlePin()
                 digitalWrite(outputs[i], !active_pin_state);
             }
             endpoints[i]->sendFeedbackMessage();
+            has_changed = true;
         }
+    }
+    if(++loop_counter % 3000 == 0 && has_changed) // Every 5 minute
+    {
+        has_changed = false;
+        writeConfigFile();
     }
 }
