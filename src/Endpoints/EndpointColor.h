@@ -6,7 +6,7 @@
 class EndpointColor : public Endpoint
 {
 public:
-    EndpointColor(HomeControlMagic* hcm_ptr);
+    EndpointColor(HomeControlMagic* hcm_ptr, double start_level = 0, int r = 0, int g = 0, int b = 0);
 
     virtual void sendFeedbackMessage();
 

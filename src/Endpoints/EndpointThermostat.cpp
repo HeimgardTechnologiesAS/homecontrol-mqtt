@@ -6,9 +6,9 @@
 
 static char* const CONFIG = "thrmstt";
 
-EndpointThermostat::EndpointThermostat(HomeControlMagic* hcm_ptr)
+EndpointThermostat::EndpointThermostat(HomeControlMagic* hcm_ptr, double start_level)
     : Endpoint(hcm_ptr)
-    , m_temperature(0)
+    , m_temperature(start_level)
 {
     m_config = CONFIG;
 }

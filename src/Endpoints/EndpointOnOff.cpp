@@ -6,9 +6,9 @@
 
 static char* const CONFIG = "pwr";
 
-EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr)
+EndpointOnOff::EndpointOnOff(HomeControlMagic* hcm_ptr, bool start_state)
     : Endpoint(hcm_ptr)
-    , m_state(false)
+    , m_state(start_state)
 {
     m_config = CONFIG;
 }

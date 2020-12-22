@@ -9,10 +9,11 @@
 
 static char* const CONFIG = "col";
 
-EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
+EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr, double start_level, int r, int g, int b)
     : Endpoint(hcm_ptr)
-    , m_level(0)
+    , m_rgb({r, g, b})
     , m_state(false)
+    , m_level(start_level)
 {
     m_config = CONFIG;
 }

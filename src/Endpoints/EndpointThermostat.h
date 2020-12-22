@@ -5,7 +5,7 @@
 class EndpointThermostat : public Endpoint
 {
 public:
-    EndpointThermostat(HomeControlMagic* hcm_ptr);
+    EndpointThermostat(HomeControlMagic* hcm_ptr, double start_level = 0);
 
     virtual void sendFeedbackMessage();
 

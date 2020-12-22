@@ -5,7 +5,7 @@
 class EndpointOnOff : public Endpoint
 {
 public:
-    EndpointOnOff(HomeControlMagic* hcm_ptr);
+    EndpointOnOff(HomeControlMagic* hcm_ptr, bool start_state = false);
 
     virtual void sendFeedbackMessage();
 
