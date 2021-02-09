@@ -88,24 +88,48 @@ void Mqtt::on_subscribe(int mid, int qos_count, const int* granted_qos)
 
 void Mqtt::on_message(const struct mosquitto_message* message)
 {
-    uint8_t* data_ptr = (uint8_t*)message->payload;
+    std::vector<uint8_t> msg(static_cast<uint8_t*>(message->payload), (uint8_t*)message->payload + message->payloadlen);
     if(logger.isDebugLoggingEnabled())
     {
         std::stringstream ss;
-        for(int i = 0; i < message->payloadlen; i++)
+        for(char a : msg)
         {
-            ss << (char*)message->payload + i;
+            ss << a;
         }
         debugMessage("Received message: \"{}\", on topic: \"{}\"", ss.str(), message->topic);
     }
 
-    if(message->payloadlen == 0)
+    if(msg.empty())
     {
         errorMessage("Got message with size 0 on topic: \"{}\"", message->topic);
         return;
     }
 
-    m_callback(message->topic, data_ptr, message->payloadlen);
+    std::lock_guard<std::mutex> lock(m_incoming_mutex);
+    m_incoming_deque.push_back(std::make_pair(message->topic, msg));
+    if(m_incoming_deque.size() > 300)
+    {
+        m_incoming_deque.pop_front();
+    }
+}
+
+void Mqtt::triggerReadBuffer()
+{
+    std::lock_guard<std::mutex> lock(m_incoming_mutex);
+    for(auto& element : m_incoming_deque)
+    {
+        if(logger.isDebugLoggingEnabled())
+        {
+            std::stringstream ss;
+            for(char a : element.second)
+            {
+                ss << a;
+            }
+            debugMessage("Received message: \"{}\", on topic: \"{}\"", ss.str(), element.first);
+        }
+        m_callback(element.first.c_str(), element.second.data(), element.second.size());
+    }
+    m_incoming_deque.clear();
 }
 
 bool Mqtt::isConnected()
@@ -127,7 +151,7 @@ void Mqtt::sendMessage()
     clearTopicBuffer();
 }
 
-void Mqtt::setCallback(void (*callback)(char*, uint8_t*, unsigned int))
+void Mqtt::setCallback(void (*callback)(const char*, const uint8_t*, const unsigned int))
 {
     m_callback = callback;
 }

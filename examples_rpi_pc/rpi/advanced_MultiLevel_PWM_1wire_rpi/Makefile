@@ -11,8 +11,8 @@ INCLUDES = -Ihomecontrol-mqtt/wrappers/linuxWrapper/lib/spdlog/include \
 		   -Ihomecontrol-mqtt/wrappers
 
 CXX = g++
-CXXFLAGS = -g -O0 -ggdb3 -D LINUX  -D DEBUG_ALL -std=c++14 -Wall -pedantic $(INCLUDES)
-LDFLAGS = -g -O0 -ggdb3 -lm -L/usr/local/lib -lmosquittopp
+CXXFLAGS = -g -O0 -ggdb3 -D LINUX  -D DEBUG_ALL -std=c++17 $(INCLUDES)
+LDFLAGS = -g -O0 -ggdb3 -lm -L/usr/local/lib -lmosquittopp -lwiringPi -lstdc++fs -pthread
 
 SOURCES = $(wildcard *.cpp) \
 		  $(wildcard homecontrol-mqtt/wrappers/linuxWrapper/src/*.cpp) \

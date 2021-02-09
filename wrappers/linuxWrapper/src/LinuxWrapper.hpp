@@ -10,7 +10,7 @@ class Mqtt;
 void wrapperLoop(bool reconnect = true);
 void wrapperSetup(const std::string& custom_uid = "");
 void wrapperSetServer(std::string ip);
-void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int));
+void wrapperSetCallback(void (*callback)(const char*, const uint8_t*, const unsigned int));
 bool wrapperIsMqttConnected();
 void wrapperSetUsernamePassword(const char* const username, const char* const password);
 void wrapperClearMessageBuffer();

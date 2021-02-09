@@ -6,9 +6,9 @@
 
 static char* const CONFIG = "tmp";
 
-EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr)
+EndpointTemperature::EndpointTemperature(HomeControlMagic* hcm_ptr, double start_temperature)
     : Endpoint(hcm_ptr)
-    , m_temperature(0)
+    , m_temperature(start_temperature)
 {
     m_config = CONFIG;
 }
@@ -24,13 +24,13 @@ double EndpointTemperature::getTemperature()
     return m_temperature;
 }
 
-void EndpointTemperature::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointTemperature::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_TEMPERATURE_DEBUG
     print(F("Incoming message, EndpointTemperature"));
 #endif
 
-    if(lineContains(topic, "st"))
+    if(lineContains(topic, "st", length))
     {
         m_owner->sendMessage("st", m_temperature, m_id);
     }

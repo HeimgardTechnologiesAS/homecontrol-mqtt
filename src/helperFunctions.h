@@ -15,10 +15,10 @@ struct RGB
 
 void clearBuffer(char* text, uint8_t length);
 void clearByte(uint8_t* text, unsigned int length);
-int lineContains(const char* str, const char* sfind);
-float extractFloat(uint8_t* text, unsigned int length);
-int extractInteger(uint8_t* text, unsigned int length);
-double extractDouble(uint8_t* text, unsigned int length);
-bool extractState(uint8_t* text, unsigned int length);
-bool extractBool(uint8_t* text, unsigned int length);
-RGB extractRGB(uint8_t* text, unsigned int length);
+int lineContains(const char* str, const char* sfind, const unsigned int length);
+float extractFloat(const uint8_t* text, const unsigned int length);
+int extractInteger(const uint8_t* text, const unsigned int length);
+double extractDouble(const uint8_t* text, const unsigned int length);
+bool extractState(const uint8_t* text, const unsigned int length);
+bool extractBool(const uint8_t* text, const unsigned int length);
+RGB extractRGB(const uint8_t* text, const unsigned int length);
