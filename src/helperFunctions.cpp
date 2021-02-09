@@ -23,7 +23,23 @@ void clearBuffer(char* text, uint8_t length)
     }
 }
 
-int lineContains(const char* str, const char* sfind)
+int atoiExtended(char*& str_start, const char* str_end, char delimitor)
+{
+    int result = 0;
+    while(str_start <= str_end && *str_start != delimitor)
+    {
+        if(*str_start < '0' || *str_start > '9')
+        {
+            ++str_start;
+            continue;
+        }
+        result = 10 * result + (*str_start - '0');
+        ++str_start;
+    }
+    return result;
+}
+
+int lineContains(const char* str, const char* sfind, const unsigned int length)
 {
     int found = 0;
     int index = 0;
@@ -54,10 +70,10 @@ int lineContains(const char* str, const char* sfind)
     return 0;
 }
 
-float extractFloat(uint8_t* text, unsigned int length)
+float extractFloat(const uint8_t* text, const unsigned int length)
 {
     float temp = 0;
-    if(int n = lineContains((const char*)text, "."))
+    if(int n = lineContains((const char*)text, ".", length))
     {
         // it is float
         if(length > n)
@@ -81,14 +97,13 @@ float extractFloat(uint8_t* text, unsigned int length)
             temp += (text[i] - '0') * pow(10, ((length - 1) - i));
         }
     }
-    clearByte(text, length);
     return temp;
 }
 
-double extractDouble(uint8_t* text, unsigned int length)
+double extractDouble(const uint8_t* text, const unsigned int length)
 {
     double temp = 0;
-    if(int n = lineContains((const char*)text, "."))
+    if(int n = lineContains((const char*)text, ".", length))
     {
         // it is double
         if(length > n)
@@ -112,101 +127,56 @@ double extractDouble(uint8_t* text, unsigned int length)
             temp += (text[i] - '0') * pow(10, ((length - 1) - i));
         }
     }
-    clearByte(text, length);
     return temp;
 }
 
-int extractInteger(uint8_t* text, unsigned int length)
+int extractInteger(const uint8_t* text, const unsigned int length)
 {
-    int temp = 0;
-
-    if(text[length] != '\0')
-    {
-        text[length] = '\0';
-    }
-
-    if(text[0] != '\0')
-    {
-        temp = atoi((const char*)text);
-    }
-    clearByte(text, length);
-    return temp;
+    char* start = (char*)text;
+    return atoiExtended(start, start + length, '\0');
 }
 
-bool extractState(uint8_t* text, unsigned int length)
+bool extractState(const uint8_t* text, const unsigned int length)
 {
     bool temp = false;
     if(text[0] != '\0')
     {
-        if(lineContains((const char*)text, "ON"))
+        if(lineContains((const char*)text, "ON", length))
         {
             temp = true;
         }
-        else if(lineContains((const char*)text, "OFF"))
+        else if(lineContains((const char*)text, "OFF", length))
         {
             temp = false;
         }
     }
-    clearByte(text, length);
     return temp;
 }
 
-bool extractBool(uint8_t* text, unsigned int length)
+bool extractBool(const uint8_t* text, const unsigned int length)
 {
     bool temp = false;
-    if(text[0] != '\0')
+    if(text[0] != '\0' && length > 0)
     {
-        if(text[1] != '\0')
-        {
-            text[1] = '\0';
-        }
-
-        if(lineContains((const char*)text, "1"))
+        if(*text == '1')
         {
             temp = true;
         }
-        else if(lineContains((const char*)text, "0"))
+        else if(*text == '0')
         {
             temp = false;
         }
     }
-    clearByte(text, length);
     return temp;
 }
 
-RGB extractRGB(uint8_t* text, unsigned int length)
+RGB extractRGB(const uint8_t* text, const unsigned int length)
 {
     RGB rgb;
-    if(text[length] != '\0')
-    {
-        text[length] = '\0';
-    }
-    int values[3] = {0};
-    for(int i = 2; i >= 0; i--)
-    {
-        char* k1 = strrchr((char*)text, ';');
-        // check if it not found
-        if(k1 == nullptr)
-        {
-            rgb.r = 0;
-            rgb.g = 0;
-            rgb.b = 0;
-            return rgb;
-        }
-        int k = k1 - (char*)text + 1;
-        if(k < 0)
-            k = 0;
-        char temp[3];
-        for(int j = k, j1 = 0; j < length; j++, j1++)
-        {
-            temp[j1] = text[j];
-        }
-        text[k - 1] = '\0';
-        values[i] = atoi(temp);
-    }
-    rgb.r = values[0];
-    rgb.g = values[1];
-    rgb.b = values[2];
-    clearByte(text, length);
+    char* here = (char*)text;
+    char* end = (char*)text + length;
+    rgb.r = atoiExtended(here, end, ';');
+    rgb.g = atoiExtended(here, end, ';');
+    rgb.b = atoiExtended(here, end, ';');
     return rgb;
 }

@@ -10,5 +10,5 @@ public:
     void sendConfig();
     void sendFeedbackMessage();
 
-    void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
+    void incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length);
 };

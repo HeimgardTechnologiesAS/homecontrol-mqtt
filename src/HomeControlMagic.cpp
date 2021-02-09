@@ -24,7 +24,7 @@ static HomeControlMagic* hcm_ptr;
 static char* s_topic_buffer_ptr;
 static char* s_common_buffer_ptr;
 
-void callback(char* topic, uint8_t* payload, unsigned int length)
+void callback(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef HCM_DEBUG
     print(F("got in callback"));
@@ -37,9 +37,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length)
     print("");
 #endif
     // check for server announce
-    if(lineContains(topic, "broadcast"))
+    if(lineContains(topic, "broadcast", length))
     {
-        if(lineContains((char*)payload, "serverannounce"))
+        if(lineContains((char*)payload, "serverannounce", length))
         {
             hcm_ptr->announce();
             return;
@@ -47,8 +47,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length)
     }
 
     // it is not server announce
-    uint8_t start_position = lineContains(topic, "/");
-    uint8_t diff = lineContains(topic + start_position, "/") - 1;
+    uint8_t start_position = lineContains(topic, "/", length);
+    uint8_t diff = lineContains(topic + start_position, "/", length) - 1;
 
     char endpoint_id[diff + 1];
     memcpy(endpoint_id, topic + start_position, diff);

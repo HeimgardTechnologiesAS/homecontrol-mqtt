@@ -16,7 +16,7 @@ void linuxSetMqttPtr(mqtt::Mqtt* mqtt)
 
 void wrapperLoop(bool reconnect)
 {
-    // not used here
+    mqtt_ptr->triggerReadBuffer();
 }
 
 void wrapperSetup(const std::string& custom_uid)
@@ -59,7 +59,7 @@ void wrapperSetServer(std::string ip)
     errorMessage("This is not used here. Set broker ip from main");
 }
 
-void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int))
+void wrapperSetCallback(void (*callback)(const char*, const uint8_t*, const unsigned int))
 {
     mqtt_ptr->setCallback(callback);
 }

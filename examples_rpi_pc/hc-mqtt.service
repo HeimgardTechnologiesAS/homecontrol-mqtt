@@ -3,7 +3,7 @@ Description=Run the HC MQTT application
 After=multi-user.target
 
 [Service]
-ExecStart=/home/pi/hc-mqtt/hc-mqtt
+ExecStart=FOLDER/hc-mqtt
 
 [Install]
 WantedBy=multi-user.target

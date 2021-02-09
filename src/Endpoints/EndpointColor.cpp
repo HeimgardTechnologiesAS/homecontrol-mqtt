@@ -9,10 +9,11 @@
 
 static char* const CONFIG = "col";
 
-EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr)
+EndpointColor::EndpointColor(HomeControlMagic* hcm_ptr, double start_level, int r, int g, int b)
     : Endpoint(hcm_ptr)
-    , m_level(0)
+    , m_rgb({r, g, b})
     , m_state(false)
+    , m_level(start_level)
 {
     m_config = CONFIG;
 }
@@ -70,38 +71,38 @@ void EndpointColor::getRGBcharPtr(char* buffer)
     strcat(buffer, buff);
 }
 
-void EndpointColor::incomingMessage(char* topic, uint8_t* payload, unsigned int length)
+void EndpointColor::incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length)
 {
 #ifdef ENDPOINT_COLOR_DEBUG
     print(F("incoming message, EndpointColor"));
 #endif
 
-    if(lineContains(topic, "cl"))
+    if(lineContains(topic, "cl", length))
     {
         m_level = extractInteger(payload, length);
     }
 
-    else if(lineContains(topic, "sl"))
+    else if(lineContains(topic, "sl", length))
     {
         m_owner->sendMessage("sl", m_level, m_id);
     }
 
-    else if(lineContains(topic, "cp"))
+    else if(lineContains(topic, "cp", length))
     {
         m_state = extractBool(payload, length);
     }
 
-    else if(lineContains(topic, "sp"))
+    else if(lineContains(topic, "sp", length))
     {
         m_owner->sendMessage("sp", m_state, m_id);
     }
 
-    else if(lineContains(topic, "cc"))
+    else if(lineContains(topic, "cc", length))
     {
         m_rgb = extractRGB(payload, length);
     }
 
-    else if(lineContains(topic, "sc"))
+    else if(lineContains(topic, "sc", length))
     {
         getRGBcharPtr(m_owner->getMessageBufferPtr());
         m_owner->sendStringMessage("sc", m_id);

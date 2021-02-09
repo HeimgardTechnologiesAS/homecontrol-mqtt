@@ -6,11 +6,11 @@
 class EndpointColor : public Endpoint
 {
 public:
-    EndpointColor(HomeControlMagic* hcm_ptr);
+    EndpointColor(HomeControlMagic* hcm_ptr, double start_level = 0, int r = 0, int g = 0, int b = 0);
 
     virtual void sendFeedbackMessage();
 
-    virtual void incomingMessage(char* topic, uint8_t* payload, unsigned int length);
+    virtual void incomingMessage(const char* topic, const uint8_t* payload, const unsigned int length);
 
     virtual void setState(bool state);
     virtual bool getState();
