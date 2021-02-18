@@ -11,7 +11,7 @@ void wrapperSetup();
 void wrapperSetServer(IPAddress ip);
 void wrapperSetServer(uint8_t* ip);
 void wrapperSetServer(char* ip);
-void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int));
+void wrapperSetCallback(void (*callback)(const char*, const uint8_t*, const unsigned int));
 bool wrapperIsMqttConnected();
 void wrapperSetUsernamePassword(const char* const username, const char* const password);
 void wrapperClearMessageBuffer();
