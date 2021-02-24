@@ -151,7 +151,7 @@ void wrapperSetServer(char* ip)
     }
 }
 
-void wrapperSetCallback(void (*callback)(char*, uint8_t*, unsigned int))
+void wrapperSetCallback(void (*callback)(const char*, const uint8_t*, const unsigned int))
 {
     m_mqtt_client.setCallback(callback);
 }
