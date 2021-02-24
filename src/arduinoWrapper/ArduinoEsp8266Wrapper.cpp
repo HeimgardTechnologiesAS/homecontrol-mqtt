@@ -69,7 +69,7 @@ void networkSetup()
 {
 
     // if we are using that small module for ESP make sure we killoff debug led
-    // For my esp01-s (black pcb) to be able to even boot properly, all except secure connection working
+    // For my esp01-s (black pcb) to be able to even boot properly.  
 #ifdef ARDUINO_ESP8266_ESP01
     DebugLedPinSet(-1);
 #else
