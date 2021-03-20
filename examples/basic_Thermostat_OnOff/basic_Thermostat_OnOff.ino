@@ -82,7 +82,7 @@ void setup()
     dht.begin();
 
     double temperature = dht.readTemperature();
-    endpointThermostat.setTemperatureTarget(temperature);
+    endpointThermostat.setHeatingSetpoint(temperature);
 }
 
 void loop()
@@ -115,7 +115,7 @@ void loop()
         Serial.println();
 
         Serial.print("Temperature target: ");
-        Serial.print(endpointThermostat.getTemperatureTarget());
+        Serial.print(endpointThermostat.getHeatingSetpoint());
         Serial.print(" *C ");
         Serial.println();
 #endif
