@@ -53,6 +53,7 @@ Mqtt::Mqtt(const char* client_id,
 
 Mqtt::~Mqtt()
 {
+    infoMessage("Called mqtt destructor");
     loop_stop();           // Kill the thread
     mosqpp::lib_cleanup(); // Mosquitto library cleanup
 }

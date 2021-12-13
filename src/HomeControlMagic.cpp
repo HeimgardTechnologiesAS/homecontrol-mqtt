@@ -69,8 +69,6 @@ HomeControlMagic::HomeControlMagic(const char* deviceName)
 {
     // pointer that is used from callback to set messages
     hcm_ptr = this;
-    s_topic_buffer_ptr = wrapperGetTopicBuffer();
-    s_common_buffer_ptr = wrapperGetMessageBuffer();
 
     EndpointZero* epZ = new EndpointZero(hcm_ptr);
     epZ->setId("0");
@@ -85,6 +83,9 @@ HomeControlMagic::~HomeControlMagic()
 
 void HomeControlMagic::setup()
 {
+    s_topic_buffer_ptr = wrapperGetTopicBuffer();
+    s_common_buffer_ptr = wrapperGetMessageBuffer();
+
     m_id = getUniqueId();
 
     strcpy(m_base_topic, "d/");
@@ -248,13 +249,12 @@ uint8_t HomeControlMagic::getNumberOfEndpoints()
 
 void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
-    char buffer[3] = {0};
     m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-    itoa(m_number_of_endpoints - 1, buffer, 10);
+    itoa(m_number_of_endpoints - 1, s_common_buffer_ptr, 10);
 #ifdef HCM_DEBUG
-    print(F("id to set: "), buffer);
+    print(F("id to set: "), s_common_buffer_ptr);
 #endif
-    endpoint_ptr->setId(buffer);
+    endpoint_ptr->setId(s_common_buffer_ptr);
     wrapperClearMessageBuffer();
 }
 
