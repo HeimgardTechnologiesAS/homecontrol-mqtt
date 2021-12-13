@@ -250,11 +250,11 @@ void HomeControlMagic::addEndpoint(Endpoint* endpoint_ptr)
 {
     char buffer[3] = {0};
     m_endpoints_pointers[m_number_of_endpoints++] = endpoint_ptr;
-    itoa(m_number_of_endpoints - 1, s_common_buffer_ptr, 10);
+    itoa(m_number_of_endpoints - 1, buffer, 10);
 #ifdef HCM_DEBUG
-    print(F("id to set: "), s_common_buffer_ptr);
+    print(F("id to set: "), buffer);
 #endif
-    endpoint_ptr->setId(s_common_buffer_ptr);
+    endpoint_ptr->setId(buffer);
     wrapperClearMessageBuffer();
 }
 
