@@ -1,11 +1,11 @@
 
-# HomeControl
-HomeControl is a Norwegian energy management and home automation provider.
+# Heimgard Technologies
+Heimgard Technologies (formerly Homecontrol) is a Norwegian energy management and home automation provider.
 More information about the system and preorders can be found here:
-- [Wattle](https://wattle.com/)
+- [Heimgard Technologies](https://heimgard.com/)
 
 ### Why this library
-HomeControl provides an open source Arduino library for integration with your smart home. This library enables microcontrollers, with MQTT capability, to connect to the HomeControl system. This gives you, as a user, the ability to use HomeControl solution for home automation with your DIY hardware. You can use gateway and app to have control and feedback over all your devices. It runs on super-low cost hardware and can be used to integrate Your existing projects.
+HGT provides an open source Arduino library for integration with your smart home. This library enables microcontrollers, with MQTT capability, to connect to the HomeControl system. This gives you, as a user, the ability to use HomeControl solution for home automation with your DIY hardware. You can use gateway and app to have control and feedback over all your devices. It runs on super-low cost hardware and can be used to integrate Your existing projects.
 
 ### MQTT
 MQTT is a machine-to-machine (M2M)/"Internet of Things" open source connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport. It is useful for connections with remote locations where a small code footprint is required and/or network bandwidth is at a premium.
@@ -30,7 +30,7 @@ On Windows, port this should be something like COM2 (or some other number), on t
 Push the reset button on the board then click the Upload button in the IDE. Wait a few seconds. If successful, the message "Done uploading." will appear in the status bar.
 
 ## Other platforms
-This will be updated as we add platform. Linux is now working on rPi, but documentation is still missing.
+Raspberry Pi and PC builds has more information in the subfolder [examples_rpi_pc](examples_rpi_pc)
 
 # Examples:
 ## Arduino
