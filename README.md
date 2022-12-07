@@ -4,6 +4,9 @@ Heimgard Technologies (formerly Homecontrol) is a Norwegian energy management an
 More information about the system and preorders can be found here:
 - [Heimgard Technologies](https://heimgard.com/)
 
+### Wiki
+Check the Wiki in this repository for more information and description of the protocol
+
 ### Why this library
 HGT provides an open source Arduino library for integration with your smart home. This library enables microcontrollers, with MQTT capability, to connect to the HomeControl system. This gives you, as a user, the ability to use HomeControl solution for home automation with your DIY hardware. You can use gateway and app to have control and feedback over all your devices. It runs on super-low cost hardware and can be used to integrate Your existing projects.
 
