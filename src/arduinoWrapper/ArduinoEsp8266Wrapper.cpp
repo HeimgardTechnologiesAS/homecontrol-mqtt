@@ -69,8 +69,8 @@ void networkSetup()
 {
 
     // if we are using that small module for ESP make sure we killoff debug led
-    // For my esp01-s (black pcb) to be able to use serial debug. 
-    // LED_BUILTIN is defined as 1 which is TX on ESP01. 
+    // For my esp01-s (black pcb) to be able to use serial debug.
+    // LED_BUILTIN is defined as 1 which is TX on ESP01.
 #ifdef ARDUINO_ESP8266_ESP01
     DebugLedPinSet(-1);
 #else
@@ -113,6 +113,7 @@ void networkSetup()
 
 bool networkReconnect()
 {
+    return true;
 }
 
 void networkChipRestart()
